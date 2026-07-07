@@ -1360,20 +1360,32 @@ const deletePasien = async (req, res) => {
             return res.status(404).json({ message: 'Pasien tidak ditemukan' });
         }
 
-        // Cleanup: update ruangan that reference this pasien
-        await prisma.ruangan.updateMany({
-            where: { ditempati: id },
-            data: { ditempati: null, status: 'kosong', id_tagihan: null }
-        });
+        await prisma.$transaction(async (tx) => {
+            // 1. Delete checkups yang refer ke pasien
+            await tx.checkUp.deleteMany({ where: { id_pasien: id } });
 
-        await prisma.pasien.delete({ where: { id } });
+            // 2. Delete riwayat_obat
+            await tx.riwayatObat.deleteMany({ where: { id_pasien: id } });
+
+            // 3. Set null di ruangan (ON DELETE SET NULL analog)
+            await tx.ruangan.updateMany({
+                where: { ditempati: id },
+                data: { ditempati: null, status: 'kosong', id_tagihan: null }
+            });
+
+            // 4. Delete tagihan
+            await tx.tagihan.deleteMany({ where: { id_pasien: id } });
+
+            // 5. Delete pasien itu sendiri
+            await tx.pasien.delete({ where: { id } });
+        });
 
         res.json({
             message: 'Pasien dan semua data terkait berhasil dihapus otomatis!',
             deleted: { pasien: 1 }
         });
     } catch (err) {
-        console.error('[DELETE] Error:', err);
+        console.error('[DELETE PASIEN] Error:', err);
         res.status(500).json({ message: err.message });
     }
 };
@@ -1405,6 +1417,11 @@ const deleteDokter = async (req, res) => {
         const userId = existing.userId;
 
         await prisma.$transaction(async (tx) => {
+            // Cleanup: nullify id_dokter di check_up yang refer
+            await tx.checkUp.updateMany({
+                where: { id_dokter: id },
+                data: { id_dokter: null }
+            });
             // Hapus shift user terkait
             await tx.shiftUser.deleteMany({
                 where: { id_users: userId }
