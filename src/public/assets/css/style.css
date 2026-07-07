@@ -879,11 +879,16 @@ body {
     background: var(--bg-hover);
 }
 
-.shift-table .col-id { width: 15%; }
+.shift-table .col-id {
+    width: 20%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .shift-table .col-name { width: 25%; }
-.shift-table .col-day { width: 20%; }
-.shift-table .col-shift { width: 20%; }
-.shift-table .col-action { width: 20%; }
+.shift-table .col-day { width: 18%; }
+.shift-table .col-shift { width: 18%; }
+.shift-table .col-action { width: 19%; }
 
 .shift-total {
     margin-top: 10px;
@@ -925,14 +930,19 @@ body {
     background: var(--bg-hover);
 }
 
-.ruangan-table .col-id { width: 10%; }
+.ruangan-table .col-id {
+    width: 14%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .ruangan-table .col-nama { width: 25%; }
 .ruangan-table .col-nomor { width: 15%; }
-.ruangan-table .col-ditempati { width: 20%; }
-.ruangan-table .col-pasien { width: 20%; }
+.ruangan-table .col-ditempati { width: 18%; }
+.ruangan-table .col-pasien { width: 18%; }
 .ruangan-table .col-lama { width: 12%; }
-.ruangan-table .col-status { width: 15%; }
-.ruangan-table .col-action { width: 12%; }
+.ruangan-table .col-status { width: 14%; }
+.ruangan-table .col-action { width: 13%; }
 
 .ruangan-table .badge-status {
     display: inline-block;
