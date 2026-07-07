@@ -353,8 +353,8 @@ const getRuanganStatus = async (req, res) => {
 
         const now = new Date();
         const formatted = rows.map(r => {
-            // Fix: if status is null but ditempati has a patient → treat as terisi
-            const safeStatus = r.status || (r.ditempati ? 'terisi' : 'kosong');
+            // Fix: treat as terisi jika ada pasien ditempati, regardless of status field
+            const safeStatus = r.ditempati ? 'terisi' : (r.status || 'kosong');
 
             let lamaInapHari = null;
             if (r.tanggal_checkin && safeStatus === 'terisi') {
@@ -426,8 +426,8 @@ const getRuanganWithFilter = async (req, res) => {
 
         const now = new Date();
         const formatted = rows.map(r => {
-            // Fix: if status is null but ditempati has a patient → treat as terisi
-            const safeStatus = r.status || (r.ditempati ? 'terisi' : 'kosong');
+            // Fix: treat as terisi jika ada pasien ditempati, regardless of status field
+            const safeStatus = r.ditempati ? 'terisi' : (r.status || 'kosong');
 
             let lamaInapHari = null;
             if (r.tanggal_checkin && safeStatus === 'terisi') {

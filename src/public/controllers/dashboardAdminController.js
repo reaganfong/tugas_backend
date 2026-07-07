@@ -249,7 +249,9 @@ async function updateSummaryCards() {
         if (elPasien) elPasien.innerText = totalPasien;
         
         const totalRuangan = ruangan.length;
-        const terisiRuangan = ruangan.filter(function(r) { return r.status === 'terisi'; }).length;
+        console.log('[DEBUG] Ruangan data:', JSON.stringify(ruangan.map(function(r) { return { id: r.id_ruangan, nama: r.nama_ruangan, status: r.status, ditempati: r.ditempati }; })));
+        const terisiRuangan = ruangan.filter(function(r) { return r.status === 'terisi' || (r.ditempati !== null && r.ditempati !== undefined); }).length;
+        console.log('[DEBUG] Ruangan terisi:', terisiRuangan, '/ total:', totalRuangan);
         const elRuangan = document.getElementById('summaryRuangan');
         if (elRuangan) elRuangan.innerText = terisiRuangan + ' / ' + totalRuangan;
         
