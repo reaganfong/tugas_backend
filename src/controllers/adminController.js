@@ -144,8 +144,11 @@ const getBayiWithFilter = async (req, res) => {
             })
         ]);
 
+        // Penting: mapping id_bayi untuk frontend (tombol edit/hapus)
+        const data = rows.map(b => ({ id_bayi: b.id, ...b }));
+
         res.json({
-            data: rows,
+            data,
             pagination: {
                 page: pageNum,
                 limit: limitNum,
