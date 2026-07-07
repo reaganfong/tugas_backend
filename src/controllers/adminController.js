@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const { toInt, toFloat } = require('../utils/sanitize');
 
 // ==================== GET PASIEN CHECK IN OUT ====================
 const getPasienCheckInOut = async (req, res) => {
@@ -294,21 +295,16 @@ const addStaff = async (req, res) => {
             return res.status(400).json({ message: 'Nama wajib diisi' });
         }
 
-        if (gaji == null || gaji === '') {
-            return res.status(400).json({ message: 'Gaji wajib diisi' });
-        }
-
-        const parsedGaji = Number(gaji);
-        if (Number.isNaN(parsedGaji)) {
-            return res.status(400).json({ message: 'Gaji harus berupa angka' });
-        }
+        const gajiVal = toInt(gaji, 'Gaji');
+        if (gajiVal.error) return res.status(400).json({ message: gajiVal.error });
+        if (gajiVal.value === null) return res.status(400).json({ message: 'Gaji wajib diisi' });
 
         const result = await prisma.staff.create({
             data: {
                 jabatan: jabatan || null,
                 nama_staff: nama_staff,
                 no_telepon: no_telepon || null,
-                gaji: parsedGaji
+                gaji: gajiVal.value
             }
         });
 
@@ -751,14 +747,20 @@ const updateDokter = async (req, res) => {
             return res.status(404).json({ message: 'Dokter tidak ditemukan' });
         }
 
+        // Sanitasi numerik
+        const umurVal = toInt(umur, 'Umur');
+        if (umurVal.error) return res.status(400).json({ message: umurVal.error });
+        const biayaHonorVal = toInt(biaya_honor, 'Biaya honor');
+        if (biayaHonorVal.error) return res.status(400).json({ message: biayaHonorVal.error });
+
         await prisma.dokter.update({
             where: { id },
             data: {
                 nama_dokter,
                 spesialisasi: spesialisasi || null,
-                umur: umur || null,
                 no_telepon: no_telepon || null,
-                biaya_honor: biaya_honor || null
+                umur: umurVal.value,
+                biaya_honor: biayaHonorVal.value
             }
         });
 
@@ -799,8 +801,9 @@ const updateStaff = async (req, res) => {
         const id = req.params.id;
         const { nama_staff, jabatan, no_telepon, gaji, hari, shift } = req.body;
         if (!nama_staff) return res.status(400).json({ message: 'Nama staff wajib diisi' });
-        const parsedGaji = Number(gaji);
-        if (isNaN(parsedGaji)) return res.status(400).json({ message: 'Gaji harus angka' });
+        const gajiVal = toInt(gaji, 'Gaji');
+        if (gajiVal.error) return res.status(400).json({ message: gajiVal.error });
+        if (gajiVal.value === null) return res.status(400).json({ message: 'Gaji wajib diisi' });
 
         const existing = await prisma.staff.findUnique({ where: { id } });
         if (!existing) return res.status(404).json({ message: 'Staff tidak ditemukan' });
@@ -811,7 +814,7 @@ const updateStaff = async (req, res) => {
                 nama_staff,
                 jabatan: jabatan || null,
                 no_telepon: no_telepon || null,
-                gaji: parsedGaji
+                gaji: gajiVal.value
             }
         });
 
@@ -862,6 +865,10 @@ const updatePasien = async (req, res) => {
             return res.status(404).json({ message: 'Pasien tidak ditemukan' });
         }
 
+        // Sanitasi numerik
+        const umurVal = toInt(umur, 'Umur');
+        if (umurVal.error) return res.status(400).json({ message: umurVal.error });
+
         await prisma.pasien.update({
             where: { id },
             data: {
@@ -869,7 +876,7 @@ const updatePasien = async (req, res) => {
                 nama_wali: nama_wali || null,
                 jenis_penyakit: jenis_penyakit || null,
                 nama_penyakit: nama_penyakit || null,
-                umur: umur || null,
+                umur: umurVal.value,
                 jenis_kelamin: jenis_kelamin || null,
                 no_telp_pasien: no_telp_pasien || null,
                 no_telp_wali: no_telp_wali || null,
@@ -898,6 +905,10 @@ const updateCheckup = async (req, res) => {
             return res.status(404).json({ message: 'Checkup tidak ditemukan' });
         }
 
+        // Sanitasi numerik
+        const biayaCheckupVal = toFloat(biaya_checkup, 'Biaya checkup');
+        if (biayaCheckupVal.error) return res.status(400).json({ message: biayaCheckupVal.error });
+
         await prisma.checkUp.update({
             where: { id },
             data: {
@@ -908,7 +919,7 @@ const updateCheckup = async (req, res) => {
                 checkout: checkout || null,
                 status: status || null,
                 keterangan: keterangan || null,
-                biaya_checkup: biaya_checkup || 0
+                biaya_checkup: biayaCheckupVal.value ?? 0
             }
         });
 
@@ -948,11 +959,15 @@ const addPasien = async (req, res) => {
             });
         }
 
+        // Sanitasi numerik
+        const umurVal = toInt(umur, 'Umur');
+        if (umurVal.error) return res.status(400).json({ message: umurVal.error });
+
         const result = await prisma.pasien.create({
             data: {
                 nama,
                 nama_wali: nama_wali || null,
-                umur: umur || null,
+                umur: umurVal.value,
                 jenis_kelamin: jenis_kelamin || null,
                 no_telp_pasien: no_telp_pasien || null,
                 no_telp_wali: no_telp_wali || null,
@@ -1324,9 +1339,15 @@ const updateRuangan = async (req, res) => {
         if (!nama_ruangan) {
             return res.status(400).json({ message: 'Nama ruangan wajib diisi' });
         }
-        if (!nomor_ruangan || nomor_ruangan <= 0) {
+
+        // Sanitasi numerik
+        const nomorRuanganVal = toInt(nomor_ruangan, 'Nomor ruangan');
+        if (nomorRuanganVal.error) return res.status(400).json({ message: nomorRuanganVal.error });
+        if (!nomorRuanganVal.value || nomorRuanganVal.value <= 0) {
             return res.status(400).json({ message: 'Nomor ruangan wajib diisi' });
         }
+        const biayaPerHariVal = toFloat(biaya_per_hari, 'Biaya per hari');
+        if (biayaPerHariVal.error) return res.status(400).json({ message: biayaPerHariVal.error });
 
         const existing = await prisma.ruangan.findUnique({ where: { id } });
         if (!existing) {
@@ -1337,10 +1358,10 @@ const updateRuangan = async (req, res) => {
             where: { id },
             data: {
                 nama_ruangan,
-                nomor_ruangan,
+                nomor_ruangan: nomorRuanganVal.value,
                 status,
                 ditempati: ditempati || null,
-                biaya_per_hari: biaya_per_hari || 0
+                biaya_per_hari: biayaPerHariVal.value ?? 0
             }
         });
 

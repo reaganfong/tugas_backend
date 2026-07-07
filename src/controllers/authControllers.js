@@ -1,6 +1,7 @@
 const prisma = require('../config/prisma');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { toInt } = require('../utils/sanitize');
 const { JWT_SECRET } = require('../config/passport');
 
 // Helper: generate JWT token
@@ -56,6 +57,16 @@ exports.register = async (req, res) => {
     // ===== HASH PASSWORD =====
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Sanitasi numerik untuk data dokter (validasi sebelum transaksi)
+    let umurVal = { value: null };
+    let biayaHonorVal = { value: null };
+    if (jabatan === 'dokter' && dokterData) {
+      umurVal = toInt(dokterData.umur, 'Umur');
+      if (umurVal.error) return res.status(400).json({ message: umurVal.error });
+      biayaHonorVal = toInt(dokterData.biaya_honor, 'Biaya honor');
+      if (biayaHonorVal.error) return res.status(400).json({ message: biayaHonorVal.error });
+    }
+
     // ===== TRANSACTION: create user + profile =====
     const result = await prisma.$transaction(async (tx) => {
       // ===== INSERT USER =====
@@ -73,15 +84,15 @@ exports.register = async (req, res) => {
       if (jabatan === 'dokter' && dokterData) {
         console.log('[REGISTER] Inserting dokter data:', dokterData);
 
-        const { nama_dokter, spesialisasi, umur, no_telepon, biaya_honor } = dokterData;
+        const { nama_dokter, spesialisasi, no_telepon } = dokterData;
 
         await tx.dokter.create({
           data: {
             nama_dokter: nama_dokter.trim(),
             spesialisasi: spesialisasi || null,
-            umur: umur || null,
+            umur: umurVal.value,
             no_telepon: no_telepon || null,
-            biaya_honor: biaya_honor || 0,
+            biaya_honor: biayaHonorVal.value ?? 0,
             userId: user.id,
           },
         });
