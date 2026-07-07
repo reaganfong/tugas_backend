@@ -1009,14 +1009,20 @@ const addBayi = async (req, res) => {
         });
         const newIdIbu = (maxIbu._max.id_ibu || 0) + 1;
 
+        // Sanitasi numerik
+        const beratVal = toFloat(berat, 'Berat');
+        if (beratVal.error && berat !== undefined) return res.status(400).json({ message: beratVal.error });
+        const tinggiVal = toFloat(tinggi, 'Tinggi');
+        if (tinggiVal.error && tinggi !== undefined) return res.status(400).json({ message: tinggiVal.error });
+
         const result = await prisma.bayi.create({
             data: {
                 id_ibu: newIdIbu,
                 nama_ibu,
                 nama_bayi: nama_bayi || null,
                 jenis_kelamin: jenis_kelamin || null,
-                berat: berat !== undefined ? parseFloat(berat) : null,
-                tinggi: tinggi !== undefined ? parseFloat(tinggi) : null
+                berat: beratVal.value,
+                tinggi: tinggiVal.value
             }
         });
 
@@ -1037,6 +1043,17 @@ const updateBayi = async (req, res) => {
         const id = req.params.id;
         const { id_ibu, nama_ibu, nama_bayi, jenis_kelamin, berat, tinggi } = req.body;
 
+        // Sanitasi numerik
+        const beratVal = toFloat(berat, 'Berat');
+        if (beratVal.error && berat !== undefined) return res.status(400).json({ message: beratVal.error });
+        const tinggiVal = toFloat(tinggi, 'Tinggi');
+        if (tinggiVal.error && tinggi !== undefined) return res.status(400).json({ message: tinggiVal.error });
+
+        const existing = await prisma.bayi.findUnique({ where: { id } });
+        if (!existing) {
+            return res.status(404).json({ message: 'Bayi tidak ditemukan' });
+        }
+
         await prisma.bayi.update({
             where: { id },
             data: {
@@ -1044,8 +1061,8 @@ const updateBayi = async (req, res) => {
                 nama_ibu: nama_ibu || null,
                 nama_bayi: nama_bayi || null,
                 jenis_kelamin: jenis_kelamin || null,
-                berat: berat !== undefined ? parseFloat(berat) : null,
-                tinggi: tinggi !== undefined ? parseFloat(tinggi) : null
+                berat: beratVal.value,
+                tinggi: tinggiVal.value
             }
         });
 
