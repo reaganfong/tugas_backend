@@ -468,7 +468,8 @@ const getNotifikasiDarurat = async (req, res) => {
             where: { dibaca: false },
             orderBy: { tanggal: 'desc' }
         });
-        res.json(rows);
+        const result = rows.map(n => ({ id_notif: n.id, ...n }));
+        res.json(result);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
