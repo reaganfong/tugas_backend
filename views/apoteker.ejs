@@ -592,24 +592,8 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var jabatan = localStorage.getItem('jabatan');
-        var username = localStorage.getItem('username');
-        
-        console.log('[DASHBOARD APOTEKER] Check auth:', { jabatan: jabatan, username: username });
-        
-        if (!jabatan || !username) {
-            console.log('[DASHBOARD APOTEKER] No auth, redirecting to login');
-            window.location.href = '/login';
-            return;
-        }
-        
-        var expectedRole = 'apoteker';
-        if (jabatan !== expectedRole) {
-            console.log('[DASHBOARD APOTEKER] Wrong role:', jabatan);
-            window.location.href = '/login';
-            return;
-        }
-        
+        var username = localStorage.getItem('username') || 'Apoteker';
+
         var namaUser = document.getElementById('namaUser');
         if (namaUser) {
             namaUser.innerText = username;

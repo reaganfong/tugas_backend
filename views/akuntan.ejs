@@ -115,22 +115,7 @@
 
     // ==================== AUTH CHECK ====================
     document.addEventListener('DOMContentLoaded', function() {
-        var jabatan = localStorage.getItem('jabatan');
-        var username = localStorage.getItem('username');
-        console.log('[DASHBOARD AKUNTAN] Check auth:', { jabatan: jabatan, username: username });
-
-        if (!jabatan || !username) {
-            console.log('[DASHBOARD AKUNTAN] No auth, redirecting to login');
-            window.location.href = '/login';
-            return;
-        }
-
-        var expectedRole = 'akuntan';
-        if (jabatan !== expectedRole) {
-            console.log('[DASHBOARD AKUNTAN] Wrong role:', jabatan);
-            window.location.href = '/login';
-            return;
-        }
+        var username = localStorage.getItem('username') || 'Akuntan';
 
         var namaUser = document.getElementById('namaUser');
         if (namaUser) {

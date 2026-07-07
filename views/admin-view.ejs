@@ -839,14 +839,7 @@
 
     // ===== AUTH CHECK =====
     document.addEventListener('DOMContentLoaded', function() {
-        const jabatan = localStorage.getItem('jabatan');
-        const username = localStorage.getItem('username');
-        
-        if (!jabatan || !username || jabatan !== 'admin') {
-            window.location.href = '/';
-            return;
-        }
-        
+        var username = localStorage.getItem('username') || 'Admin';
         document.getElementById('namaUser').innerText = username;
         
         document.getElementById('logoutBtn').onclick = function() {
