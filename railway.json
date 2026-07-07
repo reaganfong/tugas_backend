@@ -4,7 +4,6 @@
     "buildCommand": "npm install && npx prisma generate"
   },
   "deploy": {
-    "startCommand": "node server.js",
-    "restartPolicyType": "on-failure"
+    "startCommand": "node server.js"
   }
 }
