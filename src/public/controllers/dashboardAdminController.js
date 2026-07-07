@@ -1569,19 +1569,7 @@ async function loadShiftJadwal() {
         staffContainer.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat shift staff...';
         usersContainer.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat shift users...';
         
-        const response = await fetch('http://localhost:3000/api/admin/shift', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('HTTP ' + response.status);
-        }
-        
-        const data = await response.json();
+        const data = await apiService.get('/admin/shift');
         console.log('[DATA] Shift:', data);
         
         const staffShifts = data.staff || [];

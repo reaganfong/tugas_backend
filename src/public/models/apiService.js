@@ -11,8 +11,7 @@ class APIService {
     }
 
     getBaseURL() {
-        var port = window.location.port || '3000';
-        return 'http://localhost:' + port + '/api';
+        return window.location.origin + '/api';
     }
 
     async request(endpoint, options) {
