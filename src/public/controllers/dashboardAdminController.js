@@ -1583,7 +1583,7 @@ async function loadShiftJadwal() {
                 <table class="shift-table">
                     <thead>
                         <tr>
-                            <th class="col-id">ID Staff</th>
+                            <th class="col-id">No</th>
                             <th class="col-name">Nama</th>
                             <th class="col-day">Hari</th>
                             <th class="col-shift">Shift</th>
@@ -1593,10 +1593,10 @@ async function loadShiftJadwal() {
                     <tbody>
             `;
             
-            staffShifts.forEach(function(s) {
+            staffShifts.forEach(function(s, idx) {
                 html += `
                     <tr>
-                        <td class="col-id" title="${s.id_staff}">${shortId(s.id_staff)}</td>
+                        <td class="col-id">${idx + 1}</td>
                         <td class="col-name">${escapeHtml(s.nama_staff || '-')}</td>
                         <td class="col-day"><span class="badge badge-info">${s.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${s.shift}</span></td>
@@ -1627,7 +1627,7 @@ async function loadShiftJadwal() {
                 <table class="shift-table">
                     <thead>
                         <tr>
-                            <th class="col-id">ID User</th>
+                            <th class="col-id">No</th>
                             <th class="col-name">Username</th>
                             <th class="col-day">Hari</th>
                             <th class="col-shift">Shift</th>
@@ -1637,10 +1637,10 @@ async function loadShiftJadwal() {
                     <tbody>
             `;
             
-            userShifts.forEach(function(u) {
+            userShifts.forEach(function(u, idx) {
                 html += `
                     <tr>
-                        <td class="col-id" title="${u.id}">${shortId(u.id)}</td>
+                        <td class="col-id">${idx + 1}</td>
                         <td class="col-name">${escapeHtml(u.username || '-')}</td>
                         <td class="col-day"><span class="badge badge-info">${u.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${u.shift}</span></td>

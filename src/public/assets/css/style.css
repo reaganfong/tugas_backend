@@ -880,15 +880,13 @@ body {
 }
 
 .shift-table .col-id {
-    width: 20%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    width: 10%;
+    text-align: center;
 }
-.shift-table .col-name { width: 25%; }
-.shift-table .col-day { width: 18%; }
-.shift-table .col-shift { width: 18%; }
-.shift-table .col-action { width: 19%; }
+.shift-table .col-name { width: 30%; }
+.shift-table .col-day { width: 22%; }
+.shift-table .col-shift { width: 20%; }
+.shift-table .col-action { width: 18%; }
 
 .shift-total {
     margin-top: 10px;
