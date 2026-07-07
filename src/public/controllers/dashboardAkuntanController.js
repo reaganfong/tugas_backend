@@ -170,15 +170,7 @@ const AkuntanState = {
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // ✅ Cek auth manual (hindari redirect ke path lama)
-    var jabatan = localStorage.getItem('jabatan');
-    var username = localStorage.getItem('username');
-    
-    if (!jabatan || !username || jabatan !== 'akuntan') {
-        window.location.href = '/login';
-        return;
-    }
-    
+    var username = localStorage.getItem('username') || 'Akuntan';
     document.getElementById('namaUser').innerText = username;
     
     const logoutBtn = document.getElementById('logoutBtn');

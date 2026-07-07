@@ -69,12 +69,38 @@ class APIService {
             // === HANDLE 401 — TOKEN EXPIRED ===
             if (response.status === 401) {
                 console.warn('[API] Token expired atau invalid, redirect ke login');
+
+                // Guard: jangan redirect kalau sedang di halaman login
+                if (window.location.pathname === '/login') {
+                    console.warn('[API] Sudah di /login, skip redirect loop');
+                    var err401 = new Error('Sesi tidak valid. Silakan login ulang.');
+                    err401.status = 401;
+                    throw err401;
+                }
+
+                // Guard: cegah multiple redirect dari request paralel
+                if (window._redirectingToLogin) {
+                    console.warn('[API] Redirect sedang berlangsung, skip 401 handler');
+                    return;
+                }
+                window._redirectingToLogin = true;
+
                 localStorage.removeItem('token');
                 localStorage.removeItem('jabatan');
                 localStorage.removeItem('username');
                 localStorage.removeItem('nama');
                 localStorage.removeItem('user_id');
-                window.location.href = '/login';
+
+                // Panggil logout API dulu untuk clear cookie di server
+                fetch(this.baseURL + '/auth/logout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).catch(function() {
+                    // Ignore — best effort clear cookie
+                }).finally(function() {
+                    // Redirect dengan flag expired agar server tidak redirect balik
+                    window.location.href = '/login?expired=1';
+                });
                 return;
             }
 

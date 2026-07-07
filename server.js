@@ -93,6 +93,11 @@ function requireRole(role) {
 
 // ========== HALAMAN LOGIN & REGISTER ==========
 app.get('/login', (req, res) => {
+    // Kalau ada ?expired=1, skip redirect — user sengaja diarahkan ke sini karena 401
+    if (req.query.expired === '1') {
+        return res.render('login');
+    }
+
     // If already logged in via cookie, redirect to dashboard
     const token = req.cookies?.token;
     if (token) {

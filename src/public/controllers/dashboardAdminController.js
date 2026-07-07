@@ -4,13 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    var jabatan = localStorage.getItem('jabatan');
-    var username = localStorage.getItem('username');
-    
-    if (!jabatan || !username || jabatan !== 'admin') {
-        window.location.href = '/login';
-        return;
-    }
+    var username = localStorage.getItem('username') || 'Admin';
 
     var namaUser = document.getElementById('namaUser');
     if (namaUser) namaUser.innerText = username;
@@ -21,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             utils.logout();
         };
     }
-    
+
     console.log('[DEBUG] DOM Ready, memanggil loadAllData...');
     loadAllData();
     setupPasienEvents();
@@ -30,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDokterEvents();
     setupRuanganEvents();
     setupStaffEvents();
-    
+
     // Setup pagination untuk jadwal dan checkout
     setupJadwalPagination();
     setupCheckoutPagination();

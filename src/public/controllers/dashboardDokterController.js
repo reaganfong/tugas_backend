@@ -58,18 +58,7 @@ window.showInfo = function(message) { showNotifikasiPasien(message, 'info'); };
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('[DOKTER] DOM ready');
-    var jabatan = localStorage.getItem('jabatan');
-    var username = localStorage.getItem('username');
-    if (!jabatan || !username) {
-        showNotifikasiPasien('Silakan login terlebih dahulu!', 'error');
-        setTimeout(() => window.location.href = '/login', 1500);
-        return;
-    }
-    if (jabatan !== 'dokter') {
-        showNotifikasiPasien('Halaman ini untuk dokter!', 'error');
-        setTimeout(() => window.location.href = '/login', 1500);
-        return;
-    }
+    var username = localStorage.getItem('username') || 'Dokter';
     var namaUserSpan = document.getElementById('namaUser');
     if (namaUserSpan) namaUserSpan.innerText = username || 'Dokter';
 

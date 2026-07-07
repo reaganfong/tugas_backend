@@ -116,29 +116,21 @@ function formatCurrency(value) {
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // ✅ Cek auth manual (karena checkAuth mungkin redirect ke path lama)
-    var jabatan = localStorage.getItem('jabatan');
-    var username = localStorage.getItem('username');
-    
-    if (!jabatan || !username || jabatan !== 'apoteker') {
-        window.location.href = '/login';
-        return;
-    }
-    
+    var username = localStorage.getItem('username') || 'Apoteker';
     document.getElementById('namaUser').innerText = username;
-    
+
     var logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.onclick = function() {
             utils.logout();
         };
     }
-    
+
     var tambahObatBtn = document.getElementById('tambahObatBtn');
     if (tambahObatBtn) {
         tambahObatBtn.onclick = showTambahObatModal;
     }
-    
+
     await loadStokObat();
     await loadRekomendasiObat();
 });
