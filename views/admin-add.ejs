@@ -12,89 +12,89 @@
         .form-grid .full-width { grid-column: 1 / -1; }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-        .welcome-text { background: white; border-radius: 24px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid #e9f0f3; font-size: 1rem; color: #1e4a6e; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .welcome-text b { color: #0b3b5f; }
-        .welcome-text i { margin-right: 8px; color: #2c7da0; }
-        .btn-back { background: #e2edf2; color: #1e4a6e; border: 2px solid #cbdde6; padding: 10px 24px; border-radius: 40px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
-        .btn-back:hover { background: #cbdde6; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .welcome-text { background: white; border-radius: 24px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid var(--border-color); font-size: 1rem; color: var(--text-secondary); box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .welcome-text b { color: var(--gradient-start); }
+        .welcome-text i { margin-right: 8px; color: var(--btn-primary); }
+        .btn-back { background: var(--bg-secondary); color: var(--text-secondary); border: 2px solid var(--border-color); padding: 10px 24px; border-radius: 40px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+        .btn-back:hover { background: var(--border-color); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
         .btn-back i { margin-right: 6px; }
-        .btn-logout { background: #dc2626; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.95rem; }
-        .btn-logout:hover { background: #b91c1c; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(220,38,38,0.2); }
+        .btn-logout { background: var(--btn-danger); color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.95rem; }
+        .btn-logout:hover { background: var(--btn-danger-hover); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(220,38,38,0.2); }
         .btn-logout i { margin-right: 6px; }
         @keyframes slideInUp { from { transform: translateY(60px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         @keyframes slideOutDown { from { transform: translateY(0) scale(1); opacity: 1; } to { transform: translateY(60px) scale(0.95); opacity: 0; } }
-        .search-table-container { max-height: 180px; overflow-y: auto; border: 1px solid #e2edf2; border-radius: 8px; margin-bottom: 8px; }
+        .search-table-container { max-height: 180px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 8px; }
         .search-table-container table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        .search-table-container thead { position: sticky; top: 0; background: #f1f9fe; z-index: 2; }
-        .search-table-container th { padding: 6px 10px; text-align: left; border-bottom: 1px solid #dcecf3; font-weight: 600; color: #1e4a6e; }
-        .search-table-container td { padding: 6px 10px; border-bottom: 1px solid #f0f4f7; }
-        .search-table-container tr:hover td { background: #fafefe; }
-        .search-table-container .selected-row { background: #dbeafe !important; }
+        .search-table-container thead { position: sticky; top: 0; background: var(--bg-table-header); z-index: 2; }
+        .search-table-container th { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--text-secondary); }
+        .search-table-container td { padding: 6px 10px; border-bottom: 1px solid var(--border-light); }
+        .search-table-container tr:hover td { background: var(--bg-hover); }
+        .search-table-container .selected-row { background: var(--badge-info-bg) !important; }
         .badge-status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
-        .badge-status.dirawat { background: #dcfce7; color: #15803d; }
-        .badge-status.pulang { background: #e2e8f0; color: #475569; }
-        .badge-status.spesialisasi { background: #e2edf2; color: #475569; }
-        .btn-pilih { background: #2c7da0; color: white; border: none; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.7rem; transition: 0.2s; }
-        .btn-pilih:hover { background: #1f5e7a; transform: scale(1.05); }
+        .badge-status.dirawat { background: var(--badge-success-bg); color: var(--badge-success-text); }
+        .badge-status.pulang { background: var(--badge-secondary-bg); color: var(--badge-secondary-text); }
+        .badge-status.spesialisasi { background: var(--bg-secondary); color: var(--badge-secondary-text); }
+        .btn-pilih { background: var(--btn-primary); color: white; border: none; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.7rem; transition: 0.2s; }
+        .btn-pilih:hover { background: var(--btn-primary-hover); transform: scale(1.05); }
         .btn-pilih i { margin-right: 3px; }
-        .selected-display { margin-top: 6px; padding: 8px 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 0.85rem; color: #15803d; font-weight: 500; display: none; }
+        .selected-display { margin-top: 6px; padding: 8px 12px; background: var(--badge-success-bg); border-radius: 8px; border: 1px solid var(--badge-success-bg); font-size: 0.85rem; color: var(--badge-success-text); font-weight: 500; display: none; }
         .selected-display.show { display: block; }
         .selected-display i { margin-right: 6px; }
         .search-input-group { display: flex; gap: 8px; margin-bottom: 8px; }
-        .search-input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbdde6; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
-        .search-input-group input:focus { outline: none; border-color: #2c7da0; box-shadow: 0 0 0 3px rgba(44,125,160,0.1); }
+        .search-input-group input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .search-input-group input:focus { outline: none; border-color: var(--btn-primary); box-shadow: 0 0 0 3px rgba(44,125,160,0.1); }
         .search-input-group .btn-search { padding: 6px 16px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; transition: 0.2s; font-weight: 500; }
-        .search-input-group .btn-search.btn-primary { background: #2c7da0; color: white; }
-        .search-input-group .btn-search.btn-primary:hover { background: #1f5e7a; }
-        .search-input-group .btn-search.btn-secondary { background: #e2edf2; color: #1e4a6e; }
-        .search-input-group .btn-search.btn-secondary:hover { background: #cbdde6; }
+        .search-input-group .btn-search.btn-primary { background: var(--btn-primary); color: white; }
+        .search-input-group .btn-search.btn-primary:hover { background: var(--btn-primary-hover); }
+        .search-input-group .btn-search.btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); }
+        .search-input-group .btn-search.btn-secondary:hover { background: var(--border-color); }
         .combobox-wrapper { position: relative; width: 100%; }
-        .combobox-input { display: flex; align-items: center; background: white; border: 2px solid #e2edf2; border-radius: 12px; transition: all 0.3s ease; padding: 0 12px; }
-        .combobox-input:focus-within { border-color: #2c7da0; box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
-        .combobox-input .combobox-icon { color: #94a3b8; font-size: 0.9rem; margin-right: 10px; transition: 0.3s; }
-        .combobox-input:focus-within .combobox-icon { color: #2c7da0; }
-        .combobox-input input { flex: 1; border: none; padding: 12px 0; font-size: 0.95rem; background: transparent; color: #0f172a; outline: none; font-family: inherit; }
-        .combobox-input input::placeholder { color: #94a3b8; }
-        .combobox-arrow { color: #94a3b8; font-size: 0.8rem; transition: 0.3s; margin-left: 8px; }
+        .combobox-input { display: flex; align-items: center; background: white; border: 2px solid var(--border-light); border-radius: 12px; transition: all 0.3s ease; padding: 0 12px; }
+        .combobox-input:focus-within { border-color: var(--btn-primary); box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
+        .combobox-input .combobox-icon { color: var(--text-light); font-size: 0.9rem; margin-right: 10px; transition: 0.3s; }
+        .combobox-input:focus-within .combobox-icon { color: var(--btn-primary); }
+        .combobox-input input { flex: 1; border: none; padding: 12px 0; font-size: 0.95rem; background: transparent; color: var(--text-primary); outline: none; font-family: inherit; }
+        .combobox-input input::placeholder { color: var(--text-light); }
+        .combobox-arrow { color: var(--text-light); font-size: 0.8rem; transition: 0.3s; margin-left: 8px; }
         .combobox-arrow.open { transform: rotate(180deg); }
-        .combobox-clear { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px; font-size: 1rem; transition: 0.2s; }
-        .combobox-clear:hover { color: #ef4444; }
-        .combobox-dropdown { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: white; border: 2px solid #e2edf2; border-radius: 12px; max-height: 240px; overflow-y: auto; display: none; z-index: 1000; box-shadow: 0 12px 40px rgba(0,0,0,0.12); animation: dropdownFade 0.2s ease; }
+        .combobox-clear { background: none; border: none; color: var(--text-light); cursor: pointer; padding: 4px; font-size: 1rem; transition: 0.2s; }
+        .combobox-clear:hover { color: var(--badge-danger-text); }
+        .combobox-dropdown { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: white; border: 2px solid var(--border-light); border-radius: 12px; max-height: 240px; overflow-y: auto; display: none; z-index: 1000; box-shadow: 0 12px 40px rgba(0,0,0,0.12); animation: dropdownFade 0.2s ease; }
         .combobox-dropdown.open { display: block; }
         @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .combobox-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; cursor: pointer; transition: 0.15s; border-bottom: 1px solid #f1f5f9; }
+        .combobox-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; cursor: pointer; transition: 0.15s; border-bottom: 1px solid var(--border-light); }
         .combobox-item:last-child { border-bottom: none; }
-        .combobox-item:hover { background: #f1f9fe; }
+        .combobox-item:hover { background: var(--bg-table-header); }
         .combobox-item .item-info { display: flex; align-items: center; gap: 12px; }
-        .combobox-item .item-id { font-weight: 700; color: #1e4a6e; font-size: 0.8rem; background: #f1f9fe; padding: 2px 10px; border-radius: 20px; }
-        .combobox-item .item-name { font-weight: 500; color: #0f172a; }
-        .combobox-item .item-badge { font-size: 0.65rem; padding: 2px 10px; border-radius: 20px; background: #e2edf2; color: #475569; }
-        .combobox-item .item-badge.staff { background: #dbeafe; color: #1e40af; }
-        .combobox-item .item-badge.user { background: #fce7f3; color: #be185d; }
-        .combobox-item .btn-pilih-item { background: #2c7da0; color: white; border: none; padding: 4px 14px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: 600; transition: 0.2s; }
-        .combobox-item .btn-pilih-item:hover { background: #1f5e7a; transform: scale(1.05); }
+        .combobox-item .item-id { font-weight: 700; color: var(--text-secondary); font-size: 0.8rem; background: var(--bg-table-header); padding: 2px 10px; border-radius: 20px; }
+        .combobox-item .item-name { font-weight: 500; color: var(--text-primary); }
+        .combobox-item .item-badge { font-size: 0.65rem; padding: 2px 10px; border-radius: 20px; background: var(--bg-secondary); color: var(--badge-secondary-text); }
+        .combobox-item .item-badge.staff { background: var(--badge-info-bg); color: var(--badge-info-text); }
+        .combobox-item .item-badge.user { background: #fce7f3; color: var(--badge-danger-text); }
+        .combobox-item .btn-pilih-item { background: var(--btn-primary); color: white; border: none; padding: 4px 14px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: 600; transition: 0.2s; }
+        .combobox-item .btn-pilih-item:hover { background: var(--btn-primary-hover); transform: scale(1.05); }
         .combobox-item .btn-pilih-item i { margin-right: 4px; }
-        .combobox-empty { padding: 20px; text-align: center; color: #94a3b8; font-size: 0.9rem; }
-        .combobox-loading { padding: 20px; text-align: center; color: #94a3b8; font-size: 0.9rem; }
+        .combobox-empty { padding: 20px; text-align: center; color: var(--text-light); font-size: 0.9rem; }
+        .combobox-loading { padding: 20px; text-align: center; color: var(--text-light); font-size: 0.9rem; }
         .combobox-loading i { margin-right: 8px; }
         .combobox-selected { margin-top: 10px; }
-        .selected-badge { display: inline-flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 6px 14px 6px 12px; font-size: 0.85rem; font-weight: 500; color: #166534; animation: badgePop 0.3s ease; }
+        .selected-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--badge-success-bg); border: 1px solid var(--badge-success-bg); border-radius: 20px; padding: 6px 14px 6px 12px; font-size: 0.85rem; font-weight: 500; color: var(--badge-success-text); animation: badgePop 0.3s ease; }
         @keyframes badgePop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .selected-badge i { font-size: 1rem; }
-        .selected-remove { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 2px 4px; font-size: 0.9rem; transition: 0.2s; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .selected-remove:hover { color: #ef4444; background: #fee2e2; }
-        .modern-select { width: 100%; padding: 12px 16px; border: 2px solid #e2edf2; border-radius: 12px; font-size: 0.95rem; background: white; color: #0f172a; transition: all 0.3s ease; font-family: inherit; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; cursor: pointer; }
-        .modern-select:focus { outline: none; border-color: #2c7da0; box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
+        .selected-remove { background: none; border: none; color: var(--text-light); cursor: pointer; padding: 2px 4px; font-size: 0.9rem; transition: 0.2s; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .selected-remove:hover { color: var(--badge-danger-text); background: var(--badge-danger-bg); }
+        .modern-select { width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: 12px; font-size: 0.95rem; background: white; color: var(--text-primary); transition: all 0.3s ease; font-family: inherit; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; cursor: pointer; }
+        .modern-select:focus { outline: none; border-color: var(--btn-primary); box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
         .hari-chips { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
-        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 30px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: #475569; transition: all 0.25s ease; user-select: none; }
-        .chip:hover { border-color: #94a3b8; background: #e2e8f0; transform: translateY(-1px); }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: var(--bg-secondary); border: 2px solid #e2e8f0; border-radius: 30px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--badge-secondary-text); transition: all 0.25s ease; user-select: none; }
+        .chip:hover { border-color: var(--text-light); background: var(--badge-secondary-bg); transform: translateY(-1px); }
         .chip input[type="checkbox"] { display: none; }
-        .chip.active { background: #22c55e !important; border-color: #16a34a !important; color: white !important; box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4) !important; transform: scale(1.05) !important; }
+        .chip.active { background: var(--btn-success) !important; border-color: #16a34a !important; color: white !important; box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4) !important; transform: scale(1.05) !important; }
         .chip.active::before { content: "\f00c "; font-family: "Font Awesome 6 Free"; font-weight: 900; }
-        .chip.active:hover { background: #16a34a !important; border-color: #15803d !important; box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5) !important; }
+        .chip.active:hover { background: #16a34a !important; border-color: var(--badge-success-text) !important; box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5) !important; }
         .shift-result { margin-top: 12px; padding: 16px 20px; border-radius: 12px; display: none; }
-        .shift-result.success { display: block; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
-        .shift-result.error { display: block; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .shift-result.success { display: block; background: var(--badge-success-bg); border: 1px solid var(--badge-success-bg); color: var(--badge-success-text); }
+        .shift-result.error { display: block; background: #fef2f2; border: 1px solid #fecaca; color: var(--badge-danger-text); }
         .shift-result .close-result { background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: auto; padding: 0 4px; }
         .shift-result .close-result:hover { opacity: 0.7; }
         .shift-result .result-icon { font-size: 1.4rem; margin-right: 12px; }
@@ -102,9 +102,9 @@
         @media (max-width: 768px) { .combobox-input input { font-size: 0.85rem; padding: 10px 0; } .combobox-item { padding: 8px 12px; flex-wrap: wrap; gap: 6px; } .chip { padding: 6px 12px; font-size: 0.75rem; } .hari-chips { gap: 6px; } .shift-result { padding: 12px 16px; font-size: 0.9rem; } }
         @media (max-width: 480px) { .shift-result { font-size: 0.85rem; padding: 10px 14px; } .shift-result .result-detail { font-size: 0.75rem; } }
         .badge-status { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; }
-        .badge-status.baru { background: #dbeafe; color: #1e40af; }
-        .badge-status.dirawat { background: #fef3c7; color: #92400e; }
-        .badge-status.pulang { background: #dcfce7; color: #15803d; }
+        .badge-status.baru { background: var(--badge-info-bg); color: var(--badge-info-text); }
+        .badge-status.dirawat { background: var(--badge-warning-bg); color: var(--badge-warning-text); }
+        .badge-status.pulang { background: var(--badge-success-bg); color: var(--badge-success-text); }
     </style>
     <script>
         // Cegah flash of wrong theme – langsung set data-theme sebelum render
@@ -256,14 +256,14 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width:15%;">ID</th>
+                                <th style="width:15%;">No</th>
                                 <th style="width:50%;">Nama</th>
                                 <th style="width:20%;">Status</th>
                                 <th style="width:15%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="checkup_pasien_table">
-                            <tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Ketik dan cari pasien...</td></tr>
+                            <tr><td colspan="4" style="text-align:center;padding:12px;color: var(--text-muted);">Ketik dan cari pasien...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -288,14 +288,14 @@
                     <table>
                         <thead>
                             <tr>
-                                <th style="width:15%;">ID</th>
+                                <th style="width:15%;">No</th>
                                 <th style="width:40%;">Nama</th>
                                 <th style="width:30%;">Spesialisasi</th>
                                 <th style="width:15%;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="checkup_dokter_table">
-                            <tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Ketik dan cari dokter...</td></tr>
+                            <tr><td colspan="4" style="text-align:center;padding:12px;color: var(--text-muted);">Ketik dan cari dokter...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -361,7 +361,7 @@
                 <input type="hidden" id="shift_combobox_id" required>
                 <div class="combobox-selected" id="shift_combobox_selected" style="display:none;">
                     <span class="selected-badge">
-                        <i class="fas fa-check-circle" style="color:#10b981;"></i>
+                        <i class="fas fa-check-circle" style="color: var(--badge-success-text);"></i>
                         <span id="shift_combobox_selected_text">Ani (ID: 1)</span>
                         <button type="button" id="shift_combobox_remove" class="selected-remove">
                             <i class="fas fa-times"></i>
@@ -405,8 +405,8 @@
                     </label>
                 </div>
 
-                <div id="selectedDaysIndicator" style="margin-top:8px;padding:8px 12px;background:#f1f9fe;border-radius:8px;display:none;font-size:0.85rem;">
-                    <i class="fas fa-check-circle" style="color:#10b981;"></i>
+                <div id="selectedDaysIndicator" style="margin-top:8px;padding:8px 12px;background: var(--bg-table-header);border-radius:8px;display:none;font-size:0.85rem;">
+                    <i class="fas fa-check-circle" style="color: var(--badge-success-text);"></i>
                     Hari terpilih: <strong id="selectedDaysList">-</strong>
                 </div>
             </div>
@@ -468,12 +468,12 @@
         var tbody = document.getElementById('checkup_pasien_table');
         if (!tbody) return;
         if (!pasienList || pasienList.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Tidak ada pasien ditemukan</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color: var(--text-muted);">Tidak ada pasien ditemukan</td></tr>';
             return;
         }
         var selectedId = document.getElementById('checkup_id_pasien').value;
         var html = '';
-        pasienList.forEach(function(p) {
+        pasienList.forEach(function(p, idx) {
             var isSelected = (p.id_pasien == selectedId);
             var statusText = '';
             var statusClass = '';
@@ -481,8 +481,8 @@
             else if (p.msh_dirawat === 'dirawat') { statusText = 'Dirawat'; statusClass = 'badge-status dirawat'; }
             else if (p.msh_dirawat === 'pulang') { statusText = 'Pulang'; statusClass = 'badge-status pulang'; }
             else { statusText = p.msh_dirawat || '-'; statusClass = 'badge-status'; }
-            html += '<tr onclick="window.pilihPasienCheckup(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
-                '<td><strong>' + p.id_pasien + '</strong></td>' +
+            html += '<tr onclick="window.pilihPasienCheckup(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')" style="cursor:pointer;' + (isSelected ? 'background: var(--badge-info-bg);' : '') + '">' +
+                '<td><strong>' + (idx + 1) + '</strong></td>' +
                 '<td>' + escapeHtml(p.nama) + '</td>' +
                 '<td><span class="' + statusClass + '">' + statusText + '</span></td>' +
                 '<td><button type="button" onclick="event.stopPropagation();window.pilihPasienCheckup(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
@@ -495,16 +495,16 @@
         var tbody = document.getElementById('checkup_dokter_table');
         if (!tbody) return;
         if (!dokterList || dokterList.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Tidak ada dokter ditemukan</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color: var(--text-muted);">Tidak ada dokter ditemukan</td></tr>';
             return;
         }
         var selectedId = document.getElementById('checkup_id_dokter').value;
         var html = '';
-        dokterList.forEach(function(d) {
+        dokterList.forEach(function(d, idx) {
             var isSelected = (d.id_dokter == selectedId);
             var spesialisasi = d.spesialisasi || 'Umum';
-            html += '<tr onclick="window.pilihDokterCheckup(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
-                '<td><strong>' + d.id_dokter + '</strong></td>' +
+            html += '<tr onclick="window.pilihDokterCheckup(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')" style="cursor:pointer;' + (isSelected ? 'background: var(--badge-info-bg);' : '') + '">' +
+                '<td><strong>' + (idx + 1) + '</strong></td>' +
                 '<td>' + escapeHtml(d.nama_dokter) + '</td>' +
                 '<td><span class="badge-status spesialisasi">' + escapeHtml(spesialisasi) + '</span></td>' +
                 '<td><button type="button" onclick="event.stopPropagation();window.pilihDokterCheckup(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
@@ -795,9 +795,9 @@
                 resultDiv.style.display = 'flex';
                 resultDiv.style.alignItems = 'center';
                 resultDiv.style.gap = '12px';
-                resultDiv.innerHTML = '<i class="fas fa-check-circle result-icon" style="color:#22c55e;"></i>' +
+                resultDiv.innerHTML = '<i class="fas fa-check-circle result-icon" style="color:var(--btn-success);"></i>' +
                     '<div style="flex:1;"><strong>Shift Berhasil Disimpan!</strong><br><span class="result-detail">' + (tipe === 'staff' ? 'Staff' : 'User') + ': <strong>' + escapeHtml(nama) + '</strong> | Shift: <strong>' + shift + '</strong> | Hari: <strong>' + hari.join(', ') + '</strong> (' + hari.length + ' hari)</span></div>' +
-                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color:#166534;"><i class="fas fa-times"></i></button>';
+                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color: var(--badge-success-text);"><i class="fas fa-times"></i></button>';
                 resetCombobox();
                 document.querySelectorAll('#shift_hari_checkboxes input[type="checkbox"]').forEach(function(cb) { cb.checked = false; cb.closest('.chip').classList.remove('active'); });
                 updateSelectedDaysIndicator();
@@ -809,9 +809,9 @@
                 resultDiv.style.display = 'flex';
                 resultDiv.style.alignItems = 'center';
                 resultDiv.style.gap = '12px';
-                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle result-icon" style="color:#ef4444;"></i>' +
+                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle result-icon" style="color:var(--badge-danger-text);"></i>' +
                     '<div style="flex:1;"><strong>Gagal Menyimpan Shift</strong><br><span class="result-detail">' + escapeHtml(err.message || 'Terjadi kesalahan') + '</span></div>' +
-                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color:#991b1b;"><i class="fas fa-times"></i></button>';
+                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color: var(--badge-danger-text);"><i class="fas fa-times"></i></button>';
                 showNotification('Gagal: ' + err.message, 'error');
             }
             btn.disabled = false;
@@ -841,7 +841,7 @@
         var icon = type === 'success' ? '<i class="fas fa-check-circle" style="font-size:1.2rem;"></i>' : '<i class="fas fa-exclamation-circle" style="font-size:1.2rem;"></i>';
         var div = document.createElement('div');
         div.className = 'toast-notification';
-        div.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:16px;color:white;font-weight:500;font-size:0.95rem;box-shadow:0 10px 30px rgba(0,0,0,0.15);animation:slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);max-width:450px;' + (type === 'success' ? 'background:#10b981;' : 'background:#ef4444;') + 'border:1px solid rgba(255,255,255,0.1);';
+        div.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:16px;color:white;font-weight:500;font-size:0.95rem;box-shadow:0 10px 30px rgba(0,0,0,0.15);animation:slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);max-width:450px;' + (type === 'success' ? 'background: var(--btn-success);' : 'background: var(--btn-danger);') + 'border:1px solid rgba(255,255,255,0.1);';
         div.innerHTML = icon + ' ' + message;
         document.body.appendChild(div);
         setTimeout(function() { div.style.animation = 'slideOutDown 0.3s ease forwards'; setTimeout(function() { if (div.parentNode) div.remove(); }, 350); }, 4000);

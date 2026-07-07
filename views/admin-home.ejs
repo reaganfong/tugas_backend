@@ -12,23 +12,23 @@
             border-radius: 24px;
             padding: 16px 24px;
             margin-bottom: 24px;
-            border: 1px solid #e9f0f3;
+            border: 1px solid var(--border-color);
             font-size: 1rem;
-            color: #1e4a6e;
+            color: var(--text-secondary);
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         .welcome-text b {
-            color: #0b3b5f;
+            color: var(--gradient-start);
         }
         .welcome-text i {
             margin-right: 8px;
-            color: #2c7da0;
+            color: var(--btn-primary);
         }
 
         .btn-back {
-            background: #e2edf2;
-            color: #1e4a6e;
-            border: 2px solid #cbdde6;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
             padding: 10px 24px;
             border-radius: 40px;
             font-weight: 700;
@@ -37,7 +37,7 @@
             font-size: 0.95rem;
         }
         .btn-back:hover {
-            background: #cbdde6;
+            background: var(--border-color);
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
@@ -57,7 +57,7 @@
             border-radius: 24px;
             padding: 32px 24px;
             text-align: center;
-            border: 1px solid #e9f0f3;
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
@@ -66,43 +66,43 @@
         .menu-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.12);
-            border-color: #2c7da0;
+            border-color: var(--btn-primary);
         }
 
         .menu-card .icon {
             font-size: 3rem;
-            color: #2c7da0;
+            color: var(--btn-primary);
             margin-bottom: 16px;
             display: block;
         }
 
         .menu-card .icon i {
-            background: #f1f9fe;
+            background: var(--bg-table-header);
             padding: 20px;
             border-radius: 50%;
             transition: 0.3s;
         }
 
         .menu-card:hover .icon i {
-            background: #2c7da0;
+            background: var(--btn-primary);
             color: white;
         }
 
         .menu-card h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #1e4a6e;
+            color: var(--text-secondary);
             margin-bottom: 8px;
         }
 
         .menu-card p {
             font-size: 0.85rem;
-            color: #6c8eae;
+            color: var(--text-muted);
             margin-bottom: 16px;
         }
 
         .menu-card .btn-menu {
-            background: #2c7da0;
+            background: var(--btn-primary);
             color: white;
             border: none;
             padding: 10px 28px;
@@ -114,7 +114,7 @@
         }
 
         .menu-card .btn-menu:hover {
-            background: #1f5e7a;
+            background: var(--btn-primary-hover);
             transform: scale(1.03);
         }
 
@@ -123,7 +123,7 @@
         }
 
         .btn-logout {
-            background: #dc2626;
+            background: var(--btn-danger);
             color: white;
             border: none;
             padding: 10px 24px;
@@ -136,7 +136,7 @@
         }
 
         .btn-logout:hover {
-            background: #b91c1c;
+            background: var(--btn-danger-hover);
             transform: translateY(-1px);
             box-shadow: 0 6px 12px rgba(220,38,38,0.2);
         }
@@ -174,14 +174,14 @@
     <div class="dashboard-grid">
         <div class="menu-card" onclick="location.href='/admin/view'">
             <span class="icon"><i class="fas fa-eye"></i></span>
-            <h3><i class="fas fa-edit" style="font-size:0.9rem;color:#2c7da0;"></i> Lihat & Edit Data</h3>
+            <h3><i class="fas fa-edit" style="font-size:0.9rem;color:var(--btn-primary);"></i> Lihat & Edit Data</h3>
             <p>Kelola pasien, dokter, staff, ruangan, shift, dan notifikasi</p>
             <button class="btn-menu"><i class="fas fa-arrow-right"></i> Buka</button>
         </div>
 
         <div class="menu-card" onclick="location.href='/admin/add'">
             <span class="icon"><i class="fas fa-plus-circle"></i></span>
-            <h3><i class="fas fa-plus" style="font-size:0.9rem;color:#2c7da0;"></i> Tambah Data</h3>
+            <h3><i class="fas fa-plus" style="font-size:0.9rem;color:var(--btn-primary);"></i> Tambah Data</h3>
             <p>Tambah pasien baru, bayi, staff, checkup, dan shift</p>
             <button class="btn-menu"><i class="fas fa-arrow-right"></i> Buka</button>
         </div>

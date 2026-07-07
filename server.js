@@ -55,22 +55,6 @@ app.use('/models', express.static(path.join(__dirname, 'src', 'public', 'models'
 app.use('/controllers', express.static(path.join(__dirname, 'src', 'public', 'controllers')));
 
 // ========== AUTH MIDDLEWARE UNTUK HALAMAN (JWT via cookie) ==========
-function verifyTokenFromCookie(req, res, next) {
-    const token = req.cookies?.token;
-    if (!token) {
-        return res.redirect('/login');
-    }
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (err) {
-        console.log('[PAGE AUTH] Invalid token:', err.message);
-        return res.redirect('/login');
-    }
-}
-
 function requireRole(role) {
     return (req, res, next) => {
         const token = req.cookies?.token;

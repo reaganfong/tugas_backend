@@ -211,7 +211,7 @@ function renderHasil(data) {
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Check-in</th>
                                 <th>Check-out</th>
                                 <th>Dokter</th>
@@ -222,7 +222,7 @@ function renderHasil(data) {
                         <tbody>
                             ${riwayat.map(r => `
                                 <tr>
-                                    <td>${r.id_checkup}</td>
+                                    <td>${idx + 1}</td>
                                     <td>${r.checkin_formatted || '-'}</td>
                                     <td>${r.checkout_formatted || '-'}</td>
                                     <td>${escapeHtml(r.nama_dokter || '-')}</td>

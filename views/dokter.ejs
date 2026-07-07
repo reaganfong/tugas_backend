@@ -54,13 +54,13 @@
         <div id="notificationPasien" class="notification-container"></div>
         <div class="search-bar">
             <input type="text" id="searchPasien" placeholder="Cari pasien...">
-            <i class="fas fa-search" style="color:#6c8eae;margin-left:-40px;"></i>
+            <i class="fas fa-search" style="color: var(--text-muted);margin-left:-40px;"></i>
         </div>
         
         <!-- Pasien Dirawat -->
         <div style="margin-bottom:20px;">
-            <h3 style="color:#1e4a6e;font-size:1rem;margin-bottom:10px;">
-                <i class="fas fa-hospital-user" style="color:#2c7da0;"></i> Sedang Dirawat
+            <h3 style="color: var(--text-secondary);font-size:1rem;margin-bottom:10px;">
+                <i class="fas fa-hospital-user" style="color:var(--btn-primary);"></i> Sedang Dirawat
             </h3>
             <div class="table-container">
                 <table class="data-table">
@@ -88,8 +88,8 @@
 
         <!-- Pasien Pulang -->
         <div>
-            <h3 style="color:#1e4a6e;font-size:1rem;margin-bottom:10px;">
-                <i class="fas fa-check-circle" style="color:#10b981;"></i> Sudah Pulang
+            <h3 style="color: var(--text-secondary);font-size:1rem;margin-bottom:10px;">
+                <i class="fas fa-check-circle" style="color: var(--badge-success-text);"></i> Sudah Pulang
             </h3>
             <div class="table-container">
                 <table class="data-table">
@@ -120,14 +120,14 @@
     <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
             <h2 style="font-size:1.1rem;margin:0;">
-                <i class="fas fa-calendar-check" style="color:#2c7da0;"></i> 
+                <i class="fas fa-calendar-check" style="color:var(--btn-primary);"></i> 
                 Jadwal Checkup Saya
-                <span class="data-count" id="jadwalCount" style="font-size:0.8rem;color:#6c8eae;font-weight:400;margin-left:8px;">
+                <span class="data-count" id="jadwalCount" style="font-size:0.8rem;color: var(--text-muted);font-weight:400;margin-left:8px;">
                     (<span id="jadwalTotal">0</span> jadwal)
                 </span>
             </h2>
             <div style="display:flex;gap:8px;align-items:center;">
-                <button onclick="refreshJadwal()" class="btn-refresh" style="background:#e2edf2;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;color:#1e4a6e;transition:0.2s;">
+                <button onclick="refreshJadwal()" class="btn-refresh" style="background: var(--bg-secondary);border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;color: var(--text-secondary);transition:0.2s;">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
@@ -139,7 +139,7 @@
             max-height: 400px;
             overflow-y: auto;
             border-radius: 12px;
-            border: 1px solid #e2edf2;
+            border: 1px solid var(--border-light);
             position: relative;
         ">
             <div class="table-responsive" style="overflow-x: auto;">
@@ -153,11 +153,11 @@
                         position: sticky;
                         top: 0;
                         z-index: 10;
-                        background: #f1f9fe;
-                        border-bottom: 2px solid #dcecf3;
+                        background: var(--bg-table-header);
+                        border-bottom: 2px solid var(--border-color);
                     ">
                         <tr>
-                            <th>ID</th>
+                            <th>No</th>
                             <th>Pasien</th>
                             <th>Check-in</th>
                             <th>Check-out</th>
@@ -169,7 +169,7 @@
                     <tbody id="jadwalBody">
                         <tr>
                             <td colspan="7" class="empty-state">
-                                <i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:12px;color:#cbdde6;"></i>
+                                <i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:12px;color:var(--border-color);"></i>
                                 <span>Belum ada jadwal checkup</span>
                             </td>
                         </tr>
@@ -179,8 +179,8 @@
         </div>
 
         <!-- Pagination -->
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #e9f0f3;">
-            <div style="font-size:0.85rem;color:#6c8eae;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-color);">
+            <div style="font-size:0.85rem;color: var(--text-muted);">
                 <i class="fas fa-list"></i> 
                 Menampilkan <span id="jadwalFrom">0</span>-<span id="jadwalTo">0</span> 
                 dari <span id="jadwalTotalBottom">0</span> jadwal

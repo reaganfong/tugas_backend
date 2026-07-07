@@ -368,7 +368,6 @@ const getRuanganStatus = async (req, res) => {
                 biaya_per_hari: r.biaya_per_hari,
                 id_tagihan: r.id_tagihan,
                 tanggal_checkin: r.tanggal_checkin,
-                lama_inap: r.lama_inap,
                 nama_pasien: r.pasien?.nama || null,
                 lama_inap_hari: lamaInapHari,
                 lama_inap: r.status === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null
@@ -439,7 +438,6 @@ const getRuanganWithFilter = async (req, res) => {
                 biaya_per_hari: r.biaya_per_hari,
                 id_tagihan: r.id_tagihan,
                 tanggal_checkin: r.tanggal_checkin,
-                lama_inap: r.lama_inap,
                 nama_pasien: r.pasien?.nama || null,
                 lama_inap_hari: lamaInapHari,
                 lama_inap: r.status === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null

@@ -48,12 +48,12 @@
             flex-shrink: 0;
         }
         
-        .summary-card .icon.blue { background: #dbeafe; color: #1e40af; }
-        .summary-card .icon.green { background: #dcfce7; color: #15803d; }
-        .summary-card .icon.purple { background: #ede9fe; color: #6d28d9; }
-        .summary-card .icon.orange { background: #fef3c7; color: #92400e; }
-        .summary-card .icon.red { background: #fee2e2; color: #b91c1c; }
-        .summary-card .icon.pink { background: #fce7f3; color: #be185d; }
+        .summary-card .icon.blue { background: var(--badge-info-bg); color: var(--badge-info-text); }
+        .summary-card .icon.green { background: var(--badge-success-bg); color: var(--badge-success-text); }
+        .summary-card .icon.purple { background: #ede9fe; color: var(--text-secondary); }
+        .summary-card .icon.orange { background: var(--badge-warning-bg); color: var(--badge-warning-text); }
+        .summary-card .icon.red { background: var(--badge-danger-bg); color: var(--badge-danger-text); }
+        .summary-card .icon.pink { background: #fce7f3; color: var(--badge-danger-text); }
         
         .summary-card .info h3 {
             font-size: 0.75rem;
@@ -94,18 +94,18 @@
         .data-count {
             font-size: 0.8rem;
             font-weight: 400;
-            color: #6c8eae;
+            color: var(--text-muted);
             margin-left: 8px;
         }
         
         .data-count span {
             font-weight: 600;
-            color: #1e4a6e;
+            color: var(--text-secondary);
         }
         
         /* Tombol Hapus */
         .btn-delete {
-            background: #dc2626;
+            background: var(--btn-danger);
             color: white;
             border: none;
             padding: 4px 12px;
@@ -117,7 +117,7 @@
         }
         
         .btn-delete:hover {
-            background: #b91c1c;
+            background: var(--btn-danger-hover);
             transform: scale(1.05);
         }
         
@@ -184,14 +184,14 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #94a3b8;
+            color: var(--text-light);
             font-size: 0.9rem;
         }
 
         .search-input-wrapper input {
             width: 100%;
             padding: 8px 14px 8px 40px;
-            border: 1px solid #cbdde6;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.9rem;
             background: white;
@@ -200,7 +200,7 @@
 
         .search-input-wrapper input:focus {
             outline: none;
-            border-color: #2c7da0;
+            border-color: var(--btn-primary);
             box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
         }
 
@@ -221,14 +221,14 @@
             flex-wrap: wrap;
             margin-bottom: 12px;
             padding: 12px 16px;
-            background: #f8fafc;
+            background: var(--bg-secondary);
             border-radius: 12px;
             align-items: center;
         }
 
         .filter-bar select {
             padding: 8px 14px;
-            border: 1px solid #cbdde6;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.9rem;
             background: white;
@@ -260,12 +260,12 @@
             gap: 12px;
             margin-top: 16px;
             padding-top: 12px;
-            border-top: 1px solid #e9f0f3;
+            border-top: 1px solid var(--border-color);
         }
 
         .pagination-info {
             font-size: 0.85rem;
-            color: #6c8eae;
+            color: var(--text-muted);
         }
 
         .pagination-controls {
@@ -277,7 +277,7 @@
 
         .pagination-controls select {
             padding: 4px 8px;
-            border: 1px solid #cbdde6;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 0.8rem;
             background: white;
@@ -303,18 +303,18 @@
         }
 
         .badge-info {
-            background: #dbeafe;
-            color: #1e40af;
+            background: var(--badge-info-bg);
+            color: var(--badge-info-text);
         }
 
         .badge-warning {
-            background: #fef3c7;
-            color: #92400e;
+            background: var(--badge-warning-bg);
+            color: var(--badge-warning-text);
         }
 
         .badge-success {
-            background: #dcfce7;
-            color: #15803d;
+            background: var(--badge-success-bg);
+            color: var(--badge-success-text);
         }
     </style>
     <script>
@@ -355,7 +355,7 @@
     <section class="notif-section card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
             <h2 style="font-size:1rem;margin:0;">
-                <i class="fas fa-bell" style="color:#dc2626;"></i> Notifikasi
+                <i class="fas fa-bell" style="color:var(--badge-danger-text);"></i> Notifikasi
                 <span id="notifCount" class="badge badge-danger" style="font-size:0.7rem;margin-left:8px;">0</span>
             </h2>
             <button onclick="markAllNotifikasiRead()" class="btn-secondary" style="padding:4px 16px;font-size:0.75rem;">
@@ -538,7 +538,7 @@
     <section class="card" id="section-jadwal-checkup">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
             <h2 style="font-size:1.1rem;margin:0;">
-                <i class="fas fa-calendar-plus" style="color:#f59e0b;"></i> Jadwal Checkup
+                <i class="fas fa-calendar-plus" style="color:var(--btn-warning);"></i> Jadwal Checkup
                 <span class="data-count">Data: <span id="jadwalCheckupCount">0</span></span>
             </h2>
         </div>
@@ -586,7 +586,7 @@
     <section class="card" id="section-sudah-checkout">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
             <h2 style="font-size:1.1rem;margin:0;">
-                <i class="fas fa-check-double" style="color:#10b981;"></i> Sudah Checkout
+                <i class="fas fa-check-double" style="color: var(--badge-success-text);"></i> Sudah Checkout
                 <span class="data-count">Data: <span id="sudahCheckoutCount">0</span></span>
             </h2>
         </div>

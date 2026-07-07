@@ -151,7 +151,7 @@ async function loadStokObat() {
         console.log('[APOTEKER] Obat loaded:', obatList);
         
         if (!obatList || !Array.isArray(obatList)) {
-            tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: Format data tidak valid</td></tr>';
+            tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: Format data tidak valid</td></tr>';
             tbodyHabis.innerHTML = '';
             return;
         }
@@ -166,14 +166,14 @@ async function loadStokObat() {
         if (countHabis) countHabis.innerText = '(' + obatHabis.length + ')';
         
         if (obatTersedia.length === 0) {
-            tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data obat tersedia.</td></tr>';
+            tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data obat tersedia.</td></tr>';
         } else {
             var htmlTersedia = renderObatRows(obatTersedia);
             tbodyTersedia.innerHTML = htmlTersedia;
         }
         
         if (obatHabis.length === 0) {
-            tbodyHabis.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#10b981;"><i class="fas fa-check-circle"></i> Semua obat tersedia</td></tr>';
+            tbodyHabis.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--badge-success-text);"><i class="fas fa-check-circle"></i> Semua obat tersedia</td></tr>';
         } else {
             var htmlHabis = renderObatRows(obatHabis);
             tbodyHabis.innerHTML = htmlHabis;
@@ -183,7 +183,7 @@ async function loadStokObat() {
         
     } catch (err) {
         console.error('[APOTEKER] Error:', err);
-        tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
+        tbodyTersedia.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
         tbodyHabis.innerHTML = '';
     }
 }
@@ -198,7 +198,7 @@ async function loadRekomendasiObat() {
     }
     
     try {
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-spinner fa-spin"></i> Memuat rekomendasi obat...</div>';
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Memuat rekomendasi obat...</div>';
         
         console.log('[APOTEKER] Memanggil apiService.getCheckupRekomendasi()');
         var data = await apiService.getCheckupRekomendasi();
@@ -207,8 +207,8 @@ async function loadRekomendasiObat() {
         
         if (!data || data.length === 0) {
             container.innerHTML = `
-                <div style="text-align:center;padding:30px;color:#6c8eae;">
-                    <i class="fas fa-check-circle" style="font-size:2rem;display:block;margin-bottom:8px;color:#10b981;"></i>
+                <div style="text-align:center;padding:30px;color:var(--text-muted);">
+                    <i class="fas fa-check-circle" style="font-size:2rem;display:block;margin-bottom:8px;color:var(--badge-success-text);"></i>
                     Tidak ada rekomendasi obat dari dokter.
                 </div>
             `;
@@ -220,7 +220,7 @@ async function loadRekomendasiObat() {
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>ID Checkup</th>
+                            <th>No</th>
                             <th>Pasien</th>
                             <th>Dokter</th>
                             <th>Rekomendasi Obat</th>
@@ -231,26 +231,26 @@ async function loadRekomendasiObat() {
                     <tbody>
         `;
         
-        data.forEach(function(c) {
+        data.forEach(function(c, idx) {
             console.log('[APOTEKER] Render rekomendasi:', c.id_checkup, c.nama_pasien, c.rekomendasi_obat);
             
             var statusObat = c.total_obat_diproses > 0 
-                ? '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#dcfce7;color:#15803d;">Sudah Diproses</span>'
-                : '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#fef3c7;color:#92400e;">Menunggu</span>';
+                ? '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:var(--badge-success-bg);color:var(--badge-success-text);">Sudah Diproses</span>'
+                : '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:var(--badge-warning-bg);color:var(--badge-warning-text);">Menunggu</span>';
             
             html += `
                 <tr>
-                    <td><strong>${shortId(c.id_checkup)}</strong></td>
+                    <td><strong>${idx + 1}</strong></td>
                     <td>${escapeHtml(c.nama_pasien)}</td>
                     <td>${escapeHtml(c.nama_dokter)}</td>
                     <td style="max-width:200px;word-wrap:break-word;">${escapeHtml(c.rekomendasi_obat || '-')}</td>
                     <td>${statusObat}</td>
                     <td>
                         ${c.total_obat_diproses === 0 ? `
-                            <button class="btn-proses-obat" data-id="${c.id_checkup}" data-pasien="${escapeHtml(c.nama_pasien)}" style="background:#2c7da0;color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
+                            <button class="btn-proses-obat" data-id="${c.id_checkup}" data-pasien="${escapeHtml(c.nama_pasien)}" style="background:var(--btn-primary);color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
                                 <i class="fas fa-prescription"></i> Proses Obat
                             </button>
-                        ` : '<span style="color:#6c8eae;font-size:0.8rem;">Sudah diproses</span>'}
+                        ` : '<span style="color:var(--text-muted);font-size:0.8rem;">Sudah diproses</span>'}
                     </td>
                 </tr>
             `;
@@ -277,7 +277,7 @@ async function loadRekomendasiObat() {
     } catch (err) {
         console.error('[APOTEKER] Error loadRekomendasiObat:', err);
         container.innerHTML = `
-            <div style="text-align:center;padding:20px;color:#b91c1c;background:#fee2e2;border-radius:8px;">
+            <div style="text-align:center;padding:20px;color:var(--badge-danger-text);background:var(--badge-danger-bg);border-radius:8px;">
                 <i class="fas fa-exclamation-circle"></i> 
                 Error: ${err.message}
             </div>
@@ -296,31 +296,31 @@ function showProsesObatModal(idCheckup, namaPasien) {
     box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:650px;width:95%;max-height:90vh;overflow-y:auto;';
     
     box.innerHTML = `
-        <h2 style="margin:0 0 8px 0;color:#1e4a6e;">
-            <i class="fas fa-prescription" style="color:#2c7da0;"></i> Proses Obat
+        <h2 style="margin:0 0 8px 0;color:var(--text-secondary);">
+            <i class="fas fa-prescription" style="color:var(--btn-primary);"></i> Proses Obat
         </h2>
-        <p style="color:#6c8eae;font-size:0.9rem;margin-bottom:16px;">
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:16px;">
             Pasien: <strong>${escapeHtml(namaPasien)}</strong> (ID Checkup: ${idCheckup})
         </p>
         <div style="margin-bottom:16px;">
-            <label style="display:block;font-weight:600;font-size:0.85rem;color:#1e4a6e;margin-bottom:6px;">
+            <label style="display:block;font-weight:600;font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">
                 <i class="fas fa-pills"></i> Pilih Obat <span style="color:red;">*</span>
             </label>
-            <select id="obatSelect" style="width:100%;padding:10px 14px;border:1px solid #cbdde6;border-radius:8px;font-size:0.9rem;">
+            <select id="obatSelect" style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:0.9rem;">
                 <option value="">-- Pilih Obat --</option>
             </select>
         </div>
         <div style="margin-bottom:16px;">
-            <label style="display:block;font-weight:600;font-size:0.85rem;color:#1e4a6e;margin-bottom:6px;">
+            <label style="display:block;font-weight:600;font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px;">
                 <i class="fas fa-hashtag"></i> Jumlah <span style="color:red;">*</span>
             </label>
-            <input type="number" id="jumlahObat" min="1" value="1" style="width:100%;padding:10px 14px;border:1px solid #cbdde6;border-radius:8px;font-size:0.9rem;">
+            <input type="number" id="jumlahObat" min="1" value="1" style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:0.9rem;">
         </div>
         <div style="display:flex;gap:12px;">
-            <button id="btnProsesObatConfirm" style="flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+            <button id="btnProsesObatConfirm" style="flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
                 <i class="fas fa-save"></i> Proses Obat
             </button>
-            <button onclick="document.getElementById('prosesObatModal').remove()" style="padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;">
+            <button onclick="document.getElementById('prosesObatModal').remove()" style="padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);">
                 <i class="fas fa-times"></i> Batal
             </button>
         </div>
@@ -333,7 +333,7 @@ function showProsesObatModal(idCheckup, namaPasien) {
         .then(function(obatList) {
             var select = document.getElementById('obatSelect');
             select.innerHTML = '<option value="">-- Pilih Obat --</option>';
-            obatList.forEach(function(obat) {
+            obatList.forEach(function(obat, idx) {
                 var opt = document.createElement('option');
                 opt.value = obat.id_obat;
                 opt.textContent = obat.nama_obat + ' (Stok: ' + obat.stok + ', Harga: ' + formatCurrency(obat.harga || 0) + ')';
@@ -385,7 +385,7 @@ function showProsesObatModal(idCheckup, namaPasien) {
 
 function renderObatRows(obatList) {
     var html = '';
-    obatList.forEach(function(obat) {
+    obatList.forEach(function(obat, idx) {
         var statusStok = '';
         var statusColor = '';
         if (obat.stok <= 0) {
@@ -415,17 +415,17 @@ function renderObatRows(obatList) {
         
         html += `
             <tr>
-                <td>${shortId(obat.id_obat)}</td>
+                <td>${idx + 1}</td>
                 <td><strong>${escapeHtml(obat.nama_obat)}</strong></td>
                 <td>${obat.stok}</td>
                 <td>${formatCurrency(obat.harga || 0)}</td>
                 <td><span style="color:${statusColor};font-weight:600;">${statusStok}</span></td>
                 <td>${tanggalRestok}</td>
                 <td>
-                    <button class="btn-tambah" data-id="${obat.id_obat}" data-nama="${escapeHtml(obat.nama_obat)}" style="background:#10b981;color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
+                    <button class="btn-tambah" data-id="${obat.id_obat}" data-nama="${escapeHtml(obat.nama_obat)}" style="background:var(--btn-success);color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
                         <i class="fas fa-plus-circle"></i> Tambah
                     </button>
-                    <button class="btn-buang" data-id="${obat.id_obat}" data-nama="${escapeHtml(obat.nama_obat)}" style="background:#dc2626;color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
+                    <button class="btn-buang" data-id="${obat.id_obat}" data-nama="${escapeHtml(obat.nama_obat)}" style="background:var(--btn-danger);color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.75rem;cursor:pointer;transition:0.2s;">
                         <i class="fas fa-trash-alt"></i> Buang
                     </button>
                 </td>
@@ -468,14 +468,14 @@ async function showStokModal(action, idBarang, namaBarang) {
             title: 'Tambah Stok Obat',
             icon: 'fa-plus-circle',
             submitText: 'Tambah Stok',
-            color: '#10b981',
+            color: var(--badge-success-text),
             onSuccess: 'Stok berhasil ditambahkan!'
         },
         buang: {
             title: 'Buang Obat',
             icon: 'fa-trash-alt',
             submitText: 'Buang Obat',
-            color: '#dc2626',
+            color: var(--badge-danger-text),
             onSuccess: 'Obat berhasil dibuang!',
             confirmMessage: 'Apakah Anda yakin ingin membuang obat ini?'
         }
@@ -500,11 +500,11 @@ async function showStokModal(action, idBarang, namaBarang) {
     
     var header = document.createElement('div');
     header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid ' + config.color + ';padding-bottom:10px;';
-    header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas ' + config.icon + '" style="color:' + config.color + ';"></i> ' + config.title + '</h2><span onclick="document.getElementById(\'stokModal\').remove()" style="font-size:24px;cursor:pointer;color:#999;padding:0 8px;"><i class="fas fa-times"></i></span>';
+    header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas ' + config.icon + '" style="color:' + config.color + ';"></i> ' + config.title + '</h2><span onclick="document.getElementById(\'stokModal\').remove()" style="font-size:24px;cursor:pointer;color:var(--text-muted);padding:0 8px;"><i class="fas fa-times"></i></span>';
     box.appendChild(header);
     
     var info = document.createElement('div');
-    info.style.cssText = 'background:#f1f9fe;padding:10px 14px;border-radius:8px;margin-bottom:16px;color:#1e4a6e;font-weight:500;';
+    info.style.cssText = 'background:var(--bg-table-header);padding:10px 14px;border-radius:8px;margin-bottom:16px;color:var(--text-secondary);font-weight:500;';
     info.innerHTML = '<i class="fas fa-pills"></i> Obat: <strong>' + escapeHtml(namaBarang) + '</strong> (ID: ' + idBarang + ')';
     box.appendChild(info);
     
@@ -512,7 +512,7 @@ async function showStokModal(action, idBarang, namaBarang) {
     jumlahGroup.style.cssText = 'margin-bottom:14px;';
     
     var jumlahLabel = document.createElement('label');
-    jumlahLabel.style.cssText = 'display:block;font-weight:600;font-size:0.85rem;color:#1e4a6e;margin-bottom:5px;';
+    jumlahLabel.style.cssText = 'display:block;font-weight:600;font-size:0.85rem;color:var(--text-secondary);margin-bottom:5px;';
     jumlahLabel.textContent = 'Jumlah: *';
     jumlahGroup.appendChild(jumlahLabel);
     
@@ -522,17 +522,17 @@ async function showStokModal(action, idBarang, namaBarang) {
     jumlahInput.placeholder = 'Masukkan jumlah';
     jumlahInput.min = 1;
     jumlahInput.required = true;
-    jumlahInput.style.cssText = 'width:100%;padding:10px 14px;border:1px solid #cbdde6;border-radius:8px;font-size:0.9rem;';
+    jumlahInput.style.cssText = 'width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:0.9rem;';
     jumlahGroup.appendChild(jumlahInput);
     box.appendChild(jumlahGroup);
     
     var footer = document.createElement('div');
-    footer.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid #e9f0f3;';
+    footer.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);';
     footer.innerHTML = `
         <button id="stokSubmitBtn" style="flex:1;background:${config.color};color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
             <i class="fas fa-save"></i> ${config.submitText}
         </button>
-        <button onclick="document.getElementById('stokModal').remove();" style="padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;">
+        <button onclick="document.getElementById('stokModal').remove();" style="padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);">
             <i class="fas fa-times"></i> Batal
         </button>
     `;
@@ -601,8 +601,8 @@ function showTambahObatModal() {
     box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:450px;width:95%;';
     
     var header = document.createElement('div');
-    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-    header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-plus-circle"></i> Tambah Obat Baru</h2><span onclick="document.getElementById(\'tambahObatModal\').remove()" style="font-size:24px;cursor:pointer;color:#999;padding:0 8px;"><i class="fas fa-times"></i></span>';
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+    header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-plus-circle"></i> Tambah Obat Baru</h2><span onclick="document.getElementById(\'tambahObatModal\').remove()" style="font-size:24px;cursor:pointer;color:var(--text-muted);padding:0 8px;"><i class="fas fa-times"></i></span>';
     box.appendChild(header);
     
     var fields = [
@@ -617,7 +617,7 @@ function showTambahObatModal() {
         group.style.cssText = 'margin-bottom:14px;';
         
         var label = document.createElement('label');
-        label.style.cssText = 'display:block;font-weight:600;font-size:0.85rem;color:#1e4a6e;margin-bottom:5px;';
+        label.style.cssText = 'display:block;font-weight:600;font-size:0.85rem;color:var(--text-secondary);margin-bottom:5px;';
         label.textContent = field.label + (field.name === 'nama_obat' ? ' *' : '');
         group.appendChild(label);
         
@@ -627,19 +627,19 @@ function showTambahObatModal() {
         input.placeholder = field.placeholder || '';
         input.value = field.value || '';
         if (field.name === 'nama_obat') input.required = true;
-        input.style.cssText = 'width:100%;padding:10px 14px;border:1px solid #cbdde6;border-radius:8px;font-size:0.9rem;';
+        input.style.cssText = 'width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:0.9rem;';
         group.appendChild(input);
         
         box.appendChild(group);
     });
     
     var footer = document.createElement('div');
-    footer.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid #e9f0f3;';
+    footer.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);';
     footer.innerHTML = `
-        <button id="obatSubmitBtn" style="flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+        <button id="obatSubmitBtn" style="flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
             <i class="fas fa-save"></i> Simpan Obat
         </button>
-        <button onclick="document.getElementById('tambahObatModal').remove();" style="padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;">
+        <button onclick="document.getElementById('tambahObatModal').remove();" style="padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);">
             <i class="fas fa-times"></i> Batal
         </button>
     `;

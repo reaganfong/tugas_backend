@@ -78,7 +78,7 @@ function showToast(message, type) {
         ? '<i class="fas fa-check-circle"></i> ' 
         : '<i class="fas fa-exclamation-circle"></i> ';
     toast.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:12px 24px;border-radius:8px;color:white;z-index:99999;font-weight:500;' + 
-        (type === 'success' ? 'background:#10b981;' : 'background:#ef4444;');
+        (type === 'success' ? 'background:var(--btn-success);' : 'background:var(--btn-danger);');
     toast.innerHTML = icon + message;
     document.body.appendChild(toast);
     setTimeout(function() { toast.remove(); }, 3000);
@@ -98,8 +98,8 @@ function openModal(title, fields, data, onSave) {
     box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;';
     
     var header = document.createElement('div');
-    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-    header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-edit"></i> ' + title + '</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+    header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-edit"></i> ' + title + '</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
     box.appendChild(header);
     
     var form = document.createElement('form');
@@ -112,14 +112,14 @@ function openModal(title, fields, data, onSave) {
         group.style.cssText = 'margin-bottom:15px;';
         
         var label = document.createElement('label');
-        label.style.cssText = 'display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:#1e4a6e;';
+        label.style.cssText = 'display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:var(--text-secondary);';
         label.textContent = field.label;
         group.appendChild(label);
         
         var input;
         if (field.type === 'select') {
             input = document.createElement('select');
-            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;';
+            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;';
             field.options.forEach(function(opt) {
                 var option = document.createElement('option');
                 option.value = opt.value;
@@ -129,12 +129,12 @@ function openModal(title, fields, data, onSave) {
             });
         } else if (field.type === 'textarea') {
             input = document.createElement('textarea');
-            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;min-height:60px;resize:vertical;';
+            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;min-height:60px;resize:vertical;';
             input.value = value;
         } else {
             input = document.createElement('input');
             input.type = field.type || 'text';
-            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;';
+            input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;';
             input.value = value;
 
             if (field.min !== undefined) {
@@ -159,13 +159,13 @@ function openModal(title, fields, data, onSave) {
     
     var saveBtn = document.createElement('button');
     saveBtn.type = 'submit';
-    saveBtn.style.cssText = 'flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;';
+    saveBtn.style.cssText = 'flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;';
     saveBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
     btnGroup.appendChild(saveBtn);
     
     var cancelBtn = document.createElement('button');
     cancelBtn.type = 'button';
-    cancelBtn.style.cssText = 'padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;';
+    cancelBtn.style.cssText = 'padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);';
     cancelBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
     cancelBtn.onclick = function() {
         closeModal();
@@ -319,7 +319,7 @@ async function loadPasien() {
         if (countEl) countEl.innerText = pagination.total || 0;
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data pasien.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data pasien.</div>';
             updatePaginationInfo();
             container.style.opacity = '1';
             return;
@@ -374,7 +374,7 @@ async function loadPasien() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadPasien error:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -500,7 +500,7 @@ async function loadBayi() {
         if (countEl) countEl.innerText = pagination.total || 0;
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data bayi.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data bayi.</div>';
             updateBayiPaginationInfo();
             container.style.opacity = '1';
             return;
@@ -541,7 +541,7 @@ async function loadBayi() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadBayi error:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -680,7 +680,7 @@ async function loadJadwalCheckup() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadJadwalCheckup:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -698,8 +698,8 @@ function renderJadwalPage() {
     
     if (pageData.length === 0) {
         container.innerHTML = `
-            <div style="text-align:center;padding:30px;color:#6c8eae;">
-                <i class="fas fa-calendar-check" style="font-size:2rem;display:block;margin-bottom:12px;color:#cbdde6;"></i>
+            <div style="text-align:center;padding:30px;color:var(--text-muted);">
+                <i class="fas fa-calendar-check" style="font-size:2rem;display:block;margin-bottom:12px;color:var(--text-light);"></i>
                 Tidak ada jadwal checkup
             </div>
         `;
@@ -722,7 +722,7 @@ function renderJadwalPage() {
         html += '<td>';
         html += '<div class="action-buttons">';
         html += '<button class="btn-edit" onclick="editCheckup(\'' + c.id_checkup + '\')"><i class="fas fa-edit"></i> Edit</button>';
-        html += '<button class="btn-batal" onclick="batalCheckup(\'' + c.id_checkup + '\')" style="background:#f59e0b;color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;margin-left:4px;"><i class="fas fa-times"></i> Batal</button>';
+        html += '<button class="btn-batal" onclick="batalCheckup(\'' + c.id_checkup + '\')" style="background:var(--btn-warning);color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;margin-left:4px;"><i class="fas fa-times"></i> Batal</button>';
         html += '</div>';
         html += '</td>';
         html += '</tr>';
@@ -837,7 +837,7 @@ async function loadSudahCheckout() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadSudahCheckout:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -855,8 +855,8 @@ function renderCheckoutPage() {
     
     if (pageData.length === 0) {
         container.innerHTML = `
-            <div style="text-align:center;padding:30px;color:#6c8eae;">
-                <i class="fas fa-clock" style="font-size:2rem;display:block;margin-bottom:12px;color:#cbdde6;"></i>
+            <div style="text-align:center;padding:30px;color:var(--text-muted);">
+                <i class="fas fa-clock" style="font-size:2rem;display:block;margin-bottom:12px;color:var(--text-light);"></i>
                 Belum ada data checkout
             </div>
         `;
@@ -871,9 +871,9 @@ function renderCheckoutPage() {
     pageData.forEach(function(c) {
         var statusBadge = '';
         if (c.status === 'selesai') {
-            statusBadge = '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#dcfce7;color:#15803d;"><i class="fas fa-check-circle" style="margin-right:4px;"></i> Selesai</span>';
+            statusBadge = '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:var(--badge-success-bg);color:var(--badge-success-text);"><i class="fas fa-check-circle" style="margin-right:4px;"></i> Selesai</span>';
         } else if (c.status === 'batal') {
-            statusBadge = '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#fee2e2;color:#b91c1c;"><i class="fas fa-times-circle" style="margin-right:4px;"></i> Batal</span>';
+            statusBadge = '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:var(--badge-danger-bg);color:var(--badge-danger-text);"><i class="fas fa-times-circle" style="margin-right:4px;"></i> Batal</span>';
         } else {
             statusBadge = c.status || '-';
         }
@@ -1071,7 +1071,7 @@ async function loadDokter() {
         if (countEl) countEl.innerText = pagination.total || 0;
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data dokter.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data dokter.</div>';
             updateDokterPaginationInfo();
             container.style.opacity = '1';
             return;
@@ -1110,7 +1110,7 @@ async function loadDokter() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadDokter error:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -1242,7 +1242,7 @@ async function loadRuangan() {
         if (countEl) countEl.innerText = pagination.total || 0;
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data ruangan.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data ruangan.</div>';
             updateRuanganPaginationInfo();
             container.style.opacity = '1';
             return;
@@ -1298,7 +1298,7 @@ async function loadRuangan() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadRuangan error:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -1430,7 +1430,7 @@ async function loadStaff() {
         if (countEl) countEl.innerText = pagination.total || 0;
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<div style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-info-circle"></i> Tidak ada data staff.</div>';
+            container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data staff.</div>';
             updateStaffPaginationInfo();
             container.style.opacity = '1';
             return;
@@ -1468,7 +1468,7 @@ async function loadStaff() {
     } catch (err) {
         container.style.opacity = '1';
         console.error('[ERROR] loadStaff error:', err);
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</div>';
     }
 }
 
@@ -1577,7 +1577,7 @@ async function loadShiftJadwal() {
         const userShifts = data.users || [];
         
         if (staffShifts.length === 0) {
-            staffContainer.innerHTML = '<p style="color:#64748b;"><i class="fas fa-info-circle"></i> Tidak ada data shift staff.</p>';
+            staffContainer.innerHTML = '<p style="color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data shift staff.</p>';
         } else {
             let html = `
                 <table class="shift-table">
@@ -1621,7 +1621,7 @@ async function loadShiftJadwal() {
         }
         
         if (userShifts.length === 0) {
-            usersContainer.innerHTML = '<p style="color:#64748b;"><i class="fas fa-info-circle"></i> Tidak ada data shift users.</p>';
+            usersContainer.innerHTML = '<p style="color:var(--text-muted);"><i class="fas fa-info-circle"></i> Tidak ada data shift users.</p>';
         } else {
             let html = `
                 <table class="shift-table">
@@ -1666,8 +1666,8 @@ async function loadShiftJadwal() {
         
     } catch (err) {
         console.error('[ERROR] loadShiftJadwal:', err);
-        staffContainer.innerHTML = '<p style="color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</p>';
-        usersContainer.innerHTML = '<p style="color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</p>';
+        staffContainer.innerHTML = '<p style="color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</p>';
+        usersContainer.innerHTML = '<p style="color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + err.message + '</p>';
     }
 }
 
@@ -1690,10 +1690,10 @@ async function loadNotifikasi() {
         
         var html = '<div class="table-responsive"><table class="data-table">';
         html += '<thead><tr>';
-        html += '<th>ID</th><th>Jenis</th><th>Pesan</th><th>Tanggal</th><th>Aksi</th>';
+        html += '<th>No</th><th>Jenis</th><th>Pesan</th><th>Tanggal</th><th>Aksi</th>';
         html += '</tr></thead><tbody>';
         
-        data.forEach(function(n) {
+        data.forEach(function(n, idx) {
             var jenisIcon = n.jenis === 'fasilitas_rusak' 
                 ? '<i class="fas fa-tools"></i>'
                 : n.jenis === 'obat_dibuang'
@@ -1701,11 +1701,11 @@ async function loadNotifikasi() {
                 : '<i class="fas fa-bell"></i>';
             
             html += '<tr>';
-            html += '<td>' + n.id_notif + '</td>';
+            html += '<td>' + (idx + 1) + '</td>';
             html += '<td>' + jenisIcon + ' ' + escapeHtml(n.jenis || '-') + '</td>';
             html += '<td>' + escapeHtml(n.pesan || '-') + '</td>';
             html += '<td>' + formatDate(n.tanggal) + '</td>';
-            html += '<td><button class="btn-edit" onclick="markNotifikasiRead(\'' + n.id_notif + '\')" style="background:#10b981;color:white;"><i class="fas fa-check"></i> Tandai Dibaca</button></td>';
+            html += '<td><button class="btn-edit" onclick="markNotifikasiRead(\'' + n.id_notif + '\')" style="background:var(--btn-success);color:white;"><i class="fas fa-check"></i> Tandai Dibaca</button></td>';
             html += '</tr>';
         });
         
@@ -1766,26 +1766,26 @@ function editShiftStaff(id, currentHari, currentShift) {
             box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;';
             
             var header = document.createElement('div');
-            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-            header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-edit"></i> Edit Shift Staff</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+            header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-edit"></i> Edit Shift Staff</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
             box.appendChild(header);
             
             var info = document.createElement('div');
             info.className = 'staff-info';
-            info.style.cssText = 'background:#f1f9fe;padding:10px 14px;border-radius:8px;margin-bottom:16px;color:#1e4a6e;';
+            info.style.cssText = 'background:var(--bg-table-header);padding:10px 14px;border-radius:8px;margin-bottom:16px;color:var(--text-secondary);';
             
             if (staffName) {
                 info.innerHTML = '<i class="fas fa-user"></i> Staff: <strong>' + escapeHtml(staffName) + '</strong> (ID: ' + id + ')';
             } else {
-                info.innerHTML = '<i class="fas fa-user"></i> Staff ID: <strong>' + id + '</strong> <span style="color:#94a3b8;font-size:0.8rem;">(Memuat nama...)</span>';
+                info.innerHTML = '<i class="fas fa-user"></i> Staff ID: <strong>' + id + '</strong> <span style="color:var(--text-light);font-size:0.8rem;">(Memuat nama...)</span>';
             }
             box.appendChild(info);
             
             var shiftGroup = document.createElement('div');
             shiftGroup.style.cssText = 'margin-bottom:15px;';
             shiftGroup.innerHTML = `
-                <label style="display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:#1e4a6e;">Shift *</label>
-                <select id="edit_shift" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+                <label style="display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:var(--text-secondary);">Shift *</label>
+                <select id="edit_shift" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
                     <option value="Shift I" ${currentShift === 'Shift I' ? 'selected' : ''}>Shift I</option>
                     <option value="Shift II" ${currentShift === 'Shift II' ? 'selected' : ''}>Shift II</option>
                     <option value="Shift III" ${currentShift === 'Shift III' ? 'selected' : ''}>Shift III</option>
@@ -1796,31 +1796,31 @@ function editShiftStaff(id, currentHari, currentShift) {
             var hariGroup = document.createElement('div');
             hariGroup.style.cssText = 'margin-bottom:15px;';
             hariGroup.innerHTML = `
-                <label style="display:block;font-weight:600;margin-bottom:8px;font-size:14px;color:#1e4a6e;">
+                <label style="display:block;font-weight:600;margin-bottom:8px;font-size:14px;color:var(--text-secondary);">
                     <i class="fas fa-calendar-alt"></i> Hari (centang lebih dari satu) *
                 </label>
                 <div id="hari_checkboxes" style="display:flex;flex-wrap:wrap;gap:10px;">
                     ${['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'].map(function(h) {
                         var checked = selectedDays.includes(h) ? 'checked' : '';
                         return `
-                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;background:${checked ? '#dbeafe' : '#f8fafc'};border-radius:8px;border:1px solid ${checked ? '#2c7da0' : '#e2edf2'};">
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;background:${checked ? 'var(--badge-info-bg)' : 'var(--bg-secondary)'};border-radius:8px;border:1px solid ${checked ? 'var(--btn-primary)' : 'var(--border-light)'};">
                                 <input type="checkbox" value="${h}" ${checked} style="width:16px;height:16px;cursor:pointer;">
                                 ${h}
                             </label>
                         `;
                     }).join('')}
                 </div>
-                <small style="color:#6c8eae;font-size:0.75rem;">Pilih satu atau lebih hari</small>
+                <small style="color:var(--text-muted);font-size:0.75rem;">Pilih satu atau lebih hari</small>
             `;
             box.appendChild(hariGroup);
             
             var btnGroup = document.createElement('div');
             btnGroup.style.cssText = 'display:flex;gap:12px;margin-top:8px;';
             btnGroup.innerHTML = `
-                <button id="saveShiftBtn" style="flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+                <button id="saveShiftBtn" style="flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
                     <i class="fas fa-save"></i> Simpan Perubahan
                 </button>
-                <button onclick="closeModal()" style="padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;">
+                <button onclick="closeModal()" style="padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);">
                     <i class="fas fa-times"></i> Batal
                 </button>
             `;
@@ -1833,11 +1833,11 @@ function editShiftStaff(id, currentHari, currentShift) {
                 cb.addEventListener('change', function() {
                     var label = this.closest('label');
                     if (this.checked) {
-                        label.style.background = '#dbeafe';
-                        label.style.borderColor = '#2c7da0';
+                        label.style.background = 'var(--badge-info-bg)';
+                        label.style.borderColor = 'var(--btn-primary)';
                     } else {
-                        label.style.background = '#f8fafc';
-                        label.style.borderColor = '#e2edf2';
+                        label.style.background = 'var(--bg-secondary)';
+                        label.style.borderColor = 'var(--border-light)';
                     }
                 });
             });
@@ -1912,20 +1912,20 @@ function editShiftUser(id, currentHari, currentShift) {
             box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;';
             
             var header = document.createElement('div');
-            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-            header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-edit"></i> Edit Shift User</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+            header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-edit"></i> Edit Shift User</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
             box.appendChild(header);
             
             var info = document.createElement('div');
-            info.style.cssText = 'background:#f1f9fe;padding:10px 14px;border-radius:8px;margin-bottom:16px;color:#1e4a6e;';
+            info.style.cssText = 'background:var(--bg-table-header);padding:10px 14px;border-radius:8px;margin-bottom:16px;color:var(--text-secondary);';
             info.innerHTML = '<i class="fas fa-user"></i> User ID: <strong>' + id + '</strong>';
             box.appendChild(info);
             
             var shiftGroup = document.createElement('div');
             shiftGroup.style.cssText = 'margin-bottom:15px;';
             shiftGroup.innerHTML = `
-                <label style="display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:#1e4a6e;">Shift *</label>
-                <select id="edit_shift_user" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+                <label style="display:block;font-weight:600;margin-bottom:5px;font-size:14px;color:var(--text-secondary);">Shift *</label>
+                <select id="edit_shift_user" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
                     <option value="Shift I" ${currentShift === 'Shift I' ? 'selected' : ''}>Shift I</option>
                     <option value="Shift II" ${currentShift === 'Shift II' ? 'selected' : ''}>Shift II</option>
                     <option value="Shift III" ${currentShift === 'Shift III' ? 'selected' : ''}>Shift III</option>
@@ -1936,31 +1936,31 @@ function editShiftUser(id, currentHari, currentShift) {
             var hariGroup = document.createElement('div');
             hariGroup.style.cssText = 'margin-bottom:15px;';
             hariGroup.innerHTML = `
-                <label style="display:block;font-weight:600;margin-bottom:8px;font-size:14px;color:#1e4a6e;">
+                <label style="display:block;font-weight:600;margin-bottom:8px;font-size:14px;color:var(--text-secondary);">
                     <i class="fas fa-calendar-alt"></i> Hari (centang lebih dari satu) *
                 </label>
                 <div id="hari_checkboxes_user" style="display:flex;flex-wrap:wrap;gap:10px;">
                     ${['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'].map(function(h) {
                         var checked = selectedDays.includes(h) ? 'checked' : '';
                         return `
-                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;background:${checked ? '#dbeafe' : '#f8fafc'};border-radius:8px;border:1px solid ${checked ? '#2c7da0' : '#e2edf2'};">
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;background:${checked ? 'var(--badge-info-bg)' : 'var(--bg-secondary)'};border-radius:8px;border:1px solid ${checked ? 'var(--btn-primary)' : 'var(--border-light)'};">
                                 <input type="checkbox" value="${h}" ${checked} style="width:16px;height:16px;cursor:pointer;">
                                 ${h}
                             </label>
                         `;
                     }).join('')}
                 </div>
-                <small style="color:#6c8eae;font-size:0.75rem;">Pilih satu atau lebih hari</small>
+                <small style="color:var(--text-muted);font-size:0.75rem;">Pilih satu atau lebih hari</small>
             `;
             box.appendChild(hariGroup);
             
             var btnGroup = document.createElement('div');
             btnGroup.style.cssText = 'display:flex;gap:12px;margin-top:8px;';
             btnGroup.innerHTML = `
-                <button id="saveShiftUserBtn" style="flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+                <button id="saveShiftUserBtn" style="flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
                     <i class="fas fa-save"></i> Simpan Perubahan
                 </button>
-                <button onclick="closeModal()" style="padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;">
+                <button onclick="closeModal()" style="padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);">
                     <i class="fas fa-times"></i> Batal
                 </button>
             `;
@@ -1973,11 +1973,11 @@ function editShiftUser(id, currentHari, currentShift) {
                 cb.addEventListener('change', function() {
                     var label = this.closest('label');
                     if (this.checked) {
-                        label.style.background = '#dbeafe';
-                        label.style.borderColor = '#2c7da0';
+                        label.style.background = 'var(--badge-info-bg)';
+                        label.style.borderColor = 'var(--btn-primary)';
                     } else {
-                        label.style.background = '#f8fafc';
-                        label.style.borderColor = '#e2edf2';
+                        label.style.background = 'var(--bg-secondary)';
+                        label.style.borderColor = 'var(--border-light)';
                     }
                 });
             });
@@ -2040,8 +2040,8 @@ function editPasien(id) {
             box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:700px;width:95%;max-height:90vh;overflow-y:auto;';
             
             var header = document.createElement('div');
-            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-            header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-user-edit"></i> Edit Pasien</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+            header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+            header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-user-edit"></i> Edit Pasien</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
             box.appendChild(header);
             
             var form = document.createElement('form');
@@ -2075,14 +2075,14 @@ function editPasien(id) {
                 }
                 
                 var label = document.createElement('label');
-                label.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;';
+                label.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);';
                 label.textContent = field.label + (field.required ? ' *' : '');
                 group.appendChild(label);
                 
                 var input;
                 if (field.type === 'select') {
                     input = document.createElement('select');
-                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:white;';
+                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:white;';
                     field.options.forEach(function(opt) {
                         var option = document.createElement('option');
                         option.value = opt;
@@ -2092,12 +2092,12 @@ function editPasien(id) {
                     });
                 } else if (field.type === 'textarea') {
                     input = document.createElement('textarea');
-                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;min-height:60px;resize:vertical;font-family:inherit;';
+                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;min-height:60px;resize:vertical;font-family:inherit;';
                     input.value = value;
                 } else {
                     input = document.createElement('input');
                     input.type = field.type || 'text';
-                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;';
+                    input.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;';
                     input.value = value;
                     if (field.min !== undefined) input.min = field.min;
                 }
@@ -2111,17 +2111,17 @@ function editPasien(id) {
             box.appendChild(form);
             
             var btnGroup = document.createElement('div');
-            btnGroup.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid #e9f0f3;';
+            btnGroup.style.cssText = 'display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);';
             
             var saveBtn = document.createElement('button');
             saveBtn.type = 'submit';
-            saveBtn.style.cssText = 'flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
+            saveBtn.style.cssText = 'flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
             saveBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
             btnGroup.appendChild(saveBtn);
             
             var cancelBtn = document.createElement('button');
             cancelBtn.type = 'button';
-            cancelBtn.style.cssText = 'padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;font-size:14px;';
+            cancelBtn.style.cssText = 'padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);font-size:14px;';
             cancelBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
             cancelBtn.onclick = function() { closeModal(); };
             btnGroup.appendChild(cancelBtn);
@@ -2266,15 +2266,15 @@ function editCheckup(id) {
         box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:750px;width:95%;max-height:90vh;overflow-y:auto;';
         
         var header = document.createElement('div');
-        header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-        header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-edit"></i> Edit Checkup</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+        header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+        header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-edit"></i> Edit Checkup</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
         box.appendChild(header);
         
         if (isPasienDirawat) {
             var warningDiv = document.createElement('div');
-            warningDiv.style.cssText = 'background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;margin-bottom:16px;color:#92400e;display:flex;align-items:center;gap:10px;';
+            warningDiv.style.cssText = 'background:var(--badge-warning-bg);border:1px solid var(--badge-warning-text);border-radius:8px;padding:12px 16px;margin-bottom:16px;color:var(--badge-warning-text);display:flex;align-items:center;gap:10px;';
             warningDiv.innerHTML = `
-                <i class="fas fa-exclamation-triangle" style="font-size:1.2rem;color:#d97706;"></i>
+                <i class="fas fa-exclamation-triangle" style="font-size:1.2rem;color:var(--badge-warning-text);"></i>
                 <div>
                     <strong>Perhatian:</strong> Pasien <strong>${escapeHtml(pasienName)}</strong> sedang dirawat inap!
                     <br>
@@ -2292,33 +2292,33 @@ function editCheckup(id) {
         pasienGroup.style.cssText = 'grid-column:1/2;';
 
         var pasienLabel = document.createElement('label');
-        pasienLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;';
+        pasienLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);';
         pasienLabel.innerHTML = '<i class="fas fa-user"></i> Cari Pasien *';
         pasienGroup.appendChild(pasienLabel);
 
         var searchDiv = document.createElement('div');
         searchDiv.style.cssText = 'display:flex;gap:8px;margin-bottom:6px;';
         searchDiv.innerHTML = `
-            <input type="text" id="pasienSearchInput" placeholder="Cari nama atau ID pasien..." style="flex:1;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
-            <button type="button" id="searchPasienBtn" style="background:#2c7da0;color:white;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Cari</button>
-            <button type="button" id="resetPasienBtn" style="background:#e2edf2;color:#1e4a6e;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Reset</button>
+            <input type="text" id="pasienSearchInput" placeholder="Cari nama atau ID pasien..." style="flex:1;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+            <button type="button" id="searchPasienBtn" style="background:var(--btn-primary);color:white;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Cari</button>
+            <button type="button" id="resetPasienBtn" style="background:var(--bg-secondary);color:var(--text-secondary);border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Reset</button>
         `;
         pasienGroup.appendChild(searchDiv);
 
         var tableDiv = document.createElement('div');
-        tableDiv.style.cssText = 'max-height:150px;overflow-y:auto;border:1px solid #e2edf2;border-radius:8px;';
+        tableDiv.style.cssText = 'max-height:150px;overflow-y:auto;border:1px solid var(--border-light);border-radius:8px;';
         tableDiv.innerHTML = `
             <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-                <thead style="position:sticky;top:0;background:#f1f9fe;z-index:2;">
+                <thead style="position:sticky;top:0;background:var(--bg-table-header);z-index:2;">
                     <tr>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">No</th>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:40%;">Nama</th>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:20%;">Status</th>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:25%;">Aksi</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:15%;">No</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:40%;">Nama</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:20%;">Status</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:25%;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="pasienTableBody">
-                    <tr><td colspan="4" style="text-align:center;padding:10px;color:#6c8eae;">Memuat data pasien...</td></tr>
+                    <tr><td colspan="4" style="text-align:center;padding:10px;color:var(--text-muted);">Memuat data pasien...</td></tr>
                 </tbody>
             </table>
         `;
@@ -2331,10 +2331,10 @@ function editCheckup(id) {
         }
 
         var selectedPasienDiv = document.createElement('div');
-        selectedPasienDiv.style.cssText = 'margin-top:8px;padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;font-size:0.85rem;';
+        selectedPasienDiv.style.cssText = 'margin-top:8px;padding:8px 12px;background:var(--badge-success-bg);border-radius:8px;border:1px solid var(--badge-success-bg);font-size:0.85rem;';
         selectedPasienDiv.innerHTML = `
-            <span style="font-weight:600;color:#1e4a6e;">Pasien Terpilih:</span>
-            <span id="selectedPasienDisplay" style="color:#166534;font-weight:500;">${checkup.id_pasien ? 'ID: ' + checkup.id_pasien + ' - ' + escapeHtml(selectedPasienName || 'Unknown') : 'Belum ada pasien dipilih'}</span>
+            <span style="font-weight:600;color:var(--text-secondary);">Pasien Terpilih:</span>
+            <span id="selectedPasienDisplay" style="color:var(--badge-success-text);font-weight:500;">${checkup.id_pasien ? 'ID: ' + checkup.id_pasien + ' - ' + escapeHtml(selectedPasienName || 'Unknown') : 'Belum ada pasien dipilih'}</span>
         `;
         pasienGroup.appendChild(selectedPasienDiv);
 
@@ -2350,32 +2350,32 @@ function editCheckup(id) {
         dokterGroup.style.cssText = 'grid-column:2/3;';
 
         var dokterLabel = document.createElement('label');
-        dokterLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;';
+        dokterLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);';
         dokterLabel.innerHTML = '<i class="fas fa-user-md"></i> Cari Dokter *';
         dokterGroup.appendChild(dokterLabel);
 
         var searchDokterDiv = document.createElement('div');
         searchDokterDiv.style.cssText = 'display:flex;gap:8px;margin-bottom:6px;';
         searchDokterDiv.innerHTML = `
-            <input type="text" id="dokterSearchInput" placeholder="Cari nama atau ID dokter..." style="flex:1;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
-            <button type="button" id="searchDokterBtn" style="background:#2c7da0;color:white;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Cari</button>
-            <button type="button" id="resetDokterBtn" style="background:#e2edf2;color:#1e4a6e;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Reset</button>
+            <input type="text" id="dokterSearchInput" placeholder="Cari nama atau ID dokter..." style="flex:1;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+            <button type="button" id="searchDokterBtn" style="background:var(--btn-primary);color:white;border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Cari</button>
+            <button type="button" id="resetDokterBtn" style="background:var(--bg-secondary);color:var(--text-secondary);border:none;padding:6px 16px;border-radius:8px;cursor:pointer;">Reset</button>
         `;
         dokterGroup.appendChild(searchDokterDiv);
 
         var tableDokterDiv = document.createElement('div');
-        tableDokterDiv.style.cssText = 'max-height:150px;overflow-y:auto;border:1px solid #e2edf2;border-radius:8px;';
+        tableDokterDiv.style.cssText = 'max-height:150px;overflow-y:auto;border:1px solid var(--border-light);border-radius:8px;';
         tableDokterDiv.innerHTML = `
             <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-                <thead style="position:sticky;top:0;background:#f1f9fe;z-index:2;">
+                <thead style="position:sticky;top:0;background:var(--bg-table-header);z-index:2;">
                     <tr>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">No</th>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:55%;">Nama</th>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:30%;">Aksi</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:15%;">No</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:55%;">Nama</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);width:30%;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="dokterTableBody">
-                    <tr><td colspan="3" style="text-align:center;padding:10px;color:#6c8eae;">Memuat data dokter...</td></tr>
+                    <tr><td colspan="3" style="text-align:center;padding:10px;color:var(--text-muted);">Memuat data dokter...</td></tr>
                 </tbody>
             </table>
         `;
@@ -2388,10 +2388,10 @@ function editCheckup(id) {
         }
 
         var selectedDokterDiv = document.createElement('div');
-        selectedDokterDiv.style.cssText = 'margin-top:8px;padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;font-size:0.85rem;';
+        selectedDokterDiv.style.cssText = 'margin-top:8px;padding:8px 12px;background:var(--badge-success-bg);border-radius:8px;border:1px solid var(--badge-success-bg);font-size:0.85rem;';
         selectedDokterDiv.innerHTML = `
-            <span style="font-weight:600;color:#1e4a6e;">Dokter Terpilih:</span>
-            <span id="selectedDokterDisplay" style="color:#166534;font-weight:500;">${checkup.id_dokter ? 'ID: ' + checkup.id_dokter + ' - ' + escapeHtml(selectedDokterName || 'Unknown') : 'Belum ada dokter dipilih'}</span>
+            <span style="font-weight:600;color:var(--text-secondary);">Dokter Terpilih:</span>
+            <span id="selectedDokterDisplay" style="color:var(--badge-success-text);font-weight:500;">${checkup.id_dokter ? 'ID: ' + checkup.id_dokter + ' - ' + escapeHtml(selectedDokterName || 'Unknown') : 'Belum ada dokter dipilih'}</span>
         `;
         dokterGroup.appendChild(selectedDokterDiv);
 
@@ -2406,29 +2406,29 @@ function editCheckup(id) {
         var tanggalGroup = document.createElement('div');
         tanggalGroup.style.cssText = 'grid-column:1/2;';
         tanggalGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;"><i class="fas fa-calendar-alt"></i> Tanggal *</label>
-            <input type="date" id="field_tanggal" value="${checkup.tanggal || ''}" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;" required>
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);"><i class="fas fa-calendar-alt"></i> Tanggal *</label>
+            <input type="date" id="field_tanggal" value="${checkup.tanggal || ''}" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;" required>
         `;
         form.appendChild(tanggalGroup);
         
         var jamGroup = document.createElement('div');
         jamGroup.style.cssText = 'grid-column:2/3;';
         jamGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;"><i class="fas fa-clock"></i> Jam *</label>
-            <input type="time" id="field_jam" value="${checkup.jam || ''}" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;" required>
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);"><i class="fas fa-clock"></i> Jam *</label>
+            <input type="time" id="field_jam" value="${checkup.jam || ''}" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;" required>
         `;
         form.appendChild(jamGroup);
         
         var statusGroup = document.createElement('div');
         statusGroup.style.cssText = 'grid-column:1/2;';
         var statusLabel = document.createElement('label');
-        statusLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;';
+        statusLabel.style.cssText = 'display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);';
         statusLabel.innerHTML = '<i class="fas fa-tag"></i> Status';
         statusGroup.appendChild(statusLabel);
         
         var statusSelect = document.createElement('select');
         statusSelect.id = 'field_status';
-        statusSelect.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:white;';
+        statusSelect.style.cssText = 'width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:white;';
         
         var statusOptions = ['terjadwal', 'batal'];
         statusOptions.forEach(function(opt) {
@@ -2446,33 +2446,33 @@ function editCheckup(id) {
         var biayaGroup = document.createElement('div');
         biayaGroup.style.cssText = 'grid-column:2/3;';
         biayaGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;"><i class="fas fa-money-bill-wave"></i> Biaya Checkup (Rp)</label>
-            <input type="number" id="field_biaya_checkup" value="${checkup.biaya_checkup || 0}" min="0" step="1000" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);"><i class="fas fa-money-bill-wave"></i> Biaya Checkup (Rp)</label>
+            <input type="number" id="field_biaya_checkup" value="${checkup.biaya_checkup || 0}" min="0" step="1000" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
         `;
         form.appendChild(biayaGroup);
         
         var keteranganGroup = document.createElement('div');
         keteranganGroup.style.cssText = 'grid-column:1/-1;';
         keteranganGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;"><i class="fas fa-comment"></i> Keterangan</label>
-            <textarea id="field_keterangan" rows="2" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;min-height:60px;resize:vertical;font-family:inherit;">${checkup.keterangan || ''}</textarea>
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);"><i class="fas fa-comment"></i> Keterangan</label>
+            <textarea id="field_keterangan" rows="2" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;min-height:60px;resize:vertical;font-family:inherit;">${checkup.keterangan || ''}</textarea>
         `;
         form.appendChild(keteranganGroup);
         
         box.appendChild(form);
         
         var btnWrapper = document.createElement('div');
-        btnWrapper.style.cssText = 'grid-column:1/-1;display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid #e9f0f3;';
+        btnWrapper.style.cssText = 'grid-column:1/-1;display:flex;gap:12px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-color);';
         
         var saveBtn = document.createElement('button');
         saveBtn.type = 'submit';
-        saveBtn.style.cssText = 'flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
+        saveBtn.style.cssText = 'flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
         saveBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
         btnWrapper.appendChild(saveBtn);
         
         var cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
-        cancelBtn.style.cssText = 'padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;font-size:14px;';
+        cancelBtn.style.cssText = 'padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);font-size:14px;';
         cancelBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
         cancelBtn.onclick = function() { closeModal(); };
         btnWrapper.appendChild(cancelBtn);
@@ -2495,7 +2495,7 @@ function editCheckup(id) {
             }
             
             if (!filtered || filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:10px;color:#6c8eae;">Tidak ada pasien ditemukan</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:10px;color:var(--text-muted);">Tidak ada pasien ditemukan</td></tr>';
                 return;
             }
             
@@ -2504,17 +2504,17 @@ function editCheckup(id) {
             filtered.forEach(function(p, idx) {
                 var isSelected = (p.id_pasien == selectedId);
                 var statusText = p.msh_dirawat ? 'Dirawat' : 'Pulang';
-                var statusColor = p.msh_dirawat ? '#dcfce7;color:#15803d;' : '#e2e8f0;color:#475569;';
+                var statusColor = p.msh_dirawat ? 'var(--badge-success-bg);color:var(--badge-success-text);' : 'var(--badge-secondary-bg);color:var(--badge-secondary-text);';
 
                 html += `
-                    <tr onclick="pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${idx + 1}</strong></td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(p.nama)}</td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
+                    <tr onclick="pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:var(--badge-info-bg);' : ''}">
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);"><strong>${idx + 1}</strong></td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">${escapeHtml(p.nama)}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">
                             <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.65rem;font-weight:600;background:${statusColor}">${statusText}</span>
                         </td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button onclick="event.stopPropagation();pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">
+                            <button onclick="event.stopPropagation();pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:var(--btn-primary);color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>
@@ -2537,7 +2537,7 @@ function editCheckup(id) {
             }
             
             if (!filtered || filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:10px;color:#6c8eae;">Tidak ada dokter ditemukan</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:10px;color:var(--text-muted);">Tidak ada dokter ditemukan</td></tr>';
                 return;
             }
             
@@ -2546,11 +2546,11 @@ function editCheckup(id) {
             filtered.forEach(function(d, idx) {
                 var isSelected = (d.id_dokter == selectedId);
                 html += `
-                    <tr onclick="pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${idx + 1}</strong></td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(d.nama_dokter)}</td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button onclick="event.stopPropagation();pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                    <tr onclick="pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="cursor:pointer;${isSelected ? 'background:var(--badge-info-bg);' : ''}">
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);"><strong>${idx + 1}</strong></td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">${escapeHtml(d.nama_dokter)}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">
+                            <button onclick="event.stopPropagation();pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="background:var(--btn-primary);color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>
@@ -2563,13 +2563,13 @@ function editCheckup(id) {
         window.pilihPasienCheckup = function(id, nama) {
             document.getElementById('field_id_pasien').value = id;
             document.getElementById('selectedPasienDisplay').innerHTML = 'ID: ' + id + ' - ' + escapeHtml(nama);
-            document.getElementById('selectedPasienDisplay').style.color = '#166534';
+            document.getElementById('selectedPasienDisplay').style.color = 'var(--badge-success-text)';
             
             var rows = document.querySelectorAll('#pasienTableBody tr');
             rows.forEach(function(row) { row.style.background = ''; });
             rows.forEach(function(row) {
                 if (row.textContent.includes('ID: ' + id)) {
-                    row.style.background = '#dbeafe';
+                    row.style.background = 'var(--badge-info-bg)';
                 }
             });
         };
@@ -2577,13 +2577,13 @@ function editCheckup(id) {
         window.pilihDokterCheckup = function(id, nama) {
             document.getElementById('field_id_dokter').value = id;
             document.getElementById('selectedDokterDisplay').innerHTML = 'ID: ' + id + ' - ' + escapeHtml(nama);
-            document.getElementById('selectedDokterDisplay').style.color = '#166534';
+            document.getElementById('selectedDokterDisplay').style.color = 'var(--badge-success-text)';
             
             var rows = document.querySelectorAll('#dokterTableBody tr');
             rows.forEach(function(row) { row.style.background = ''; });
             rows.forEach(function(row) {
                 if (row.textContent.includes('ID: ' + id)) {
-                    row.style.background = '#dbeafe';
+                    row.style.background = 'var(--badge-info-bg)';
                 }
             });
         };
@@ -2754,8 +2754,8 @@ function editRuangan(id) {
         box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:650px;width:95%;max-height:90vh;overflow-y:auto;';
         
         var header = document.createElement('div');
-        header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
-        header.innerHTML = '<h2 style="margin:0;color:#1e4a6e;"><i class="fas fa-edit"></i> Edit Ruangan</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>';
+        header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
+        header.innerHTML = '<h2 style="margin:0;color:var(--text-secondary);"><i class="fas fa-edit"></i> Edit Ruangan</h2><span onclick="closeModal()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>';
         box.appendChild(header);
         
         var form = document.createElement('form');
@@ -2765,24 +2765,24 @@ function editRuangan(id) {
         var nameGroup = document.createElement('div');
         nameGroup.style.cssText = 'grid-column:1/2;';
         nameGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">Nama Ruangan *</label>
-            <input type="text" id="field_nama_ruangan" value="${escapeHtml(ruangan.nama_ruangan || '')}" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">Nama Ruangan *</label>
+            <input type="text" id="field_nama_ruangan" value="${escapeHtml(ruangan.nama_ruangan || '')}" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
         `;
         form.appendChild(nameGroup);
         
         var nomorGroup = document.createElement('div');
         nomorGroup.style.cssText = 'grid-column:2/3;';
         nomorGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">Nomor Ruangan *</label>
-            <input type="number" id="field_nomor_ruangan" value="${ruangan.nomor_ruangan || ''}" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">Nomor Ruangan *</label>
+            <input type="number" id="field_nomor_ruangan" value="${ruangan.nomor_ruangan || ''}" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
         `;
         form.appendChild(nomorGroup);
         
         var statusGroup = document.createElement('div');
         statusGroup.style.cssText = 'grid-column:1/2;';
         statusGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">Status</label>
-            <select id="field_status" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;background:white;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">Status</label>
+            <select id="field_status" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;background:white;">
                 <option value="kosong" ${ruangan.status === 'kosong' ? 'selected' : ''}>Kosong</option>
                 <option value="terisi" ${ruangan.status === 'terisi' ? 'selected' : ''}>Terisi</option>
             </select>
@@ -2792,8 +2792,8 @@ function editRuangan(id) {
         var biayaGroup = document.createElement('div');
         biayaGroup.style.cssText = 'grid-column:2/3;';
         biayaGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">Biaya Per Hari (Rp)</label>
-            <input type="number" id="field_biaya_per_hari" value="${ruangan.biaya_per_hari || 0}" step="1000" min="0" style="width:100%;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">Biaya Per Hari (Rp)</label>
+            <input type="number" id="field_biaya_per_hari" value="${ruangan.biaya_per_hari || 0}" step="1000" min="0" style="width:100%;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
         `;
         form.appendChild(biayaGroup);
         
@@ -2801,17 +2801,17 @@ function editRuangan(id) {
         lamaRawatGroup.id = 'lamaRawatGroup';
         lamaRawatGroup.style.cssText = 'grid-column:1/-1;display:' + (ruangan.ditempati ? 'block' : 'none') + ';';
         lamaRawatGroup.innerHTML = `
-            <div style="background:#f0fdf4;padding:12px 16px;border-radius:8px;border:1px solid #bbf7d0;">
-                <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">
+            <div style="background:var(--badge-success-bg);padding:12px 16px;border-radius:8px;border:1px solid var(--badge-success-bg);">
+                <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">
                     <i class="fas fa-clock"></i> Lama Rawat Inap (hari) *
                 </label>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                     <input type="number" id="field_lama_inap" value="${ruangan.lama_inap || 1}" min="1" max="365" 
-                           style="width:120px;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;text-align:center;">
-                    <span style="font-size:0.85rem;color:#475569;">
+                           style="width:120px;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;text-align:center;">
+                    <span style="font-size:0.85rem;color:var(--badge-secondary-text);">
                         <i class="fas fa-calculator"></i> Total: <strong id="previewTotalLama">${formatCurrency((ruangan.biaya_per_hari || 0) * (ruangan.lama_inap || 1))}</strong>
                     </span>
-                    <span style="font-size:0.75rem;color:#94a3b8;">
+                    <span style="font-size:0.75rem;color:var(--text-light);">
                         <i class="fas fa-info-circle"></i> Minimal 1 hari
                     </span>
                 </div>
@@ -2822,50 +2822,50 @@ function editRuangan(id) {
         var pasienGroup = document.createElement('div');
         pasienGroup.style.cssText = 'grid-column:1/-1;margin-top:4px;';
         pasienGroup.innerHTML = `
-            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:#1e4a6e;">
+            <label style="display:block;font-weight:600;margin-bottom:4px;font-size:13px;color:var(--text-secondary);">
                 <i class="fas fa-user"></i> Pilih Pasien
             </label>
             <div style="display:flex;gap:8px;margin-bottom:8px;">
-                <input type="text" id="patientSearchInput" placeholder="Cari nama atau ID pasien..." style="flex:1;padding:8px 12px;border:1px solid #ccc;border-radius:8px;font-size:14px;">
-                <button type="button" id="searchPatientBtn" style="background:#2c7da0;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;">Cari</button>
-                <button type="button" id="resetPatientBtn" style="background:#e2edf2;color:#1e4a6e;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;">Reset</button>
+                <input type="text" id="patientSearchInput" placeholder="Cari nama atau ID pasien..." style="flex:1;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;">
+                <button type="button" id="searchPatientBtn" style="background:var(--btn-primary);color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;">Cari</button>
+                <button type="button" id="resetPatientBtn" style="background:var(--bg-secondary);color:var(--text-secondary);border:none;padding:8px 16px;border-radius:8px;cursor:pointer;">Reset</button>
             </div>
-            <div id="patientList" style="max-height:150px;overflow-y:auto;border:1px solid #e2edf2;border-radius:8px;margin-bottom:8px;">
+            <div id="patientList" style="max-height:150px;overflow-y:auto;border:1px solid var(--border-light);border-radius:8px;margin-bottom:8px;">
                 <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-                    <thead style="position:sticky;top:0;background:#f1f9fe;">
+                    <thead style="position:sticky;top:0;background:var(--bg-table-header);">
                         <tr>
-                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;">ID</th>
-                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;">Nama</th>
-                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;">Aksi</th>
+                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);">No</th>
+                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);">Nama</th>
+                            <th style="padding:6px 10px;text-align:left;border-bottom:1px solid var(--border-color);">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="patientTableBody">
-                        <tr><td colspan="3" style="text-align:center;padding:10px;color:#6c8eae;">Memuat data pasien...</td></tr>
+                        <tr><td colspan="3" style="text-align:center;padding:10px;color:var(--text-muted);">Memuat data pasien...</td></tr>
                     </tbody>
                 </table>
             </div>
-            <div id="selectedPatientDisplay" style="padding:8px 12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;font-weight:500;color:#166534;">
+            <div id="selectedPatientDisplay" style="padding:8px 12px;background:var(--badge-success-bg);border-radius:8px;border:1px solid var(--badge-success-bg);font-weight:500;color:var(--badge-success-text);">
                 ${ruangan.ditempati ? 'ID: ' + ruangan.ditempati + ' - ' + escapeHtml(ruangan.nama_pasien || 'Unknown') : 'Belum ada pasien dipilih'}
             </div>
             <input type="hidden" id="field_ditempati" value="${ruangan.ditempati || ''}">
-            <div style="margin-top:6px;font-size:0.75rem;color:#94a3b8;">
+            <div style="margin-top:6px;font-size:0.75rem;color:var(--text-light);">
                 <i class="fas fa-info-circle"></i> Pilih pasien untuk mengisi ruangan, status akan otomatis berubah menjadi "Terisi"
             </div>
         `;
         form.appendChild(pasienGroup);
         
         var btnWrapper = document.createElement('div');
-        btnWrapper.style.cssText = 'grid-column:1/-1;display:flex;gap:12px;margin-top:12px;padding-top:16px;border-top:1px solid #e9f0f3;';
+        btnWrapper.style.cssText = 'grid-column:1/-1;display:flex;gap:12px;margin-top:12px;padding-top:16px;border-top:1px solid var(--border-color);';
         
         var saveBtn = document.createElement('button');
         saveBtn.type = 'submit';
-        saveBtn.style.cssText = 'flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
+        saveBtn.style.cssText = 'flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
         saveBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Perubahan';
         btnWrapper.appendChild(saveBtn);
         
         var cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
-        cancelBtn.style.cssText = 'padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;font-size:14px;';
+        cancelBtn.style.cssText = 'padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);font-size:14px;';
         cancelBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
         cancelBtn.onclick = function() { closeModal(); };
         btnWrapper.appendChild(cancelBtn);
@@ -2899,19 +2899,19 @@ function editRuangan(id) {
             var tbody = document.getElementById('patientTableBody');
             if (!tbody) return;
             if (!patients || patients.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:10px;color:#6c8eae;">Tidak ada pasien ditemukan</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:10px;color:var(--text-muted);">Tidak ada pasien ditemukan</td></tr>';
                 return;
             }
             var selectedId = document.getElementById('field_ditempati').value;
             var html = '';
-            patients.forEach(function(p) {
+            patients.forEach(function(p, idx) {
                 var isSelected = (p.id_pasien == selectedId);
                 html += `
-                    <tr onclick="pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${p.id_pasien}</td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(p.nama)}</td>
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button type="button" onclick="event.stopPropagation();pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                    <tr onclick="pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:var(--badge-info-bg);' : ''}">
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">${idx + 1}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">${escapeHtml(p.nama)}</td>
+                        <td style="padding:6px 10px;border-bottom:1px solid var(--border-light);">
+                            <button type="button" onclick="event.stopPropagation();pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:var(--btn-primary);color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>
@@ -2924,7 +2924,7 @@ function editRuangan(id) {
         window.pilihPasienRuangan = function(id, nama) {
             document.getElementById('field_ditempati').value = id;
             document.getElementById('selectedPatientDisplay').innerHTML = 'ID: ' + id + ' - ' + escapeHtml(nama);
-            document.getElementById('selectedPatientDisplay').style.color = '#166534';
+            document.getElementById('selectedPatientDisplay').style.color = 'var(--badge-success-text)';
             
             updateStatusAndLamaRawat(true);
             
@@ -2932,7 +2932,7 @@ function editRuangan(id) {
             rows.forEach(function(row) { row.style.background = ''; });
             rows.forEach(function(row) {
                 if (row.textContent.includes('ID: ' + id)) {
-                    row.style.background = '#dbeafe';
+                    row.style.background = 'var(--badge-info-bg)';
                 }
             });
             
@@ -3140,17 +3140,17 @@ function showLamaRawatModal(ruanganId, idPasien, namaPasien, biayaPerHari, onSuc
     box.style.cssText = 'background:white;border-radius:16px;padding:30px;max-width:450px;width:95%;';
     
     var header = document.createElement('div');
-    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:2px solid #2c7da0;padding-bottom:10px;';
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:2px solid var(--btn-primary);padding-bottom:10px;';
     header.innerHTML = `
-        <h2 style="margin:0;color:#1e4a6e;font-size:1.2rem;">
-            <i class="fas fa-clock" style="color:#2c7da0;"></i> Lama Rawat Inap
+        <h2 style="margin:0;color:var(--text-secondary);font-size:1.2rem;">
+            <i class="fas fa-clock" style="color:var(--btn-primary);"></i> Lama Rawat Inap
         </h2>
-        <span onclick="document.getElementById('lamaRawatModal').remove()" style="font-size:24px;cursor:pointer;color:#999;">&times;</span>
+        <span onclick="document.getElementById('lamaRawatModal').remove()" style="font-size:24px;cursor:pointer;color:var(--text-muted);">&times;</span>
     `;
     box.appendChild(header);
     
     var info = document.createElement('div');
-    info.style.cssText = 'background:#f1f9fe;padding:12px 16px;border-radius:8px;margin-bottom:16px;';
+    info.style.cssText = 'background:var(--bg-table-header);padding:12px 16px;border-radius:8px;margin-bottom:16px;';
     info.innerHTML = `
         <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <span><strong>Pasien:</strong> ${escapeHtml(namaPasien)}</span>
@@ -3165,12 +3165,12 @@ function showLamaRawatModal(ruanganId, idPasien, namaPasien, biayaPerHari, onSuc
     var group = document.createElement('div');
     group.style.cssText = 'margin-bottom:16px;';
     group.innerHTML = `
-        <label style="display:block;font-weight:600;margin-bottom:6px;font-size:14px;color:#1e4a6e;">
+        <label style="display:block;font-weight:600;margin-bottom:6px;font-size:14px;color:var(--text-secondary);">
             <i class="fas fa-calendar-day"></i> Lama Rawat Inap (hari) *
         </label>
         <input type="number" id="inputLamaRawat" value="1" min="1" max="365" 
-               style="width:100%;padding:10px 14px;border:1px solid #ccc;border-radius:8px;font-size:16px;text-align:center;">
-        <div style="display:flex;gap:12px;margin-top:8px;font-size:0.8rem;color:#94a3b8;">
+               style="width:100%;padding:10px 14px;border:1px solid var(--border-color);border-radius:8px;font-size:16px;text-align:center;">
+        <div style="display:flex;gap:12px;margin-top:8px;font-size:0.8rem;color:var(--text-light);">
             <span><i class="fas fa-info-circle"></i> Minimal 1 hari</span>
             <span><i class="fas fa-calculator"></i> Total: <strong id="previewTotal">Rp100.000</strong></span>
         </div>
@@ -3191,13 +3191,13 @@ function showLamaRawatModal(ruanganId, idPasien, namaPasien, biayaPerHari, onSuc
     
     var simpanBtn = document.createElement('button');
     simpanBtn.type = 'submit';
-    simpanBtn.style.cssText = 'flex:1;background:#2c7da0;color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
+    simpanBtn.style.cssText = 'flex:1;background:var(--btn-primary);color:white;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:14px;';
     simpanBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Rawat Inap';
     btnGroup.appendChild(simpanBtn);
     
     var batalBtn = document.createElement('button');
     batalBtn.type = 'button';
-    batalBtn.style.cssText = 'padding:12px 24px;background:#f1f5f9;border:none;border-radius:8px;font-weight:500;cursor:pointer;color:#475569;font-size:14px;';
+    batalBtn.style.cssText = 'padding:12px 24px;background:var(--bg-secondary);border:none;border-radius:8px;font-weight:500;cursor:pointer;color:var(--badge-secondary-text);font-size:14px;';
     batalBtn.innerHTML = '<i class="fas fa-times"></i> Batal';
     batalBtn.onclick = function() { document.getElementById('lamaRawatModal').remove(); };
     btnGroup.appendChild(batalBtn);

@@ -122,15 +122,15 @@ async function loadDaftarPasien(keyword) {
         tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;"><i class="fas fa-spinner fa-spin"></i> Memuat...</td></tr>';
         var pasienList = await apiService.getPasienSaya(keyword);
         if (!pasienList || pasienList.length === 0) {
-            tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-user-injured"></i> Tidak ada pasien sedang dirawat</td></tr>';
-            tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-check-circle"></i> Belum ada pasien yang pulang</td></tr>';
+            tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-user-injured"></i> Tidak ada pasien sedang dirawat</td></tr>';
+            tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-check-circle"></i> Belum ada pasien yang pulang</td></tr>';
             return;
         }
         var pasienDirawat = pasienList.filter(p => p.msh_dirawat === 'dirawat');
         var pasienPulang = pasienList.filter(p => p.msh_dirawat === 'pulang');
         // render dirawat
         if (pasienDirawat.length === 0) {
-            tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-user-injured"></i> Tidak ada pasien sedang dirawat</td></tr>';
+            tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-user-injured"></i> Tidak ada pasien sedang dirawat</td></tr>';
         } else {
             var htmlDirawat = '';
             pasienDirawat.forEach(function(p) {
@@ -140,11 +140,11 @@ async function loadDaftarPasien(keyword) {
                     <td>${p.umur || '-'}</td>
                     <td>${jk}</td>
                     <td>${escapeHtml(p.nama_penyakit || '-')}</td>
-                    <td><textarea class="desc-textarea" data-id="${p.id_pasien}" rows="2" style="width:100%;min-width:120px;padding:6px 10px;border:1px solid #e2edf2;border-radius:8px;font-size:0.8rem;">${escapeHtml(p.deskripsi_dokter || '')}</textarea></td>
+                    <td><textarea class="desc-textarea" data-id="${p.id_pasien}" rows="2" style="width:100%;min-width:120px;padding:6px 10px;border:1px solid var(--border-light);border-radius:8px;font-size:0.8rem;">${escapeHtml(p.deskripsi_dokter || '')}</textarea></td>
                     <td style="white-space:nowrap;">
-                        <button class="btn-save" data-id="${p.id_pasien}" style="background:#2c7da0;color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;"><i class="fas fa-save"></i> Simpan</button>
-                        <button class="btn-discharge" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:#dc2626;color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-door-open"></i> Pulangkan</button>
-                        <button class="btn-pulangkan-ruangan" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:#f59e0b;color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-bed"></i> Pulangkan dari Ruangan</button>
+                        <button class="btn-save" data-id="${p.id_pasien}" style="background:var(--btn-primary);color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;"><i class="fas fa-save"></i> Simpan</button>
+                        <button class="btn-discharge" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:var(--btn-danger);color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-door-open"></i> Pulangkan</button>
+                        <button class="btn-pulangkan-ruangan" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:var(--btn-warning);color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-bed"></i> Pulangkan dari Ruangan</button>
                     </td>
                 </tr>`;
             });
@@ -152,7 +152,7 @@ async function loadDaftarPasien(keyword) {
         }
         // render pulang
         if (pasienPulang.length === 0) {
-            tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#6c8eae;"><i class="fas fa-check-circle"></i> Belum ada pasien yang pulang</td></tr>';
+            tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);"><i class="fas fa-check-circle"></i> Belum ada pasien yang pulang</td></tr>';
         } else {
             var htmlPulang = '';
             pasienPulang.forEach(function(p) {
@@ -163,8 +163,8 @@ async function loadDaftarPasien(keyword) {
                     <td>${jk}</td>
                     <td>${escapeHtml(p.nama_penyakit || '-')}</td>
                     <td>${escapeHtml(p.deskripsi_dokter || '-')}</td>
-                    <td><span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:#dcfce7;color:#15803d;margin-right:8px;"><i class="fas fa-check-circle"></i> Sudah Pulang</span>
-                        <button class="btn-batalkan-pulang" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:#f59e0b;color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-undo"></i> Batalkan Pulang</button>
+                    <td><span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;background:var(--badge-success-bg);color:var(--badge-success-text);margin-right:8px;"><i class="fas fa-check-circle"></i> Sudah Pulang</span>
+                        <button class="btn-batalkan-pulang" data-id="${p.id_pasien}" data-nama="${escapeHtml(p.nama)}" style="background:var(--btn-warning);color:white;border:none;padding:4px 14px;border-radius:20px;font-size:0.75rem;cursor:pointer;margin-top:4px;"><i class="fas fa-undo"></i> Batalkan Pulang</button>
                     </td>
                 </tr>`;
             });
@@ -173,8 +173,8 @@ async function loadDaftarPasien(keyword) {
         setupTableEvents();
     } catch (err) {
         console.error('[DOKTER] Error loading patients:', err);
-        tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
-        tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
+        tbodyDirawat.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
+        tbodyPulang.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
     }
 }
 
@@ -246,7 +246,7 @@ async function updateDeskripsiPasien(idPasien, deskripsi) {
         var nama = row ? row.querySelector('td:first-child strong')?.innerText || 'Pasien' : 'Pasien';
         showNotifikasiPasien('Deskripsi pasien ' + nama + ' berhasil disimpan!', 'success');
         var textarea = document.querySelector('.desc-textarea[data-id="' + idPasien + '"]');
-        if (textarea) { textarea.style.borderColor = '#10b981'; setTimeout(() => textarea.style.borderColor = '#e2edf2', 2000); }
+        if (textarea) { textarea.style.borderColor = 'var(--btn-success)'; setTimeout(() => textarea.style.borderColor = 'var(--border-light)', 2000); }
     } catch (err) {
         console.error('[DOKTER] Error update deskripsi:', err);
         showNotifikasiPasien('Gagal menyimpan deskripsi: ' + err.message, 'error');
@@ -490,7 +490,7 @@ async function loadJadwal() {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;"><i class="fas fa-spinner fa-spin"></i> Memuat jadwal...</td></tr>';
         var jadwal = await apiService.getJadwalSaya();
         if (!jadwal || jadwal.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:12px;color:#cbdde6;"></i> Belum ada jadwal checkup</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:12px;color:var(--text-light);"></i> Belum ada jadwal checkup</td></tr>';
             updateJadwalPaginationInfo(0);
             return;
         }
@@ -501,7 +501,7 @@ async function loadJadwal() {
         updateJadwalPaginationInfo(jadwalState.total);
     } catch (err) {
         console.error('[DOKTER] Error load jadwal:', err);
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#b91c1c;"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--badge-danger-text);"><i class="fas fa-exclamation-circle"></i> Error: ' + escapeHtml(err.message) + '</td></tr>';
     }
 }
 
@@ -512,11 +512,11 @@ function renderJadwalPage() {
     var end = Math.min(start + jadwalState.limit, jadwalState.total);
     var pageData = jadwalState.data.slice(start, end);
     if (pageData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:#6c8eae;"><i class="fas fa-calendar-times"></i> Tidak ada jadwal</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted);"><i class="fas fa-calendar-times"></i> Tidak ada jadwal</td></tr>';
         return;
     }
     var html = '';
-    pageData.forEach(function(j) {
+    pageData.forEach(function(j, idx) {
         var checkin = '-', checkout = '-';
         if (j.tanggal && j.jam) {
             var dateStr = (typeof j.tanggal === 'string' && j.tanggal.includes('T')) ? j.tanggal.split('T')[0] : j.tanggal;
@@ -538,14 +538,14 @@ function renderJadwalPage() {
         var keterangan = j.keterangan || '-';
         var showBtn = (statusLower === 'terjadwal');
         html += `<tr>
-            <td><strong>${shortId(j.id_checkup)}</strong></td>
+            <td><strong>${start + idx + 1}</strong></td>
             <td><strong>${escapeHtml(j.nama_pasien || '-')}</strong></td>
             <td>${checkin}</td>
             <td>${checkout}</td>
             <td>${badge}</td>
             <td style="max-width:150px;word-wrap:break-word;">${escapeHtml(keterangan)}</td>
             <td style="text-align:center;">
-                ${showBtn ? `<button class="btn-selesai" data-id="${j.id_checkup}"><i class="fas fa-check"></i> Selesai</button>` : '<span style="color:#6c8eae;font-size:0.8rem;">-</span>'}
+                ${showBtn ? `<button class="btn-selesai" data-id="${j.id_checkup}"><i class="fas fa-check"></i> Selesai</button>` : '<span style="color:var(--text-muted);font-size:0.8rem;">-</span>'}
             </td>
         </tr>`;
     });
