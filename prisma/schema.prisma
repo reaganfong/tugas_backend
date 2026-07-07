@@ -1,0 +1,251 @@
+// Prisma schema for MongoDB
+// Rumah Sehat — MySQL to MongoDB Atlas migration via Prisma ORM v6
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==================== USER & AUTHENTICATION ====================
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  username String  @unique
+  pwd      String                // bcrypt hash
+  jabatan  String                // admin, dokter, akuntan, apoteker, pasien
+
+  // Profile 1:1 — hanya admin & dokter yang ada tabel profile
+  admin   Admin?   @relation("AdminUser")
+  dokter  Dokter?  @relation("DokterUser")
+
+  shifts  ShiftUser[]
+
+  @@map("users")
+}
+
+model Admin {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  nama_admin String?
+
+  user   User   @relation("AdminUser", fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+
+  @@map("admin")
+}
+
+model Dokter {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  nama_dokter  String?
+  spesialisasi String?
+  umur         Int?
+  no_telepon   String?
+  biaya_honor  Int?
+
+  user     User     @relation("DokterUser", fields: [userId], references: [id])
+  userId   String   @unique @db.ObjectId
+
+  checkups CheckUp[]
+
+  @@map("dokter")
+}
+
+// ==================== PASIEN & BAYI ====================
+
+model Pasien {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  nama             String?
+  nama_wali        String?
+  jenis_penyakit   String?  // ringan, berat, kronis
+  nama_penyakit    String?
+  umur             Int?
+  jenis_kelamin    String?  // L, P
+  no_telp_pasien   String?
+  no_telp_wali     String?
+  deskripsi_dokter String?
+  msh_dirawat      String? @default("baru")  // baru, dirawat, pulang
+
+  checkups    CheckUp[]
+  riwayat_obat RiwayatObat[]
+  ruangans    Ruangan[]
+  tagihans    Tagihan[]
+
+  @@map("pasien")
+}
+
+model Bayi {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  id_ibu        Int                    // manual counter dari aplikasi
+  nama_ibu      String
+  nama_bayi     String? @default("Belum bernama")
+  jenis_kelamin String?  // L, P
+  berat         Float?
+  tinggi        Float?
+
+  @@map("bayi")
+}
+
+// ==================== CHECKUP & MEDICAL RECORDS ====================
+
+model CheckUp {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  id_pasien        String  @db.ObjectId
+  id_dokter        String? @db.ObjectId
+  tanggal          String               // YYYY-MM-DD
+  jam              String               // HH:mm:ss
+  checkout         String?              // datetime ISO string or null
+  status           String? @default("terjadwal")  // terjadwal, selesai, batal
+  keterangan       String?
+  rekomendasi_obat String?
+  biaya_checkup    Float?  @default(0)
+  id_tagihan       String? @db.ObjectId
+
+  pasien  Pasien  @relation(fields: [id_pasien], references: [id])
+  dokter  Dokter? @relation(fields: [id_dokter], references: [id])
+  tagihan Tagihan? @relation(fields: [id_tagihan], references: [id])
+
+  riwayat_obat RiwayatObat[]
+
+  @@index([id_pasien])
+  @@index([id_dokter])
+  @@index([status])
+  @@map("check_up")
+}
+
+model RiwayatObat {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id_checkup  String? @db.ObjectId
+  id_pasien   String? @db.ObjectId
+  id_obat     String? @db.ObjectId
+  jumlah      Int?    @default(1)
+  total_harga Float?
+  id_tagihan  String? @db.ObjectId
+  tanggal     String?               // datetime ISO string
+
+  checkup CheckUp?   @relation(fields: [id_checkup], references: [id])
+  pasien  Pasien?    @relation(fields: [id_pasien], references: [id])
+  obat    StokObat?  @relation(fields: [id_obat], references: [id])
+  tagihan Tagihan?   @relation(fields: [id_tagihan], references: [id])
+
+  @@index([id_pasien])
+  @@map("riwayat_obat")
+}
+
+// ==================== MEDICINE INVENTORY ====================
+
+model StokObat {
+  id                       String @id @default(auto()) @map("_id") @db.ObjectId
+  nama_obat                String?
+  stok                     Int?
+  batas_notifikasi         Int?    @default(50)
+  tanggal_restok_terakhir  String? // YYYY-MM-DD
+  harga                    Float?  @default(0)
+
+  riwayat_obat RiwayatObat[]
+
+  @@map("stok_obat")
+}
+
+// ==================== ROOMS ====================
+
+model Ruangan {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  nama_ruangan    String?
+  nomor_ruangan   Int?
+  ditempati       String? @db.ObjectId  // → Pasien.id (nullable)
+  status          String? @default("kosong")  // kosong, terisi
+  biaya_per_hari  Float?  @default(0)
+  id_tagihan      String? @db.ObjectId
+  tanggal_checkin String? // datetime ISO string
+  lama_inap       Int?
+
+  pasien  Pasien?  @relation(fields: [ditempati], references: [id])
+  tagihan Tagihan? @relation(fields: [id_tagihan], references: [id])
+
+  @@map("ruangan")
+}
+
+// ==================== BILLING ====================
+
+model Tagihan {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  id_pasien       String @db.ObjectId
+  total_biaya     Float?
+  status          String? @default("belum")  // lunas, belum
+  tanggal_tagihan String? // YYYY-MM-DD
+  keterangan      String?
+
+  pasien   Pasien   @relation(fields: [id_pasien], references: [id])
+  checkups CheckUp[]
+  obat     RiwayatObat[]
+  ruangans Ruangan[]
+
+  @@index([id_pasien])
+  @@index([status])
+  @@map("tagihan")
+}
+
+// ==================== FACILITIES ====================
+
+model Fasilitas {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  nama_fasilitas String?
+  status         String? @default("baik")  // baik, rusak
+
+  @@map("fasilitas")
+}
+
+// ==================== NOTIFICATIONS ====================
+
+model Notifikasi {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  jenis   String?
+  pesan   String?
+  tanggal String? // datetime ISO string
+  dibaca  Boolean? @default(false)
+
+  @@map("notifikasi")
+}
+
+// ==================== STAFF ====================
+
+model Staff {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  jabatan    String?
+  nama_staff String?
+  no_telepon String?
+  gaji       Int?
+
+  shifts ShiftStaff[]
+
+  @@map("staff")
+}
+
+// ==================== SHIFTS ====================
+
+model ShiftStaff {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id_staff String @db.ObjectId
+  hari     String?  // Senin, Selasa, ...
+  shift    String?  // Shift I, Shift II, Shift III
+
+  staff Staff @relation(fields: [id_staff], references: [id])
+
+  @@index([id_staff])
+  @@map("shift_staff")
+}
+
+model ShiftUser {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id_users String? @db.ObjectId
+  hari     String?
+  shift    String?
+
+  user User? @relation(fields: [id_users], references: [id])
+
+  @@index([id_users])
+  @@map("shift_users")
+}
