@@ -348,8 +348,8 @@ async function loadPasien() {
             html += '<td>' + statusDisplay + '</td>';
             html += '<td>';
             html += '<div class="action-buttons">';
-            html += '<button class="btn-edit" onclick="editPasien(' + p.id_pasien + ')"><i class="fas fa-edit"></i> Edit</button>';
-            html += '<button class="btn-delete" onclick="hapusPasien(' + p.id_pasien + ', \'' + escapeHtml(p.nama) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '<button class="btn-edit" onclick="editPasien(\'' + p.id_pasien + '\')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="btn-delete" onclick="hapusPasien(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
             html += '</div>';
             html += '</td>';
             html += '</tr>';
@@ -515,8 +515,8 @@ async function loadBayi() {
             html += '<td>' + (b.tinggi || '-') + '</td>';
             html += '<td>';
             html += '<div class="action-buttons">';
-            html += '<button class="btn-edit" onclick="editBayi(' + b.id_bayi + ')"><i class="fas fa-edit"></i> Edit</button>';
-            html += '<button class="btn-delete" onclick="hapusBayi(' + b.id_bayi + ', \'' + escapeHtml(b.nama_bayi || 'Bayi') + '\')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '<button class="btn-edit" onclick="editBayi(\'' + b.id_bayi + '\')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="btn-delete" onclick="hapusBayi(\'' + b.id_bayi + '\', \'' + escapeHtml(b.nama_bayi || 'Bayi') + '\')"><i class="fas fa-trash"></i> Hapus</button>';
             html += '</div>';
             html += '</td>';
             html += '</tr>';
@@ -714,8 +714,8 @@ function renderJadwalPage() {
         html += '<td>' + escapeHtml(c.keterangan || '-') + '</td>';
         html += '<td>';
         html += '<div class="action-buttons">';
-        html += '<button class="btn-edit" onclick="editCheckup(' + c.id_checkup + ')"><i class="fas fa-edit"></i> Edit</button>';
-        html += '<button class="btn-batal" onclick="batalCheckup(' + c.id_checkup + ')" style="background:#f59e0b;color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;margin-left:4px;"><i class="fas fa-times"></i> Batal</button>';
+        html += '<button class="btn-edit" onclick="editCheckup(\'' + c.id_checkup + '\')"><i class="fas fa-edit"></i> Edit</button>';
+        html += '<button class="btn-batal" onclick="batalCheckup(\'' + c.id_checkup + '\')" style="background:#f59e0b;color:white;border:none;padding:4px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;margin-left:4px;"><i class="fas fa-times"></i> Batal</button>';
         html += '</div>';
         html += '</td>';
         html += '</tr>';
@@ -1084,8 +1084,8 @@ async function loadDokter() {
             html += '<td>' + formatCurrency(d.biaya_honor || 0) + '</td>';
             html += '<td>';
             html += '<div class="action-buttons">';
-            html += '<button class="btn-edit" onclick="editDokter(' + d.id_dokter + ')"><i class="fas fa-edit"></i> Edit</button>';
-            html += '<button class="btn-delete" onclick="hapusDokter(' + d.id_dokter + ', \'' + escapeHtml(d.nama_dokter) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '<button class="btn-edit" onclick="editDokter(\'' + d.id_dokter + '\')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="btn-delete" onclick="hapusDokter(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
             html += '</div>';
             html += '</td>';
             html += '</tr>';
@@ -1272,8 +1272,8 @@ async function loadRuangan() {
             html += '<td>' + statusBadge + '</td>';
             html += '<td>';
             html += '<div class="action-buttons">';
-            html += '<button class="btn-edit" onclick="editRuangan(' + r.id_ruangan + ')"><i class="fas fa-edit"></i> Edit</button>';
-            html += '<button class="btn-delete" onclick="hapusRuangan(' + r.id_ruangan + ', \'' + escapeHtml(r.nama_ruangan) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '<button class="btn-edit" onclick="editRuangan(\'' + r.id_ruangan + '\')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="btn-delete" onclick="hapusRuangan(\'' + r.id_ruangan + '\', \'' + escapeHtml(r.nama_ruangan) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
             html += '</div>';
             html += '</td>';
             html += '</tr>';
@@ -1442,8 +1442,8 @@ async function loadStaff() {
             html += '<td>' + formatCurrency(s.gaji || 0) + '</td>';
             html += '<td>';
             html += '<div class="action-buttons">';
-            html += '<button class="btn-edit" onclick="editStaff(' + s.id_staff + ')"><i class="fas fa-edit"></i> Edit</button>';
-            html += '<button class="btn-delete" onclick="hapusStaff(' + s.id_staff + ', \'' + escapeHtml(s.nama_staff) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
+            html += '<button class="btn-edit" onclick="editStaff(\'' + s.id_staff + '\')"><i class="fas fa-edit"></i> Edit</button>';
+            html += '<button class="btn-delete" onclick="hapusStaff(\'' + s.id_staff + '\', \'' + escapeHtml(s.nama_staff) + '\')"><i class="fas fa-trash"></i> Hapus</button>';
             html += '</div>';
             html += '</td>';
             html += '</tr>';
@@ -1594,7 +1594,7 @@ async function loadShiftJadwal() {
                         <td class="col-day"><span class="badge badge-info">${s.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${s.shift}</span></td>
                         <td class="col-action">
-                            <button class="btn-edit" onclick="editShiftStaff(${s.id_staff}, '${s.hari}', '${s.shift}')">
+                            <button class="btn-edit" onclick="editShiftStaff('${s.id_staff}', '${s.hari}', '${s.shift}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </td>
@@ -1638,7 +1638,7 @@ async function loadShiftJadwal() {
                         <td class="col-day"><span class="badge badge-info">${u.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${u.shift}</span></td>
                         <td class="col-action">
-                            <button class="btn-edit" onclick="editShiftUser(${u.id}, '${u.hari}', '${u.shift}')">
+                            <button class="btn-edit" onclick="editShiftUser('${u.id}', '${u.hari}', '${u.shift}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
                         </td>
@@ -1698,7 +1698,7 @@ async function loadNotifikasi() {
             html += '<td>' + jenisIcon + ' ' + escapeHtml(n.jenis || '-') + '</td>';
             html += '<td>' + escapeHtml(n.pesan || '-') + '</td>';
             html += '<td>' + formatDate(n.tanggal) + '</td>';
-            html += '<td><button class="btn-edit" onclick="markNotifikasiRead(' + n.id_notif + ')" style="background:#10b981;color:white;"><i class="fas fa-check"></i> Tandai Dibaca</button></td>';
+            html += '<td><button class="btn-edit" onclick="markNotifikasiRead(\'' + n.id_notif + '\')" style="background:#10b981;color:white;"><i class="fas fa-check"></i> Tandai Dibaca</button></td>';
             html += '</tr>';
         });
         
@@ -2500,14 +2500,14 @@ function editCheckup(id) {
                 var statusColor = p.msh_dirawat ? '#dcfce7;color:#15803d;' : '#e2e8f0;color:#475569;';
                 
                 html += `
-                    <tr onclick="pilihPasienCheckup(${p.id_pasien}, '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
+                    <tr onclick="pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${p.id_pasien}</strong></td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(p.nama)}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
                             <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.65rem;font-weight:600;background:${statusColor}">${statusText}</span>
                         </td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button onclick="event.stopPropagation();pilihPasienCheckup(${p.id_pasien}, '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                            <button onclick="event.stopPropagation();pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>
@@ -2539,11 +2539,11 @@ function editCheckup(id) {
             filtered.forEach(function(d) {
                 var isSelected = (d.id_dokter == selectedId);
                 html += `
-                    <tr onclick="pilihDokterCheckup(${d.id_dokter}, '${escapeHtml(d.nama_dokter)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
+                    <tr onclick="pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${d.id_dokter}</strong></td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(d.nama_dokter)}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button onclick="event.stopPropagation();pilihDokterCheckup(${d.id_dokter}, '${escapeHtml(d.nama_dokter)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                            <button onclick="event.stopPropagation();pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>
@@ -2900,11 +2900,11 @@ function editRuangan(id) {
             patients.forEach(function(p) {
                 var isSelected = (p.id_pasien == selectedId);
                 html += `
-                    <tr onclick="pilihPasienRuangan(${p.id_pasien}, '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
+                    <tr onclick="pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${p.id_pasien}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(p.nama)}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
-                            <button type="button" onclick="event.stopPropagation();pilihPasienRuangan(${p.id_pasien}, '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
+                            <button type="button" onclick="event.stopPropagation();pilihPasienRuangan('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
                                 <i class="fas fa-check"></i> Pilih
                             </button>
                         </td>

@@ -571,7 +571,7 @@ function showAddPaymentModal() {
             }
             
             html += `
-                <tr onclick="pilihPasien(${p.id_pasien}, '${escapeHtml(p.nama)}')" style="cursor:pointer;">
+                <tr onclick="pilihPasien('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;">
                     <td><strong>${p.id_pasien}</strong></td>
                     <td>${escapeHtml(p.nama || '-')}</td>
                     <td>${lastCheckin}</td>

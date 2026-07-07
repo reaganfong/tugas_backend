@@ -481,11 +481,11 @@
             else if (p.msh_dirawat === 'dirawat') { statusText = 'Dirawat'; statusClass = 'badge-status dirawat'; }
             else if (p.msh_dirawat === 'pulang') { statusText = 'Pulang'; statusClass = 'badge-status pulang'; }
             else { statusText = p.msh_dirawat || '-'; statusClass = 'badge-status'; }
-            html += '<tr onclick="window.pilihPasienCheckup(' + p.id_pasien + ', \'' + escapeHtml(p.nama) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
+            html += '<tr onclick="window.pilihPasienCheckup(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
                 '<td><strong>' + p.id_pasien + '</strong></td>' +
                 '<td>' + escapeHtml(p.nama) + '</td>' +
                 '<td><span class="' + statusClass + '">' + statusText + '</span></td>' +
-                '<td><button type="button" onclick="event.stopPropagation();window.pilihPasienCheckup(' + p.id_pasien + ', \'' + escapeHtml(p.nama) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
+                '<td><button type="button" onclick="event.stopPropagation();window.pilihPasienCheckup(\'' + p.id_pasien + '\', \'' + escapeHtml(p.nama) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
                 '</tr>';
         });
         tbody.innerHTML = html;
@@ -503,11 +503,11 @@
         dokterList.forEach(function(d) {
             var isSelected = (d.id_dokter == selectedId);
             var spesialisasi = d.spesialisasi || 'Umum';
-            html += '<tr onclick="window.pilihDokterCheckup(' + d.id_dokter + ', \'' + escapeHtml(d.nama_dokter) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
+            html += '<tr onclick="window.pilihDokterCheckup(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
                 '<td><strong>' + d.id_dokter + '</strong></td>' +
                 '<td>' + escapeHtml(d.nama_dokter) + '</td>' +
                 '<td><span class="badge-status spesialisasi">' + escapeHtml(spesialisasi) + '</span></td>' +
-                '<td><button type="button" onclick="event.stopPropagation();window.pilihDokterCheckup(' + d.id_dokter + ', \'' + escapeHtml(d.nama_dokter) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
+                '<td><button type="button" onclick="event.stopPropagation();window.pilihDokterCheckup(\'' + d.id_dokter + '\', \'' + escapeHtml(d.nama_dokter) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
                 '</tr>';
         });
         tbody.innerHTML = html;
@@ -527,13 +527,13 @@
             var name = shiftComboboxType === 'staff' ? item.nama_staff : item.username;
             var badge = shiftComboboxType === 'staff' ? 'Staff' : (item.jabatan || 'User');
             var badgeClass = shiftComboboxType === 'staff' ? 'staff' : 'user';
-            html += '<div class="combobox-item" onclick="window.pilihComboboxItem(' + id + ', \'' + escapeHtml(name) + '\')">' +
+            html += '<div class="combobox-item" onclick="window.pilihComboboxItem(\'' + id + '\', \'' + escapeHtml(name) + '\')">' +
                 '<div class="item-info">' +
                 '<span class="item-id">#' + id + '</span>' +
                 '<span class="item-name">' + escapeHtml(name) + '</span>' +
                 '<span class="item-badge ' + badgeClass + '">' + escapeHtml(badge) + '</span>' +
                 '</div>' +
-                '<button type="button" class="btn-pilih-item" onclick="event.stopPropagation();window.pilihComboboxItem(' + id + ', \'' + escapeHtml(name) + '\')"><i class="fas fa-check"></i> Pilih</button>' +
+                '<button type="button" class="btn-pilih-item" onclick="event.stopPropagation();window.pilihComboboxItem(\'' + id + '\', \'' + escapeHtml(name) + '\')"><i class="fas fa-check"></i> Pilih</button>' +
                 '</div>';
         });
         dropdown.innerHTML = html;
