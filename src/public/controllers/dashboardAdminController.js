@@ -2311,7 +2311,7 @@ function editCheckup(id) {
             <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
                 <thead style="position:sticky;top:0;background:#f1f9fe;z-index:2;">
                     <tr>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">ID</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">No</th>
                         <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:40%;">Nama</th>
                         <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:20%;">Status</th>
                         <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:25%;">Aksi</th>
@@ -2369,7 +2369,7 @@ function editCheckup(id) {
             <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
                 <thead style="position:sticky;top:0;background:#f1f9fe;z-index:2;">
                     <tr>
-                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">ID</th>
+                        <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:15%;">No</th>
                         <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:55%;">Nama</th>
                         <th style="padding:6px 10px;text-align:left;border-bottom:1px solid #dcecf3;width:30%;">Aksi</th>
                     </tr>
@@ -2501,14 +2501,14 @@ function editCheckup(id) {
             
             var selectedId = document.getElementById('field_id_pasien').value;
             var html = '';
-            filtered.forEach(function(p) {
+            filtered.forEach(function(p, idx) {
                 var isSelected = (p.id_pasien == selectedId);
                 var statusText = p.msh_dirawat ? 'Dirawat' : 'Pulang';
                 var statusColor = p.msh_dirawat ? '#dcfce7;color:#15803d;' : '#e2e8f0;color:#475569;';
-                
+
                 html += `
                     <tr onclick="pilihPasienCheckup('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${p.id_pasien}</strong></td>
+                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${idx + 1}</strong></td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(p.nama)}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
                             <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:0.65rem;font-weight:600;background:${statusColor}">${statusText}</span>
@@ -2543,11 +2543,11 @@ function editCheckup(id) {
             
             var selectedId = document.getElementById('field_id_dokter').value;
             var html = '';
-            filtered.forEach(function(d) {
+            filtered.forEach(function(d, idx) {
                 var isSelected = (d.id_dokter == selectedId);
                 html += `
                     <tr onclick="pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="cursor:pointer;${isSelected ? 'background:#dbeafe;' : ''}">
-                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${d.id_dokter}</strong></td>
+                        <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;"><strong>${idx + 1}</strong></td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">${escapeHtml(d.nama_dokter)}</td>
                         <td style="padding:6px 10px;border-bottom:1px solid #f0f4f7;">
                             <button onclick="event.stopPropagation();pilihDokterCheckup('${d.id_dokter}', '${escapeHtml(d.nama_dokter)}')" style="background:#2c7da0;color:white;border:none;padding:4px 12px;border-radius:12px;cursor:pointer;font-size:0.7rem;">
