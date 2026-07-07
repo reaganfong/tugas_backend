@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ==================== HELPER ====================
 
+// Helper: potong ObjectId (24 hex chars) jadi 8 chars + "..."
+function shortId(id) {
+    if (!id || typeof id !== 'string') return id || '-';
+    if (id.length <= 8) return id;
+    return id.substring(0, 8) + '...';
+}
+
 function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/[&<>"']/g, function(m) {
@@ -1589,7 +1596,7 @@ async function loadShiftJadwal() {
             staffShifts.forEach(function(s) {
                 html += `
                     <tr>
-                        <td class="col-id" title="${s.id_staff}">${s.id_staff}</td>
+                        <td class="col-id" title="${s.id_staff}">${shortId(s.id_staff)}</td>
                         <td class="col-name">${escapeHtml(s.nama_staff || '-')}</td>
                         <td class="col-day"><span class="badge badge-info">${s.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${s.shift}</span></td>
@@ -1633,7 +1640,7 @@ async function loadShiftJadwal() {
             userShifts.forEach(function(u) {
                 html += `
                     <tr>
-                        <td class="col-id" title="${u.id}">${u.id}</td>
+                        <td class="col-id" title="${u.id}">${shortId(u.id)}</td>
                         <td class="col-name">${escapeHtml(u.username || '-')}</td>
                         <td class="col-day"><span class="badge badge-info">${u.hari}</span></td>
                         <td class="col-shift"><span class="badge badge-secondary">${u.shift}</span></td>

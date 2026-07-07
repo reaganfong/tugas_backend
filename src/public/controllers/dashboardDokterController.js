@@ -538,7 +538,7 @@ function renderJadwalPage() {
         var keterangan = j.keterangan || '-';
         var showBtn = (statusLower === 'terjadwal');
         html += `<tr>
-            <td><strong>${j.id_checkup}</strong></td>
+            <td><strong>${shortId(j.id_checkup)}</strong></td>
             <td><strong>${escapeHtml(j.nama_pasien || '-')}</strong></td>
             <td>${checkin}</td>
             <td>${checkout}</td>

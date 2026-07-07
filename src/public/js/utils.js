@@ -370,6 +370,13 @@ function formatRelativeTime(date) {
 
 // ==================== STRING HELPERS ====================
 
+// Helper: potong ObjectId (24 hex chars) jadi 8 chars + "..."
+function shortId(id) {
+    if (!id || typeof id !== 'string') return id || '-';
+    if (id.length <= 8) return id;
+    return id.substring(0, 8) + '...';
+}
+
 function escapeHtml(str) {
     if (!str) return '';
     const map = {

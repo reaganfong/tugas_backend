@@ -278,7 +278,7 @@ async function loadTagihan(status = 'belum') {
             
             html += `
                 <tr>
-                    <td>${t.id_tagihan}</td>
+                    <td>${shortId(t.id_tagihan)}</td>
                     <td>${escapeHtml(t.nama)}</td>
                     <td><strong>${formatCurrency(totalBiaya)}</strong></td>
                     <td>${statusBadge}</td>
@@ -515,7 +515,7 @@ function renderCheckInOut(data) {
         
         html += `
             <tr>
-                <td>${c.id_checkup}</td>
+                <td>${shortId(c.id_checkup)}</td>
                 <td>${escapeHtml(c.nama_pasien)}</td>
                 <td>${escapeHtml(c.nama_dokter)}</td>
                 <td>${checkin}</td>
@@ -572,7 +572,7 @@ function showAddPaymentModal() {
             
             html += `
                 <tr onclick="pilihPasien('${p.id_pasien}', '${escapeHtml(p.nama)}')" style="cursor:pointer;">
-                    <td><strong>${p.id_pasien}</strong></td>
+                    <td><strong>${shortId(p.id_pasien)}</strong></td>
                     <td>${escapeHtml(p.nama || '-')}</td>
                     <td>${lastCheckin}</td>
                     <td><span class="badge ${statusClass}">${status}</span></td>
@@ -790,7 +790,7 @@ async function showDetailTagihan(idTagihan) {
         header.innerHTML = `
             <h2 style="margin:0;color:#1e4a6e;font-size:1.3rem;">
                 <i class="fas fa-receipt" style="color:#2c7da0;margin-right:8px;"></i> 
-                Detail Tagihan #${tagihan.id_tagihan}
+                Detail Tagihan #${shortId(tagihan.id_tagihan)}
             </h2>
             <button onclick="document.getElementById('detailModal').remove()" style="font-size:24px;cursor:pointer;color:#999;background:none;border:none;transition:0.2s;">
                 <i class="fas fa-times"></i>
@@ -801,7 +801,7 @@ async function showDetailTagihan(idTagihan) {
         var info = document.createElement('div');
         info.style.cssText = 'background:#f1f9fe;padding:12px 16px;border-radius:8px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;';
         info.innerHTML = `
-            <div><strong>Pasien:</strong> <span style="font-weight:600;">#${tagihan.id_pasien}</span> - ${escapeHtml(tagihan.nama)}</div>
+            <div><strong>Pasien:</strong> <span style="font-weight:600;">#${shortId(tagihan.id_pasien)}</span> - ${escapeHtml(tagihan.nama)}</div>
             <div><strong>Status:</strong> ${tagihan.status === 'lunas' ? '<span style="color:#10b981;">Lunas</span>' : '<span style="color:#dc2626;">Belum Lunas</span>'}</div>
             <div><strong>Total Tagihan:</strong> <span style="font-weight:600;">${formatCurrency(tagihan.total_biaya)}</span></div>
             <div><strong>Tanggal:</strong> ${formatDate(tagihan.tanggal_tagihan)}</div>

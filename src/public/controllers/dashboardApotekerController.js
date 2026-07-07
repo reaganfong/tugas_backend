@@ -240,7 +240,7 @@ async function loadRekomendasiObat() {
             
             html += `
                 <tr>
-                    <td><strong>${c.id_checkup}</strong></td>
+                    <td><strong>${shortId(c.id_checkup)}</strong></td>
                     <td>${escapeHtml(c.nama_pasien)}</td>
                     <td>${escapeHtml(c.nama_dokter)}</td>
                     <td style="max-width:200px;word-wrap:break-word;">${escapeHtml(c.rekomendasi_obat || '-')}</td>
@@ -415,7 +415,7 @@ function renderObatRows(obatList) {
         
         html += `
             <tr>
-                <td>${obat.id_obat}</td>
+                <td>${shortId(obat.id_obat)}</td>
                 <td><strong>${escapeHtml(obat.nama_obat)}</strong></td>
                 <td>${obat.stok}</td>
                 <td>${formatCurrency(obat.harga || 0)}</td>
