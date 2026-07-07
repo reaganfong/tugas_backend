@@ -353,8 +353,11 @@ const getRuanganStatus = async (req, res) => {
 
         const now = new Date();
         const formatted = rows.map(r => {
+            // Fix: if status is null but ditempati has a patient → treat as terisi
+            const safeStatus = r.status || (r.ditempati ? 'terisi' : 'kosong');
+
             let lamaInapHari = null;
-            if (r.tanggal_checkin && r.status === 'terisi') {
+            if (r.tanggal_checkin && safeStatus === 'terisi') {
                 const checkin = new Date(r.tanggal_checkin);
                 lamaInapHari = Math.max(1, Math.ceil((now - checkin) / (1000 * 60 * 60 * 24)));
             }
@@ -364,13 +367,13 @@ const getRuanganStatus = async (req, res) => {
                 nama_ruangan: r.nama_ruangan,
                 nomor_ruangan: r.nomor_ruangan,
                 ditempati: r.ditempati,
-                status: r.status,
+                status: safeStatus,
                 biaya_per_hari: r.biaya_per_hari,
                 id_tagihan: r.id_tagihan,
                 tanggal_checkin: r.tanggal_checkin,
                 nama_pasien: r.pasien?.nama || null,
                 lama_inap_hari: lamaInapHari,
-                lama_inap: r.status === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null
+                lama_inap: safeStatus === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null
             };
         });
 
@@ -423,8 +426,11 @@ const getRuanganWithFilter = async (req, res) => {
 
         const now = new Date();
         const formatted = rows.map(r => {
+            // Fix: if status is null but ditempati has a patient → treat as terisi
+            const safeStatus = r.status || (r.ditempati ? 'terisi' : 'kosong');
+
             let lamaInapHari = null;
-            if (r.tanggal_checkin && r.status === 'terisi') {
+            if (r.tanggal_checkin && safeStatus === 'terisi') {
                 const checkin = new Date(r.tanggal_checkin);
                 lamaInapHari = Math.max(1, Math.ceil((now - checkin) / (1000 * 60 * 60 * 24)));
             }
@@ -434,13 +440,13 @@ const getRuanganWithFilter = async (req, res) => {
                 nama_ruangan: r.nama_ruangan,
                 nomor_ruangan: r.nomor_ruangan,
                 ditempati: r.ditempati,
-                status: r.status,
+                status: safeStatus,
                 biaya_per_hari: r.biaya_per_hari,
                 id_tagihan: r.id_tagihan,
                 tanggal_checkin: r.tanggal_checkin,
                 nama_pasien: r.pasien?.nama || null,
                 lama_inap_hari: lamaInapHari,
-                lama_inap: r.status === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null
+                lama_inap: safeStatus === 'terisi' && r.tanggal_checkin ? (lamaInapHari || r.lama_inap || '?') : null
             };
         });
 
