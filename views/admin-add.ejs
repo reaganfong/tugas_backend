@@ -853,7 +853,7 @@
         var username = localStorage.getItem('username');
         if (!jabatan || !username || jabatan !== 'admin') { window.location.href = '/login'; return; }
         document.getElementById('namaUser').innerText = username;
-        document.getElementById('logoutBtn').onclick = function() { localStorage.clear(); window.location.href = '/login'; };
+        document.getElementById('logoutBtn').onclick = function() { if (typeof utils !== 'undefined' && utils.logout) { utils.logout(); } else { localStorage.clear(); window.location.href = '/login'; } };
         document.getElementById('shift_tipe').addEventListener('change', function() {
             var val = this.value;
             if (val === 'staff') {

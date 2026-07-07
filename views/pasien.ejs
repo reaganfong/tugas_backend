@@ -301,8 +301,7 @@
         }
         
         document.getElementById('logoutBtn').onclick = function() {
-            localStorage.clear();
-            window.location.href = '/login';
+            if (typeof utils !== 'undefined' && utils.logout) { utils.logout(); } else { localStorage.clear(); window.location.href = '/login'; }
         };
         
         loadPasienList();

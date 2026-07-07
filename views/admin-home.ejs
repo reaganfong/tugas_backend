@@ -218,6 +218,7 @@
         var logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
             logoutBtn.onclick = function() {
+                try { if (typeof utils !== 'undefined' && utils.logout) { utils.logout(); return; } } catch(e) {}
                 localStorage.clear();
                 window.location.href = '/login';
             };
