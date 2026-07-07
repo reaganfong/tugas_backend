@@ -1,0 +1,12 @@
+Nama tim: Badai pasti berlalu
+Anggota:
+- Jeneva Calista Chandra (241110028)
+- Catherine Tania (241110926)
+- Devita Andriany Fendy (241111003)
+- Riyanti Teresa (241112192)
+- Reagan (241111564)
+
+Teknologi yg digunakan:
+GitHub: https://github.com/hrishikeshathalye/Hospital-Management-System-DBMS
+font: https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap
+deepseek: https://chat.deepseek.com/share/xdgdl4ug29lc2fvjq1

@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Apoteker</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .welcome-text {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9f0f3;
+            font-size: 1rem;
+            color: #1e4a6e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .welcome-text b {
+            color: #0b3b5f;
+        }
+        .welcome-text i {
+            margin-right: 8px;
+            color: #2c7da0;
+        }
+
+        .btn-logout {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+        }
+
+        .btn-logout:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(220,38,38,0.2);
+        }
+
+        .btn-logout i {
+            margin-right: 6px;
+        }
+
+        .btn-primary {
+            background: #2c7da0;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #1f5e7a;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(44,125,160,0.3);
+        }
+
+        .btn-primary i {
+            margin-right: 6px;
+        }
+
+        .stok-rendah {
+            background-color: #ffe0b3;
+            font-weight: bold;
+        }
+
+        .status-aman {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .status-menipis {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .status-habis {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        /* ===== TABLE UNIFORM ===== */
+        .table-uniform {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 700px;
+        }
+
+        .table-uniform th {
+            background: #f1f9fe;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f4e6e;
+            border-bottom: 2px solid #dcecf3;
+            white-space: nowrap;
+        }
+
+        .table-uniform td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f4f7;
+            color: #1f2c38;
+            vertical-align: middle;
+        }
+
+        .table-uniform tr:hover td {
+            background: #fafefe;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            border: 1px solid #e9f0f3;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e9f0f3;
+            color: #1e4a6e;
+        }
+
+        .card h2 i {
+            margin-right: 8px;
+            color: #2c7da0;
+        }
+
+        .header {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 28px;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2edf2;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b3b5f, #1e6f5c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .header h1 i {
+            margin-right: 10px;
+            color: #2c7da0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn-tambah {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-tambah:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        .btn-tambah i {
+            margin-right: 4px;
+        }
+
+        .btn-kurang {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-kurang:hover {
+            background: #d97706;
+            transform: scale(1.05);
+        }
+
+        .btn-kurang i {
+            margin-right: 4px;
+        }
+
+        .btn-buang {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-buang:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .btn-buang i {
+            margin-right: 4px;
+        }
+
+        .btn-proses-obat {
+            background: #2c7da0;
+            color: white;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-proses-obat:hover {
+            background: #1f5e7a;
+            transform: scale(1.05);
+        }
+
+        .btn-proses-obat i {
+            margin-right: 4px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .sub-title {
+            color: #1e4a6e;
+            font-size: 1rem;
+            margin: 16px 0 8px 0;
+        }
+
+        .sub-title i {
+            margin-right: 8px;
+        }
+
+        .count-badge {
+            font-size: 0.8rem;
+            color: #6c8eae;
+            font-weight: 400;
+        }
+
+        /* ============================================================ */
+        /* ===== NOTIFIKASI SMOOTH ===== */
+        /* ============================================================ */
+
+        @keyframes notifSlideIn {
+            from {
+                transform: translateY(-20px) scale(0.92);
+                opacity: 0;
+                max-height: 0;
+                padding: 0 18px;
+                margin-bottom: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+                max-height: 80px;
+                padding: 12px 18px;
+                margin-bottom: 8px;
+            }
+        }
+
+        @keyframes notifSlideOut {
+            from {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+                max-height: 80px;
+                padding: 12px 18px;
+                margin-bottom: 8px;
+            }
+            to {
+                transform: translateY(-15px) scale(0.95);
+                opacity: 0;
+                max-height: 0;
+                padding: 0 18px;
+                margin-bottom: 0;
+            }
+        }
+
+        @keyframes progressBar {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .notification-container {
+            margin-top: 12px;
+            margin-bottom: 12px;
+        }
+
+        .notification {
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid transparent;
+            overflow: hidden;
+            transform-origin: top center;
+            animation: notifSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            position: relative;
+        }
+
+        .notification.hiding {
+            animation: notifSlideOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .notification i {
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .notification .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: all 0.25s ease;
+            padding: 0 4px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification .close-btn:hover {
+            opacity: 1;
+            background: rgba(0,0,0,0.05);
+            transform: rotate(90deg);
+        }
+
+        .notification .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            border-radius: 0 3px 0 0;
+            animation: progressBar 4.5s linear forwards;
+        }
+
+        .notification-success {
+            background: #f0fdf4;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+            border-color: #bbf7d0;
+        }
+
+        .notification-success i {
+            color: #22c55e;
+        }
+
+        .notification-success .notification-progress {
+            background: linear-gradient(90deg, #22c55e, #86efac);
+        }
+
+        .notification-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+            border-color: #fecaca;
+        }
+
+        .notification-error i {
+            color: #ef4444;
+        }
+
+        .notification-error .notification-progress {
+            background: linear-gradient(90deg, #ef4444, #fca5a5);
+        }
+
+        .notification-info {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+            border-color: #bfdbfe;
+        }
+
+        .notification-info i {
+            color: #3b82f6;
+        }
+
+        .notification-info .notification-progress {
+            background: linear-gradient(90deg, #3b82f6, #93c5fd);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .notification {
+                font-size: 0.85rem;
+                padding: 10px 14px;
+            }
+            .btn-tambah, .btn-kurang, .btn-buang {
+                display: block;
+                width: 100%;
+                margin-bottom: 4px;
+            }
+            .table-uniform {
+                font-size: 0.75rem;
+                min-width: 600px;
+            }
+            .table-uniform th,
+            .table-uniform td {
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table-uniform {
+                font-size: 0.7rem;
+                min-width: 500px;
+            }
+            .table-uniform th,
+            .table-uniform td {
+                padding: 6px 8px;
+            }
+        }
+    </style>
+    <script>
+        // Cegah flash of wrong theme – langsung set data-theme sebelum render
+        (function() {
+            const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-pills"></i> Dashboard Apoteker</h1>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="themeToggle" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem;">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+            <button id="logoutBtn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="welcome-text">
+        <i class="fas fa-user-circle"></i> Selamat datang, <b id="namaUser"><%= username %></b>
+    </div>
+
+    <!-- ===== MANAJEMEN STOK OBAT ===== -->
+    <div class="card">
+        <div class="flex-between">
+            <h2><i class="fas fa-boxes"></i> Manajemen Stok Obat</h2>
+            <button id="tambahObatBtn" class="btn-primary">
+                <i class="fas fa-plus-circle"></i> Tambah Obat Baru
+            </button>
+        </div>
+
+        <div id="notificationApoteker" class="notification-container"></div>
+
+        <h3 class="sub-title">
+            <i class="fas fa-check-circle" style="color:#10b981;"></i> Stok Tersedia
+            <span class="count-badge" id="obatTersediaCount">(0)</span>
+        </h3>
+        <div class="table-responsive">
+            <table class="table-uniform">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Obat</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Status Stok</th>
+                        <th>Terakhir Restok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyObatTersedia">
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i> Memuat...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="sub-title" style="margin-top:24px;">
+            <i class="fas fa-exclamation-triangle" style="color:#dc2626;"></i> Stok Habis
+            <span class="count-badge" id="obatHabisCount">(0)</span>
+        </h3>
+        <div class="table-responsive">
+            <table class="table-uniform">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Obat</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Status Stok</th>
+                        <th>Terakhir Restok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyObatHabis">
+                    <tr>
+                        <td colspan="7" style="text-align:center;padding:20px;color:#10b981;">
+                            <i class="fas fa-check-circle"></i> Semua obat tersedia
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== REKOMENDASI OBAT DARI DOKTER ===== -->
+    <div class="card">
+        <h2><i class="fas fa-prescription-bottle" style="color:#f59e0b;"></i> Rekomendasi Obat dari Dokter</h2>
+        <p style="color:#6c8eae;font-size:0.85rem;margin-bottom:12px;">
+            <i class="fas fa-info-circle"></i> 
+            Daftar checkup yang sudah selesai dan memiliki rekomendasi obat dari dokter.
+            <strong>Apoteker harus memproses obat di sini.</strong>
+        </p>
+        <div id="rekomendasiObatContainer">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/controllers/dashboardApotekerController.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var jabatan = localStorage.getItem('jabatan');
+        var username = localStorage.getItem('username');
+        
+        console.log('[DASHBOARD APOTEKER] Check auth:', { jabatan: jabatan, username: username });
+        
+        if (!jabatan || !username) {
+            console.log('[DASHBOARD APOTEKER] No auth, redirecting to login');
+            window.location.href = '/login';
+            return;
+        }
+        
+        var expectedRole = 'apoteker';
+        if (jabatan !== expectedRole) {
+            console.log('[DASHBOARD APOTEKER] Wrong role:', jabatan);
+            window.location.href = '/login';
+            return;
+        }
+        
+        var namaUser = document.getElementById('namaUser');
+        if (namaUser) {
+            namaUser.innerText = username;
+        }
+        
+        var logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.onclick = function() {
+                localStorage.clear();
+                window.location.href = '/login';
+            };
+        }
+    });
+</script>
+
+<!-- ==================== DARK MODE TOGGLE ==================== -->
+<script>
+    (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        function setTheme(isDark) {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? '1' : '0');
+            if (icon && text) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                text.textContent = isDark ? 'Light' : 'Dark';
+            }
+        }
+
+        // Inisialisasi dari localStorage (sinkron dengan flash script)
+        const saved = localStorage.getItem('darkMode') === '1';
+        setTheme(saved);
+
+        btn.addEventListener('click', function() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    })();
+</script>
+
+</body>
+</html>

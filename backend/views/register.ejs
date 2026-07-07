@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi User - Rumah Sehat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e6f0fa 0%, #f4f9fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .register-container {
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e9f0f3;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .register-card:hover {
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo .icon-hospital {
+            font-size: 48px;
+            color: #2c7da0;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b3b5f, #1e6f5c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #5e7e9e;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1e4a6e;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #2c7da0;
+            width: 18px;
+        }
+
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbdde6;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #a0b8cc;
+        }
+
+        .form-group .help-text {
+            display: block;
+            margin-top: 3px;
+            font-size: 0.7rem;
+            color: #6c8eae;
+        }
+
+        .form-group .help-text i {
+            margin-right: 4px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #8ba3bc;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+
+        .password-toggle:hover {
+            color: #2c7da0;
+        }
+
+        .dokter-fields {
+            display: none;
+            margin-top: 12px;
+            padding: 16px 16px;
+            background: #f8fafc;
+            border-radius: 14px;
+            border: 1px solid #e9f0f3;
+            animation: slideDown 0.3s ease;
+        }
+
+        .dokter-fields.show {
+            display: block;
+        }
+
+        .dokter-fields .sub-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1e4a6e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dokter-fields .sub-title i {
+            color: #2c7da0;
+        }
+
+        /* ===== MESSAGE BOX ===== */
+        #message {
+            min-height: 65px;
+            margin-top: 10px;
+        }
+
+        .message-box {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 5px solid;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+
+        .message-box i {
+            font-size: 1.1rem;
+        }
+
+        .message-success {
+            background: #f0fdf4;
+            color: #166534;
+            border-left-color: #22c55e;
+            border: 1px solid #bbf7d0;
+        }
+
+        .message-success i {
+            color: #22c55e;
+        }
+
+        .message-error {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left-color: #ef4444;
+            border: 1px solid #fecaca;
+        }
+
+        .message-error i {
+            color: #ef4444;
+        }
+
+        .message-info {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left-color: #3b82f6;
+            border: 1px solid #bfdbfe;
+        }
+
+        .message-info i {
+            color: #3b82f6;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 13px;
+            background: #2c7da0;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
+        }
+
+        .btn-register:hover {
+            background: #1f5e7a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(44, 125, 160, 0.3);
+        }
+
+        .btn-register i {
+            margin-right: 8px;
+        }
+
+        .btn-register:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #e9f0f3;
+            color: #2c7da0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: #1f5e7a;
+            text-decoration: underline;
+        }
+
+        .back-link i {
+            margin-right: 6px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+            20%, 40%, 60%, 80% { transform: translateX(6px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease;
+        }
+
+        @media (max-width: 480px) {
+            .register-card {
+                padding: 28px 20px;
+            }
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            .logo .icon-hospital {
+                font-size: 36px;
+            }
+            .dokter-fields {
+                padding: 12px 12px;
+            }
+            .message-box {
+                font-size: 0.8rem;
+                padding: 10px 12px;
+            }
+        }
+    </style>
+    <script>
+        // Cegah flash of wrong theme – langsung set data-theme sebelum render
+        (function() {
+            const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+<div class="register-container">
+    <div class="register-card">
+
+        <!-- Tombol Dark Mode -->
+        <div style="position: absolute; top: 16px; right: 16px; z-index: 10;">
+            <button id="themeToggle" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem;">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+        </div>
+
+        <div class="logo">
+            <span class="icon-hospital"><i class="fas fa-hospital"></i></span>
+            <h1>Rumah Sehat</h1>
+            <p><i class="fas fa-info-circle" style="color:#2c7da0;margin-right:6px;"></i>Daftar Akun Baru</p>
+        </div>
+
+        <form id="registerForm" novalidate>
+
+            <!-- USERNAME -->
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username <span class="required">*</span></label>
+                <input type="text" id="reg_username" placeholder="Masukkan username" required autocomplete="off">
+                <span class="help-text"><i class="fas fa-info-circle"></i> Minimal 3 karakter</span>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password <span class="required">*</span></label>
+                <div class="password-wrapper">
+                    <input type="password" id="reg_password" placeholder="Masukkan password" required>
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <span class="help-text"><i class="fas fa-info-circle"></i> Minimal 4 karakter</span>
+            </div>
+
+            <!-- JABATAN -->
+            <div class="form-group">
+                <label><i class="fas fa-briefcase"></i> Jabatan <span class="required">*</span></label>
+                <select id="reg_jabatan">
+                    <option value="admin">Admin</option>
+                    <option value="akuntan">Akuntan</option>
+                    <option value="apoteker">Apoteker</option>
+                    <option value="dokter">Dokter</option>
+                    <option value="pasien">Pasien</option>
+                </select>
+            </div>
+
+            <!-- DOKTER FIELDS -->
+            <div id="dokterFields" class="dokter-fields">
+                <div class="sub-title"><i class="fas fa-user-md"></i> Data Dokter <span style="color:#ef4444;">*</span></div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Nama Lengkap <span class="required">*</span></label>
+                    <input type="text" id="dokter_nama" placeholder="Masukkan nama lengkap">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-stethoscope"></i> Spesialisasi</label>
+                    <input type="text" id="dokter_spesialisasi" placeholder="Contoh: Umum, Anak, Jantung">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> Umur</label>
+                    <input type="number" id="dokter_umur" placeholder="Masukkan umur" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> No Telepon</label>
+                    <input type="text" id="dokter_telepon" placeholder="Contoh: 08123456789">
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-money-bill-wave"></i> Biaya Honor</label>
+                    <input type="number" id="dokter_honor" placeholder="Contoh: 150000" min="0">
+                </div>
+            </div>
+
+            <!-- ===== MESSAGE BOX ===== -->
+            <div id="message"></div>
+
+            <!-- ===== TOMBOL DAFTAR ===== -->
+            <button type="submit" class="btn-register" id="registerBtn">
+                <i class="fas fa-check-circle"></i> Daftar Sekarang
+            </button>
+        </form>
+
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Kembali ke Login
+        </a>
+
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script>
+    // ==================== DOM REFS ====================
+    const jabatanSelect = document.getElementById('reg_jabatan');
+    const dokterFields = document.getElementById('dokterFields');
+    const registerForm = document.getElementById('registerForm');
+    const messageDiv = document.getElementById('message');
+    const registerBtn = document.getElementById('registerBtn');
+    const usernameInput = document.getElementById('reg_username');
+    const passwordInput = document.getElementById('reg_password');
+
+    // ==================== TOGGLE PASSWORD ====================
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const input = document.getElementById('reg_password');
+        const icon = this.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    });
+
+    // ==================== SHOW/HIDE DOKTER FIELDS ====================
+    jabatanSelect.addEventListener('change', function() {
+        if (this.value === 'dokter') {
+            dokterFields.classList.add('show');
+            document.getElementById('dokter_nama').required = true;
+        } else {
+            dokterFields.classList.remove('show');
+            document.getElementById('dokter_nama').required = false;
+        }
+    });
+
+    // ==================== REGISTER SUBMIT ====================
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        messageDiv.innerHTML = '';
+        messageDiv.className = '';
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        const jabatan = jabatanSelect.value;
+
+        // ===== VALIDASI =====
+        if (!username || username.length < 3) {
+            showMessage('Username minimal 3 karakter!', 'error');
+            usernameInput.focus();
+            return;
+        }
+
+        if (!password || password.length < 4) {
+            showMessage('Password minimal 4 karakter!', 'error');
+            passwordInput.focus();
+            return;
+        }
+
+        let dokterData = null;
+        if (jabatan === 'dokter') {
+            const nama = document.getElementById('dokter_nama').value.trim();
+            if (!nama) {
+                showMessage('Nama dokter wajib diisi!', 'error');
+                document.getElementById('dokter_nama').focus();
+                return;
+            }
+            dokterData = {
+                nama_dokter: nama,
+                spesialisasi: document.getElementById('dokter_spesialisasi').value.trim(),
+                umur: parseInt(document.getElementById('dokter_umur').value) || null,
+                no_telepon: document.getElementById('dokter_telepon').value.trim(),
+                biaya_honor: parseInt(document.getElementById('dokter_honor').value) || 0
+            };
+            console.log('[REGISTER] Dokter Data:', dokterData);
+        }
+
+        // ===== LOADING =====
+        registerBtn.disabled = true;
+        registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+        try {
+            console.log('[REGISTER] Sending request...');
+            const result = await apiService.register(username, password, jabatan, dokterData);
+            console.log('[REGISTER] Result:', result);
+
+            showMessage('Registrasi berhasil! Mengalihkan ke halaman login...', 'success');
+            
+            registerForm.reset();
+            dokterFields.classList.remove('show');
+            document.getElementById('dokter_nama').required = false;
+
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+
+        } catch (err) {
+            console.error('[REGISTER] Error:', err);
+            let errorMsg = err.message || 'Registrasi gagal!';
+            
+            if (err.data && err.data.message) {
+                errorMsg = err.data.message;
+            }
+            
+            showMessage(errorMsg, 'error');
+            
+            document.querySelector('.register-card').classList.add('shake');
+            setTimeout(() => {
+                document.querySelector('.register-card').classList.remove('shake');
+            }, 500);
+
+        } finally {
+            registerBtn.disabled = false;
+            registerBtn.innerHTML = '<i class="fas fa-check-circle"></i> Daftar Sekarang';
+        }
+    });
+
+    // ==================== HELPER FUNCTIONS ====================
+    function showMessage(text, type) {
+        const iconMap = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+
+        messageDiv.innerHTML = `
+            <div class="message-box message-${type}">
+                <i class="fas ${iconMap[type] || iconMap.info}"></i>
+                <span>${text}</span>
+            </div>
+        `;
+    }
+</script>
+
+<!-- ==================== DARK MODE TOGGLE ==================== -->
+<script>
+    (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        function setTheme(isDark) {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? '1' : '0');
+            if (icon && text) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                text.textContent = isDark ? 'Light' : 'Dark';
+            }
+        }
+
+        const saved = localStorage.getItem('darkMode') === '1';
+        setTheme(saved);
+
+        btn.addEventListener('click', function() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Tambah Data</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ===== SEMUA CSS DARI HTML ASLI ===== */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-grid .full-width { grid-column: 1 / -1; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .welcome-text { background: white; border-radius: 24px; padding: 16px 24px; margin-bottom: 24px; border: 1px solid #e9f0f3; font-size: 1rem; color: #1e4a6e; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .welcome-text b { color: #0b3b5f; }
+        .welcome-text i { margin-right: 8px; color: #2c7da0; }
+        .btn-back { background: #e2edf2; color: #1e4a6e; border: 2px solid #cbdde6; padding: 10px 24px; border-radius: 40px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+        .btn-back:hover { background: #cbdde6; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .btn-back i { margin-right: 6px; }
+        .btn-logout { background: #dc2626; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.95rem; }
+        .btn-logout:hover { background: #b91c1c; transform: translateY(-1px); box-shadow: 0 6px 12px rgba(220,38,38,0.2); }
+        .btn-logout i { margin-right: 6px; }
+        @keyframes slideInUp { from { transform: translateY(60px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        @keyframes slideOutDown { from { transform: translateY(0) scale(1); opacity: 1; } to { transform: translateY(60px) scale(0.95); opacity: 0; } }
+        .search-table-container { max-height: 180px; overflow-y: auto; border: 1px solid #e2edf2; border-radius: 8px; margin-bottom: 8px; }
+        .search-table-container table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        .search-table-container thead { position: sticky; top: 0; background: #f1f9fe; z-index: 2; }
+        .search-table-container th { padding: 6px 10px; text-align: left; border-bottom: 1px solid #dcecf3; font-weight: 600; color: #1e4a6e; }
+        .search-table-container td { padding: 6px 10px; border-bottom: 1px solid #f0f4f7; }
+        .search-table-container tr:hover td { background: #fafefe; }
+        .search-table-container .selected-row { background: #dbeafe !important; }
+        .badge-status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
+        .badge-status.dirawat { background: #dcfce7; color: #15803d; }
+        .badge-status.pulang { background: #e2e8f0; color: #475569; }
+        .badge-status.spesialisasi { background: #e2edf2; color: #475569; }
+        .btn-pilih { background: #2c7da0; color: white; border: none; padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 0.7rem; transition: 0.2s; }
+        .btn-pilih:hover { background: #1f5e7a; transform: scale(1.05); }
+        .btn-pilih i { margin-right: 3px; }
+        .selected-display { margin-top: 6px; padding: 8px 12px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0; font-size: 0.85rem; color: #15803d; font-weight: 500; display: none; }
+        .selected-display.show { display: block; }
+        .selected-display i { margin-right: 6px; }
+        .search-input-group { display: flex; gap: 8px; margin-bottom: 8px; }
+        .search-input-group input { flex: 1; padding: 8px 12px; border: 1px solid #cbdde6; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .search-input-group input:focus { outline: none; border-color: #2c7da0; box-shadow: 0 0 0 3px rgba(44,125,160,0.1); }
+        .search-input-group .btn-search { padding: 6px 16px; border-radius: 8px; font-size: 0.8rem; border: none; cursor: pointer; transition: 0.2s; font-weight: 500; }
+        .search-input-group .btn-search.btn-primary { background: #2c7da0; color: white; }
+        .search-input-group .btn-search.btn-primary:hover { background: #1f5e7a; }
+        .search-input-group .btn-search.btn-secondary { background: #e2edf2; color: #1e4a6e; }
+        .search-input-group .btn-search.btn-secondary:hover { background: #cbdde6; }
+        .combobox-wrapper { position: relative; width: 100%; }
+        .combobox-input { display: flex; align-items: center; background: white; border: 2px solid #e2edf2; border-radius: 12px; transition: all 0.3s ease; padding: 0 12px; }
+        .combobox-input:focus-within { border-color: #2c7da0; box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
+        .combobox-input .combobox-icon { color: #94a3b8; font-size: 0.9rem; margin-right: 10px; transition: 0.3s; }
+        .combobox-input:focus-within .combobox-icon { color: #2c7da0; }
+        .combobox-input input { flex: 1; border: none; padding: 12px 0; font-size: 0.95rem; background: transparent; color: #0f172a; outline: none; font-family: inherit; }
+        .combobox-input input::placeholder { color: #94a3b8; }
+        .combobox-arrow { color: #94a3b8; font-size: 0.8rem; transition: 0.3s; margin-left: 8px; }
+        .combobox-arrow.open { transform: rotate(180deg); }
+        .combobox-clear { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 4px; font-size: 1rem; transition: 0.2s; }
+        .combobox-clear:hover { color: #ef4444; }
+        .combobox-dropdown { position: absolute; top: calc(100% + 8px); left: 0; right: 0; background: white; border: 2px solid #e2edf2; border-radius: 12px; max-height: 240px; overflow-y: auto; display: none; z-index: 1000; box-shadow: 0 12px 40px rgba(0,0,0,0.12); animation: dropdownFade 0.2s ease; }
+        .combobox-dropdown.open { display: block; }
+        @keyframes dropdownFade { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .combobox-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; cursor: pointer; transition: 0.15s; border-bottom: 1px solid #f1f5f9; }
+        .combobox-item:last-child { border-bottom: none; }
+        .combobox-item:hover { background: #f1f9fe; }
+        .combobox-item .item-info { display: flex; align-items: center; gap: 12px; }
+        .combobox-item .item-id { font-weight: 700; color: #1e4a6e; font-size: 0.8rem; background: #f1f9fe; padding: 2px 10px; border-radius: 20px; }
+        .combobox-item .item-name { font-weight: 500; color: #0f172a; }
+        .combobox-item .item-badge { font-size: 0.65rem; padding: 2px 10px; border-radius: 20px; background: #e2edf2; color: #475569; }
+        .combobox-item .item-badge.staff { background: #dbeafe; color: #1e40af; }
+        .combobox-item .item-badge.user { background: #fce7f3; color: #be185d; }
+        .combobox-item .btn-pilih-item { background: #2c7da0; color: white; border: none; padding: 4px 14px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: 600; transition: 0.2s; }
+        .combobox-item .btn-pilih-item:hover { background: #1f5e7a; transform: scale(1.05); }
+        .combobox-item .btn-pilih-item i { margin-right: 4px; }
+        .combobox-empty { padding: 20px; text-align: center; color: #94a3b8; font-size: 0.9rem; }
+        .combobox-loading { padding: 20px; text-align: center; color: #94a3b8; font-size: 0.9rem; }
+        .combobox-loading i { margin-right: 8px; }
+        .combobox-selected { margin-top: 10px; }
+        .selected-badge { display: inline-flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 20px; padding: 6px 14px 6px 12px; font-size: 0.85rem; font-weight: 500; color: #166534; animation: badgePop 0.3s ease; }
+        @keyframes badgePop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .selected-badge i { font-size: 1rem; }
+        .selected-remove { background: none; border: none; color: #94a3b8; cursor: pointer; padding: 2px 4px; font-size: 0.9rem; transition: 0.2s; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .selected-remove:hover { color: #ef4444; background: #fee2e2; }
+        .modern-select { width: 100%; padding: 12px 16px; border: 2px solid #e2edf2; border-radius: 12px; font-size: 0.95rem; background: white; color: #0f172a; transition: all 0.3s ease; font-family: inherit; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; cursor: pointer; }
+        .modern-select:focus { outline: none; border-color: #2c7da0; box-shadow: 0 0 0 4px rgba(44,125,160,0.1); }
+        .hari-chips { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: #f1f5f9; border: 2px solid #e2e8f0; border-radius: 30px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: #475569; transition: all 0.25s ease; user-select: none; }
+        .chip:hover { border-color: #94a3b8; background: #e2e8f0; transform: translateY(-1px); }
+        .chip input[type="checkbox"] { display: none; }
+        .chip.active { background: #22c55e !important; border-color: #16a34a !important; color: white !important; box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4) !important; transform: scale(1.05) !important; }
+        .chip.active::before { content: "\f00c "; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .chip.active:hover { background: #16a34a !important; border-color: #15803d !important; box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5) !important; }
+        .shift-result { margin-top: 12px; padding: 16px 20px; border-radius: 12px; display: none; }
+        .shift-result.success { display: block; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+        .shift-result.error { display: block; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .shift-result .close-result { background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: auto; padding: 0 4px; }
+        .shift-result .close-result:hover { opacity: 0.7; }
+        .shift-result .result-icon { font-size: 1.4rem; margin-right: 12px; }
+        .shift-result .result-detail { font-size: 0.85rem; opacity: 0.9; }
+        @media (max-width: 768px) { .combobox-input input { font-size: 0.85rem; padding: 10px 0; } .combobox-item { padding: 8px 12px; flex-wrap: wrap; gap: 6px; } .chip { padding: 6px 12px; font-size: 0.75rem; } .hari-chips { gap: 6px; } .shift-result { padding: 12px 16px; font-size: 0.9rem; } }
+        @media (max-width: 480px) { .shift-result { font-size: 0.85rem; padding: 10px 14px; } .shift-result .result-detail { font-size: 0.75rem; } }
+        .badge-status { display: inline-block; padding: 2px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; }
+        .badge-status.baru { background: #dbeafe; color: #1e40af; }
+        .badge-status.dirawat { background: #fef3c7; color: #92400e; }
+        .badge-status.pulang { background: #dcfce7; color: #15803d; }
+    </style>
+    <script>
+        // Cegah flash of wrong theme – langsung set data-theme sebelum render
+        (function() {
+            const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-hospital"></i> Admin Panel</h1>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="themeToggle" class="btn-theme" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem;">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+            <button class="btn-back" onclick="location.href='/admin'">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button id="logoutBtn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="welcome-text">
+        <i class="fas fa-user-circle"></i> Selamat datang, <b id="namaUser"><%= username %></b>
+    </div>
+
+    <!-- ==================== FORM TAMBAH PASIEN ==================== -->
+    <div class="card">
+        <h2><i class="fas fa-user-plus"></i> Tambah Pasien Baru</h2>
+        <form id="formTambahPasien" class="form-grid">
+            <div class="form-group">
+                <label>Nama <span style="color:red;">*</span></label>
+                <input type="text" id="tambah_nama" required placeholder="Nama lengkap pasien">
+            </div>
+            <div class="form-group">
+                <label>Nama Wali</label>
+                <input type="text" id="tambah_nama_wali" placeholder="Nama wali/pendamping">
+            </div>
+            <div class="form-group">
+                <label>Umur</label>
+                <input type="number" id="tambah_umur" placeholder="Umur pasien" min="0">
+            </div>
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <select id="tambah_jenis_kelamin">
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>No Telp Pasien</label>
+                <input type="text" id="tambah_no_telp_pasien" placeholder="(+62)">
+            </div>
+            <div class="form-group">
+                <label>No Telp Wali</label>
+                <input type="text" id="tambah_no_telp_wali" placeholder="(+62)">
+            </div>
+            <div class="full-width">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Simpan Pasien
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== FORM TAMBAH BAYI ==================== -->
+    <div class="card">
+        <h2><i class="fas fa-baby"></i> Tambah Bayi Baru</h2>
+        <form id="formTambahBayi" class="form-grid">
+            <div class="form-group">
+                <label>Nama Ibu <span style="color:red;">*</span></label>
+                <input type="text" id="bayi_nama_ibu" placeholder="Masukkan nama ibu" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Bayi</label>
+                <input type="text" id="bayi_nama" placeholder="Masukkan nama bayi">
+            </div>
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <select id="bayi_jk">
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Berat (kg)</label>
+                <input type="number" step="0.01" id="bayi_berat" placeholder="Berat bayi (kg)" min="0">
+            </div>
+            <div class="form-group">
+                <label>Tinggi (cm)</label>
+                <input type="number" step="0.01" id="bayi_tinggi" placeholder="Tinggi bayi (cm)" min="0">
+            </div>
+            <div class="full-width" style="margin-top:8px;">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Simpan Bayi
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== FORM TAMBAH STAFF ==================== -->
+    <div class="card">
+        <h2><i class="fas fa-id-badge"></i> Tambah Staff Baru</h2>
+        <form id="formTambahStaff" class="form-grid">
+            <div class="form-group">
+                <label>Nama Staff <span style="color:red;">*</span></label>
+                <input type="text" id="staff_nama" required placeholder="Nama lengkap staff">
+            </div>
+            <div class="form-group">
+                <label>Jabatan</label>
+                <input type="text" id="staff_jabatan" placeholder="Contoh: Perawat, Cleaning">
+            </div>
+            <div class="form-group">
+                <label>No Telepon</label>
+                <input type="text" id="staff_no_telp" placeholder="08123456789">
+            </div>
+            <div class="form-group">
+                <label>Gaji <span style="color:red;">*</span></label>
+                <input type="number" id="staff_gaji" required placeholder="Gaji staff (Rp)" min="0">
+            </div>
+            <div class="full-width">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Simpan Staff
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== FORM TAMBAH CHECKUP ==================== -->
+    <div class="card">
+        <h2><i class="fas fa-stethoscope"></i> Tambah Checkup Baru</h2>
+        <form id="formTambahCheckup" class="form-grid">
+            <div class="form-group">
+                <label>Cari Pasien <span style="color:red;">*</span></label>
+                <div class="search-input-group">
+                    <input type="text" id="checkup_pasien_search" placeholder="Cari nama atau ID pasien...">
+                    <button type="button" id="btnSearchPasien" class="btn-search btn-primary">
+                        <i class="fas fa-search"></i> Cari
+                    </button>
+                    <button type="button" id="btnResetPasien" class="btn-search btn-secondary">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+                <div class="search-table-container" id="checkup_pasien_list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:15%;">ID</th>
+                                <th style="width:50%;">Nama</th>
+                                <th style="width:20%;">Status</th>
+                                <th style="width:15%;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkup_pasien_table">
+                            <tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Ketik dan cari pasien...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="checkup_id_pasien" required>
+                <div class="selected-display" id="checkup_pasien_terpilih">
+                    <i class="fas fa-check-circle"></i> Pasien Terpilih: <span id="checkup_pasien_nama"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Cari Dokter <span style="color:red;">*</span></label>
+                <div class="search-input-group">
+                    <input type="text" id="checkup_dokter_search" placeholder="Cari nama atau ID dokter...">
+                    <button type="button" id="btnSearchDokter" class="btn-search btn-primary">
+                        <i class="fas fa-search"></i> Cari
+                    </button>
+                    <button type="button" id="btnResetDokter" class="btn-search btn-secondary">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                </div>
+                <div class="search-table-container" id="checkup_dokter_list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:15%;">ID</th>
+                                <th style="width:40%;">Nama</th>
+                                <th style="width:30%;">Spesialisasi</th>
+                                <th style="width:15%;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkup_dokter_table">
+                            <tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Ketik dan cari dokter...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <input type="hidden" id="checkup_id_dokter" required>
+                <div class="selected-display" id="checkup_dokter_terpilih">
+                    <i class="fas fa-check-circle"></i> Dokter Terpilih: <span id="checkup_dokter_nama"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Tanggal Check-in <span style="color:red;">*</span></label>
+                <input type="date" id="checkup_tanggal" required>
+            </div>
+            <div class="form-group">
+                <label>Jam Check-in <span style="color:red;">*</span></label>
+                <input type="time" id="checkup_jam" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Biaya Checkup (Rp)</label>
+                <input type="number" id="checkup_biaya" step="1000" value="0" placeholder="Biaya checkup (Rp)" min="0">
+            </div>
+            <div class="form-group">
+                <label>Keterangan</label>
+                <input type="text" id="checkup_keterangan" placeholder="Catatan checkup">
+            </div>
+            
+            <div class="full-width">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Simpan Checkup
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== FORM TAMBAH SHIFT ==================== -->
+    <div class="card">
+        <h2><i class="fas fa-clock"></i> Tambah Shift Baru</h2>
+        <form id="formTambahShift" class="form-grid">
+            <div class="form-group">
+                <label>Tipe <span style="color:red;">*</span></label>
+                <select id="shift_tipe" class="modern-select" required>
+                    <option value="staff">Staff</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="shift_combobox_group">
+                <label id="shift_combobox_label">Cari Staff <span style="color:red;">*</span></label>
+                <div class="combobox-wrapper">
+                    <div class="combobox-input">
+                        <i class="fas fa-search combobox-icon"></i>
+                        <input type="text" id="shift_combobox_input" placeholder="Ketik nama atau ID..." autocomplete="off">
+                        <button type="button" id="shift_combobox_clear" class="combobox-clear" style="display:none;">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                        <i class="fas fa-chevron-down combobox-arrow"></i>
+                    </div>
+                    <div class="combobox-dropdown" id="shift_combobox_dropdown">
+                        <div class="combobox-loading">Memuat data...</div>
+                    </div>
+                </div>
+                <input type="hidden" id="shift_combobox_id" required>
+                <div class="combobox-selected" id="shift_combobox_selected" style="display:none;">
+                    <span class="selected-badge">
+                        <i class="fas fa-check-circle" style="color:#10b981;"></i>
+                        <span id="shift_combobox_selected_text">Ani (ID: 1)</span>
+                        <button type="button" id="shift_combobox_remove" class="selected-remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Shift <span style="color:red;">*</span></label>
+                <select id="shift_shift" class="modern-select" required>
+                    <option value="Shift I">Shift I</option>
+                    <option value="Shift II">Shift II</option>
+                    <option value="Shift III">Shift III</option>
+                </select>
+            </div>
+            
+            <div class="form-group full-width">
+                <label>Hari (bisa centang lebih dari satu) <span style="color:red;">*</span></label>
+                <div class="hari-chips" id="shift_hari_checkboxes">
+                    <label class="chip" onclick="toggleChip(this)" data-value="Senin">
+                        <input type="checkbox" value="Senin"> Senin
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Selasa">
+                        <input type="checkbox" value="Selasa"> Selasa
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Rabu">
+                        <input type="checkbox" value="Rabu"> Rabu
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Kamis">
+                        <input type="checkbox" value="Kamis"> Kamis
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Jumat">
+                        <input type="checkbox" value="Jumat"> Jumat
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Sabtu">
+                        <input type="checkbox" value="Sabtu"> Sabtu
+                    </label>
+                    <label class="chip" onclick="toggleChip(this)" data-value="Minggu">
+                        <input type="checkbox" value="Minggu"> Minggu
+                    </label>
+                </div>
+
+                <div id="selectedDaysIndicator" style="margin-top:8px;padding:8px 12px;background:#f1f9fe;border-radius:8px;display:none;font-size:0.85rem;">
+                    <i class="fas fa-check-circle" style="color:#10b981;"></i>
+                    Hari terpilih: <strong id="selectedDaysList">-</strong>
+                </div>
+            </div>
+            
+            <div class="full-width">
+                <button type="submit" class="btn-submit" id="shiftSubmitBtn">
+                    <i class="fas fa-save"></i> Simpan Shift
+                </button>
+            </div>
+        </form>
+        
+        <div id="shiftResult" class="shift-result"></div>
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+    let allPasien = [];
+    let allDokter = [];
+    let allStaff = [];
+    let allUsers = [];
+    let shiftComboboxData = [];
+    let shiftComboboxType = 'staff';
+
+    // ==================== LOAD DATA ====================
+    async function loadSearchData() {
+        try {
+            const [pasien, dokter] = await Promise.all([
+                apiService.getPasien(),
+                apiService.getDokter()
+            ]);
+            allPasien = pasien || [];
+            allDokter = dokter || [];
+            renderPasienTable(allPasien);
+            renderDokterTable(allDokter);
+        } catch (err) {
+            console.error('[ERROR] Load search data:', err);
+        }
+    }
+
+    async function loadShiftData() {
+        try {
+            const [staff, users] = await Promise.all([
+                apiService.getStaff(),
+                apiService.getUsers()
+            ]);
+            allStaff = staff || [];
+            allUsers = users || [];
+            shiftComboboxData = allStaff;
+            renderComboboxItems(allStaff);
+        } catch (err) {
+            console.error('[ERROR] Load shift data:', err);
+        }
+    }
+
+    // ==================== RENDER TABLE ====================
+    function renderPasienTable(pasienList) {
+        var tbody = document.getElementById('checkup_pasien_table');
+        if (!tbody) return;
+        if (!pasienList || pasienList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Tidak ada pasien ditemukan</td></tr>';
+            return;
+        }
+        var selectedId = document.getElementById('checkup_id_pasien').value;
+        var html = '';
+        pasienList.forEach(function(p) {
+            var isSelected = (p.id_pasien == selectedId);
+            var statusText = '';
+            var statusClass = '';
+            if (p.msh_dirawat === 'baru') { statusText = 'Baru'; statusClass = 'badge-status baru'; }
+            else if (p.msh_dirawat === 'dirawat') { statusText = 'Dirawat'; statusClass = 'badge-status dirawat'; }
+            else if (p.msh_dirawat === 'pulang') { statusText = 'Pulang'; statusClass = 'badge-status pulang'; }
+            else { statusText = p.msh_dirawat || '-'; statusClass = 'badge-status'; }
+            html += '<tr onclick="window.pilihPasienCheckup(' + p.id_pasien + ', \'' + escapeHtml(p.nama) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
+                '<td><strong>' + p.id_pasien + '</strong></td>' +
+                '<td>' + escapeHtml(p.nama) + '</td>' +
+                '<td><span class="' + statusClass + '">' + statusText + '</span></td>' +
+                '<td><button type="button" onclick="event.stopPropagation();window.pilihPasienCheckup(' + p.id_pasien + ', \'' + escapeHtml(p.nama) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
+                '</tr>';
+        });
+        tbody.innerHTML = html;
+    }
+
+    function renderDokterTable(dokterList) {
+        var tbody = document.getElementById('checkup_dokter_table');
+        if (!tbody) return;
+        if (!dokterList || dokterList.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:12px;color:#6c8eae;">Tidak ada dokter ditemukan</td></tr>';
+            return;
+        }
+        var selectedId = document.getElementById('checkup_id_dokter').value;
+        var html = '';
+        dokterList.forEach(function(d) {
+            var isSelected = (d.id_dokter == selectedId);
+            var spesialisasi = d.spesialisasi || 'Umum';
+            html += '<tr onclick="window.pilihDokterCheckup(' + d.id_dokter + ', \'' + escapeHtml(d.nama_dokter) + '\')" style="cursor:pointer;' + (isSelected ? 'background:#dbeafe;' : '') + '">' +
+                '<td><strong>' + d.id_dokter + '</strong></td>' +
+                '<td>' + escapeHtml(d.nama_dokter) + '</td>' +
+                '<td><span class="badge-status spesialisasi">' + escapeHtml(spesialisasi) + '</span></td>' +
+                '<td><button type="button" onclick="event.stopPropagation();window.pilihDokterCheckup(' + d.id_dokter + ', \'' + escapeHtml(d.nama_dokter) + '\')" class="btn-pilih"><i class="fas fa-check"></i> Pilih</button></td>' +
+                '</tr>';
+        });
+        tbody.innerHTML = html;
+    }
+
+    // ==================== COMBOBOX SHIFT ====================
+    function renderComboboxItems(items) {
+        var dropdown = document.getElementById('shift_combobox_dropdown');
+        if (!dropdown) return;
+        if (!items || items.length === 0) {
+            dropdown.innerHTML = '<div class="combobox-empty">Tidak ada data ditemukan</div>';
+            return;
+        }
+        var html = '';
+        items.forEach(function(item) {
+            var id = shiftComboboxType === 'staff' ? item.id_staff : item.id;
+            var name = shiftComboboxType === 'staff' ? item.nama_staff : item.username;
+            var badge = shiftComboboxType === 'staff' ? 'Staff' : (item.jabatan || 'User');
+            var badgeClass = shiftComboboxType === 'staff' ? 'staff' : 'user';
+            html += '<div class="combobox-item" onclick="window.pilihComboboxItem(' + id + ', \'' + escapeHtml(name) + '\')">' +
+                '<div class="item-info">' +
+                '<span class="item-id">#' + id + '</span>' +
+                '<span class="item-name">' + escapeHtml(name) + '</span>' +
+                '<span class="item-badge ' + badgeClass + '">' + escapeHtml(badge) + '</span>' +
+                '</div>' +
+                '<button type="button" class="btn-pilih-item" onclick="event.stopPropagation();window.pilihComboboxItem(' + id + ', \'' + escapeHtml(name) + '\')"><i class="fas fa-check"></i> Pilih</button>' +
+                '</div>';
+        });
+        dropdown.innerHTML = html;
+    }
+
+    // ==================== GLOBAL FUNCTIONS ====================
+    window.pilihPasienCheckup = function(id, nama) {
+        document.getElementById('checkup_id_pasien').value = id;
+        document.getElementById('checkup_pasien_search').value = nama + ' (ID: ' + id + ')';
+        var terpilih = document.getElementById('checkup_pasien_terpilih');
+        if (terpilih) {
+            terpilih.classList.add('show');
+            document.getElementById('checkup_pasien_nama').innerText = 'ID: ' + id + ' - ' + nama;
+        }
+    };
+
+    window.pilihDokterCheckup = function(id, nama) {
+        document.getElementById('checkup_id_dokter').value = id;
+        document.getElementById('checkup_dokter_search').value = nama + ' (ID: ' + id + ')';
+        var terpilih = document.getElementById('checkup_dokter_terpilih');
+        if (terpilih) {
+            terpilih.classList.add('show');
+            document.getElementById('checkup_dokter_nama').innerText = 'ID: ' + id + ' - ' + nama;
+        }
+    };
+
+    window.pilihComboboxItem = function(id, name) {
+        document.getElementById('shift_combobox_id').value = id;
+        document.getElementById('shift_combobox_input').value = name + ' (ID: ' + id + ')';
+        var selected = document.getElementById('shift_combobox_selected');
+        if (selected) {
+            selected.style.display = 'block';
+            document.getElementById('shift_combobox_selected_text').innerHTML = name + ' (ID: ' + id + ')';
+        }
+        var dropdown = document.getElementById('shift_combobox_dropdown');
+        if (dropdown) dropdown.classList.remove('open');
+        var clearBtn = document.getElementById('shift_combobox_clear');
+        if (clearBtn) clearBtn.style.display = 'block';
+    };
+
+    // ==================== RESET COMBOBOX ====================
+    function resetCombobox() {
+        var input = document.getElementById('shift_combobox_input');
+        if (input) input.value = '';
+        var idEl = document.getElementById('shift_combobox_id');
+        if (idEl) idEl.value = '';
+        var selected = document.getElementById('shift_combobox_selected');
+        if (selected) selected.style.display = 'none';
+        var clearBtn = document.getElementById('shift_combobox_clear');
+        if (clearBtn) clearBtn.style.display = 'none';
+        var dropdown = document.getElementById('shift_combobox_dropdown');
+        if (dropdown) dropdown.classList.remove('open');
+        renderComboboxItems(shiftComboboxData);
+    }
+
+    // ==================== EVENT HANDLERS ====================
+    function setupCheckupSearchEvents() {
+        document.getElementById('btnSearchPasien').addEventListener('click', function() {
+            var keyword = document.getElementById('checkup_pasien_search').value.trim();
+            if (!keyword) { renderPasienTable(allPasien); return; }
+            var kw = keyword.toLowerCase();
+            var filtered = allPasien.filter(function(p) { return (p.nama || '').toLowerCase().includes(kw) || String(p.id_pasien).includes(kw); });
+            renderPasienTable(filtered);
+        });
+        document.getElementById('btnResetPasien').addEventListener('click', function() {
+            document.getElementById('checkup_pasien_search').value = '';
+            document.getElementById('checkup_id_pasien').value = '';
+            var terpilih = document.getElementById('checkup_pasien_terpilih');
+            if (terpilih) terpilih.classList.remove('show');
+            renderPasienTable(allPasien);
+        });
+        document.getElementById('btnSearchDokter').addEventListener('click', function() {
+            var keyword = document.getElementById('checkup_dokter_search').value.trim();
+            if (!keyword) { renderDokterTable(allDokter); return; }
+            var kw = keyword.toLowerCase();
+            var filtered = allDokter.filter(function(d) { return (d.nama_dokter || '').toLowerCase().includes(kw) || String(d.id_dokter).includes(kw); });
+            renderDokterTable(filtered);
+        });
+        document.getElementById('btnResetDokter').addEventListener('click', function() {
+            document.getElementById('checkup_dokter_search').value = '';
+            document.getElementById('checkup_id_dokter').value = '';
+            var terpilih = document.getElementById('checkup_dokter_terpilih');
+            if (terpilih) terpilih.classList.remove('show');
+            renderDokterTable(allDokter);
+        });
+    }
+
+    function setupComboboxEvents() {
+        var input = document.getElementById('shift_combobox_input');
+        var dropdown = document.getElementById('shift_combobox_dropdown');
+        var clearBtn = document.getElementById('shift_combobox_clear');
+        var removeBtn = document.getElementById('shift_combobox_remove');
+        if (!input || !dropdown) return;
+
+        input.addEventListener('input', function() {
+            var val = this.value.trim();
+            if (clearBtn) clearBtn.style.display = val === '' ? 'none' : 'block';
+            if (!val) { renderComboboxItems(shiftComboboxData); dropdown.classList.add('open'); return; }
+            var kw = val.toLowerCase();
+            var filtered = shiftComboboxData.filter(function(item) {
+                var id = shiftComboboxType === 'staff' ? String(item.id_staff) : String(item.id);
+                var name = shiftComboboxType === 'staff' ? (item.nama_staff || '') : (item.username || '');
+                return name.toLowerCase().includes(kw) || id.includes(kw);
+            });
+            renderComboboxItems(filtered);
+            dropdown.classList.add('open');
+        });
+        input.addEventListener('focus', function() {
+            if (this.value.trim() !== '') {
+                var kw = this.value.toLowerCase();
+                var filtered = shiftComboboxData.filter(function(item) {
+                    var id = shiftComboboxType === 'staff' ? String(item.id_staff) : String(item.id);
+                    var name = shiftComboboxType === 'staff' ? (item.nama_staff || '') : (item.username || '');
+                    return name.toLowerCase().includes(kw) || id.includes(kw);
+                });
+                renderComboboxItems(filtered);
+            } else { renderComboboxItems(shiftComboboxData); }
+            dropdown.classList.add('open');
+        });
+        input.addEventListener('blur', function() { setTimeout(function() { dropdown.classList.remove('open'); }, 200); });
+        if (clearBtn) clearBtn.addEventListener('click', function() { resetCombobox(); input.focus(); });
+        if (removeBtn) removeBtn.addEventListener('click', function() { resetCombobox(); input.focus(); });
+    }
+
+    async function loadDropdowns() {
+        try {
+            await loadSearchData();
+            setupCheckupSearchEvents();
+            await loadShiftData();
+            setupComboboxEvents();
+        } catch (err) { showNotification('Gagal memuat data: ' + err.message, 'error'); }
+    }
+
+    // ==================== FORM HANDLERS ====================
+    function setupFormHandlers() {
+        document.getElementById('formTambahPasien').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = this.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            try {
+                var data = {
+                    nama: document.getElementById('tambah_nama').value.trim(),
+                    nama_wali: document.getElementById('tambah_nama_wali').value.trim(),
+                    umur: parseInt(document.getElementById('tambah_umur').value) || null,
+                    jenis_kelamin: document.getElementById('tambah_jenis_kelamin').value,
+                    no_telp_pasien: document.getElementById('tambah_no_telp_pasien').value.trim(),
+                    no_telp_wali: document.getElementById('tambah_no_telp_wali').value.trim()
+                };
+                if (!data.nama) { showNotification('Nama pasien wajib diisi!', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Pasien'; return; }
+                await apiService.addPasien(data);
+                showNotification('Pasien berhasil ditambahkan!', 'success');
+                this.reset();
+                await loadSearchData();
+            } catch (err) { showNotification('Gagal: ' + err.message, 'error'); }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Pasien';
+        });
+
+        document.getElementById('formTambahBayi').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = this.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            try {
+                var data = {
+                    nama_ibu: document.getElementById('bayi_nama_ibu').value.trim(),
+                    nama_bayi: document.getElementById('bayi_nama').value.trim(),
+                    jenis_kelamin: document.getElementById('bayi_jk').value,
+                    berat: parseFloat(document.getElementById('bayi_berat').value) || null,
+                    tinggi: parseFloat(document.getElementById('bayi_tinggi').value) || null
+                };
+                if (!data.nama_ibu) { showNotification('Nama Ibu wajib diisi!', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Bayi'; return; }
+                await apiService.addBayi(data);
+                showNotification('Bayi berhasil ditambahkan!', 'success');
+                this.reset();
+            } catch (err) { showNotification('Gagal: ' + err.message, 'error'); }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Bayi';
+        });
+
+        document.getElementById('formTambahStaff').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = this.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            try {
+                var data = {
+                    nama_staff: document.getElementById('staff_nama').value.trim(),
+                    jabatan: document.getElementById('staff_jabatan').value.trim(),
+                    no_telepon: document.getElementById('staff_no_telp').value.trim(),
+                    gaji: parseInt(document.getElementById('staff_gaji').value) || 0
+                };
+                if (!data.nama_staff) { showNotification('Nama staff wajib diisi!', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Staff'; return; }
+                await apiService.addStaff(data);
+                showNotification('Staff berhasil ditambahkan!', 'success');
+                await loadShiftData();
+                this.reset();
+            } catch (err) { showNotification('Gagal: ' + err.message, 'error'); }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Staff';
+        });
+
+        document.getElementById('formTambahCheckup').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = this.querySelector('.btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            try {
+                var idPasien = document.getElementById('checkup_id_pasien').value;
+                var idDokter = document.getElementById('checkup_id_dokter').value;
+                var tanggal = document.getElementById('checkup_tanggal').value;
+                var jam = document.getElementById('checkup_jam').value;
+                if (!idPasien || !idDokter) { showNotification('Silakan pilih Pasien dan Dokter!', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Checkup'; return; }
+                if (!tanggal || !jam) { showNotification('Tanggal dan jam wajib diisi!', 'error'); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Simpan Checkup'; return; }
+                var data = {
+                    id_pasien: parseInt(idPasien),
+                    id_dokter: parseInt(idDokter),
+                    tanggal: tanggal,
+                    jam: jam + ':00',
+                    biaya_checkup: parseInt(document.getElementById('checkup_biaya').value) || 0,
+                    keterangan: document.getElementById('checkup_keterangan').value.trim()
+                };
+                await apiService.addCheckup(data);
+                showNotification('Checkup berhasil ditambahkan!', 'success');
+                this.reset();
+                document.getElementById('checkup_pasien_terpilih').classList.remove('show');
+                document.getElementById('checkup_dokter_terpilih').classList.remove('show');
+                document.getElementById('checkup_id_pasien').value = '';
+                document.getElementById('checkup_id_dokter').value = '';
+                document.getElementById('checkup_pasien_search').value = '';
+                document.getElementById('checkup_dokter_search').value = '';
+            } catch (err) { showNotification('Gagal: ' + err.message, 'error'); }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Checkup';
+        });
+
+        document.getElementById('formTambahShift').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var btn = document.getElementById('shiftSubmitBtn');
+            var resultDiv = document.getElementById('shiftResult');
+            resultDiv.className = 'shift-result';
+            resultDiv.style.display = 'none';
+            var tipe = document.getElementById('shift_tipe').value;
+            var shift = document.getElementById('shift_shift').value;
+            var id = document.getElementById('shift_combobox_id').value;
+            if (!id) { showNotification('Silakan pilih ' + (tipe === 'staff' ? 'Staff' : 'User') + ' terlebih dahulu!', 'error'); return; }
+            var checkboxes = document.querySelectorAll('#shift_hari_checkboxes input[type="checkbox"]:checked');
+            var hari = [];
+            checkboxes.forEach(function(cb) { hari.push(cb.value); });
+            if (hari.length === 0) { showNotification('Pilih minimal 1 hari!', 'error'); return; }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            try {
+                var data = { tipe: tipe, id: parseInt(id), hari: hari, shift: shift };
+                var result = await apiService.addShift(data);
+                var nama = document.getElementById('shift_combobox_selected_text').innerText || 'ID ' + id;
+                resultDiv.className = 'shift-result success';
+                resultDiv.style.display = 'flex';
+                resultDiv.style.alignItems = 'center';
+                resultDiv.style.gap = '12px';
+                resultDiv.innerHTML = '<i class="fas fa-check-circle result-icon" style="color:#22c55e;"></i>' +
+                    '<div style="flex:1;"><strong>Shift Berhasil Disimpan!</strong><br><span class="result-detail">' + (tipe === 'staff' ? 'Staff' : 'User') + ': <strong>' + escapeHtml(nama) + '</strong> | Shift: <strong>' + shift + '</strong> | Hari: <strong>' + hari.join(', ') + '</strong> (' + hari.length + ' hari)</span></div>' +
+                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color:#166534;"><i class="fas fa-times"></i></button>';
+                resetCombobox();
+                document.querySelectorAll('#shift_hari_checkboxes input[type="checkbox"]').forEach(function(cb) { cb.checked = false; cb.closest('.chip').classList.remove('active'); });
+                updateSelectedDaysIndicator();
+                document.getElementById('shift_shift').value = 'Shift I';
+                resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showNotification('Shift berhasil ditambahkan! (' + hari.length + ' hari)', 'success');
+            } catch (err) {
+                resultDiv.className = 'shift-result error';
+                resultDiv.style.display = 'flex';
+                resultDiv.style.alignItems = 'center';
+                resultDiv.style.gap = '12px';
+                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle result-icon" style="color:#ef4444;"></i>' +
+                    '<div style="flex:1;"><strong>Gagal Menyimpan Shift</strong><br><span class="result-detail">' + escapeHtml(err.message || 'Terjadi kesalahan') + '</span></div>' +
+                    '<button type="button" class="close-result" onclick="this.closest(\'.shift-result\').style.display=\'none\'" style="color:#991b1b;"><i class="fas fa-times"></i></button>';
+                showNotification('Gagal: ' + err.message, 'error');
+            }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Simpan Shift';
+        });
+    }
+
+    function toggleChip(element) {
+        var checkbox = element.querySelector('input[type="checkbox"]');
+        if (checkbox) { checkbox.checked = !checkbox.checked; element.classList.toggle('active'); updateSelectedDaysIndicator(); }
+    }
+
+    function updateSelectedDaysIndicator() {
+        var checkboxes = document.querySelectorAll('#shift_hari_checkboxes input[type="checkbox"]:checked');
+        var indicator = document.getElementById('selectedDaysIndicator');
+        var list = document.getElementById('selectedDaysList');
+        if (checkboxes.length === 0) { if (indicator) indicator.style.display = 'none'; return; }
+        var days = [];
+        checkboxes.forEach(function(cb) { days.push(cb.value); });
+        if (list) list.innerText = days.join(', ');
+        if (indicator) indicator.style.display = 'block';
+    }
+
+    function showNotification(message, type) {
+        var existing = document.querySelector('.toast-notification');
+        if (existing) existing.remove();
+        var icon = type === 'success' ? '<i class="fas fa-check-circle" style="font-size:1.2rem;"></i>' : '<i class="fas fa-exclamation-circle" style="font-size:1.2rem;"></i>';
+        var div = document.createElement('div');
+        div.className = 'toast-notification';
+        div.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:16px;color:white;font-weight:500;font-size:0.95rem;box-shadow:0 10px 30px rgba(0,0,0,0.15);animation:slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);max-width:450px;' + (type === 'success' ? 'background:#10b981;' : 'background:#ef4444;') + 'border:1px solid rgba(255,255,255,0.1);';
+        div.innerHTML = icon + ' ' + message;
+        document.body.appendChild(div);
+        setTimeout(function() { div.style.animation = 'slideOutDown 0.3s ease forwards'; setTimeout(function() { if (div.parentNode) div.remove(); }, 350); }, 4000);
+    }
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        var jabatan = localStorage.getItem('jabatan');
+        var username = localStorage.getItem('username');
+        if (!jabatan || !username || jabatan !== 'admin') { window.location.href = '/login'; return; }
+        document.getElementById('namaUser').innerText = username;
+        document.getElementById('logoutBtn').onclick = function() { localStorage.clear(); window.location.href = '/login'; };
+        document.getElementById('shift_tipe').addEventListener('change', function() {
+            var val = this.value;
+            if (val === 'staff') {
+                shiftComboboxType = 'staff';
+                shiftComboboxData = allStaff;
+                document.getElementById('shift_combobox_label').innerHTML = 'Cari Staff <span style="color:red;">*</span>';
+                document.getElementById('shift_combobox_input').placeholder = 'Ketik nama atau ID staff...';
+            } else {
+                shiftComboboxType = 'user';
+                shiftComboboxData = allUsers;
+                document.getElementById('shift_combobox_label').innerHTML = 'Cari User <span style="color:red;">*</span>';
+                document.getElementById('shift_combobox_input').placeholder = 'Ketik nama atau ID user...';
+            }
+            resetCombobox();
+        });
+        loadDropdowns();
+        setupFormHandlers();
+    });
+</script>
+
+<!-- ==================== DARK MODE TOGGLE SCRIPT ==================== -->
+<script>
+    (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        function setTheme(isDark) {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? '1' : '0');
+            if (icon && text) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                text.textContent = isDark ? 'Light' : 'Dark';
+            }
+        }
+
+        // Inisialisasi dari localStorage (sinkron dengan flash script)
+        const saved = localStorage.getItem('darkMode') === '1';
+        setTheme(saved);
+
+        btn.addEventListener('click', function() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Dokter</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ... semua CSS yang ada di file asli, tidak diubah ... */
+    </style>
+
+    <script>
+  // Cegah flash of wrong theme – langsung set data-theme sebelum render
+  (function() {
+    const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-user-md"></i> Dashboard Dokter</h1>
+        <button id="logoutBtn" class="btn-logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <div class="welcome-text">
+        <i class="fas fa-user-circle"></i> Selamat datang, <b id="namaUser"><%= username %></b>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-icon"><i class="fas fa-users"></i></span>
+            <h4>Total Pasien Ditangani</h4>
+            <div class="stat-number" id="totalPasien">0</div>
+            <span class="stat-label"><i class="fas fa-clock"></i> Seluruh waktu</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-icon"><i class="fas fa-calendar-day"></i></span>
+            <h4>Pasien Hari Ini</h4>
+            <div class="stat-number" id="pasienHariIni">0</div>
+            <span class="stat-label"><i class="fas fa-calendar-alt"></i> Hari ini</span>
+        </div>
+    </div>
+
+    <!-- Daftar Pasien Saya -->
+    <div class="card">
+        <h2><i class="fas fa-list"></i> Daftar Pasien Saya</h2>
+        <div id="notificationPasien" class="notification-container"></div>
+        <div class="search-bar">
+            <input type="text" id="searchPasien" placeholder="Cari pasien...">
+            <i class="fas fa-search" style="color:#6c8eae;margin-left:-40px;"></i>
+        </div>
+        
+        <!-- Pasien Dirawat -->
+        <div style="margin-bottom:20px;">
+            <h3 style="color:#1e4a6e;font-size:1rem;margin-bottom:10px;">
+                <i class="fas fa-hospital-user" style="color:#2c7da0;"></i> Sedang Dirawat
+            </h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user"></i> Nama</th>
+                            <th><i class="fas fa-calendar-alt"></i> Umur</th>
+                            <th><i class="fas fa-venus-mars"></i> JK</th>
+                            <th><i class="fas fa-notes-medical"></i> Penyakit</th>
+                            <th><i class="fas fa-pen"></i> Deskripsi</th>
+                            <th><i class="fas fa-cog"></i> Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPasienDirawat">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="fas fa-user-injured"></i>
+                                <span>Tidak ada pasien sedang dirawat</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pasien Pulang -->
+        <div>
+            <h3 style="color:#1e4a6e;font-size:1rem;margin-bottom:10px;">
+                <i class="fas fa-check-circle" style="color:#10b981;"></i> Sudah Pulang
+            </h3>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user"></i> Nama</th>
+                            <th><i class="fas fa-calendar-alt"></i> Umur</th>
+                            <th><i class="fas fa-venus-mars"></i> JK</th>
+                            <th><i class="fas fa-notes-medical"></i> Penyakit</th>
+                            <th><i class="fas fa-pen"></i> Deskripsi</th>
+                            <th><i class="fas fa-info-circle"></i> Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPasienPulang">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Belum ada pasien yang pulang</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jadwal Checkup -->
+    <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-calendar-check" style="color:#2c7da0;"></i> 
+                Jadwal Checkup Saya
+                <span class="data-count" id="jadwalCount" style="font-size:0.8rem;color:#6c8eae;font-weight:400;margin-left:8px;">
+                    (<span id="jadwalTotal">0</span> jadwal)
+                </span>
+            </h2>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button onclick="refreshJadwal()" class="btn-refresh" style="background:#e2edf2;border:none;padding:6px 14px;border-radius:20px;cursor:pointer;font-size:0.75rem;color:#1e4a6e;transition:0.2s;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+
+        <div id="notificationCheckup" class="notification-container"></div>
+
+        <div class="table-scroll-wrapper" style="
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #e2edf2;
+            position: relative;
+        ">
+            <div class="table-responsive" style="overflow-x: auto;">
+                <table class="data-table" id="tabelJadwal" style="
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 0.85rem;
+                    min-width: 700px;
+                ">
+                    <thead style="
+                        position: sticky;
+                        top: 0;
+                        z-index: 10;
+                        background: #f1f9fe;
+                        border-bottom: 2px solid #dcecf3;
+                    ">
+                        <tr>
+                            <th>ID</th>
+                            <th>Pasien</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jadwalBody">
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                <i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:12px;color:#cbdde6;"></i>
+                                <span>Belum ada jadwal checkup</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid #e9f0f3;">
+            <div style="font-size:0.85rem;color:#6c8eae;">
+                <i class="fas fa-list"></i> 
+                Menampilkan <span id="jadwalFrom">0</span>-<span id="jadwalTo">0</span> 
+                dari <span id="jadwalTotalBottom">0</span> jadwal
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button id="jadwalPrevBtn" class="btn-pagination">Prev</button>
+                <span id="jadwalPageInfo">Halaman 1</span>
+                <button id="jadwalNextBtn" class="btn-pagination">Next</button>
+                <select id="jadwalLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/controllers/dashboardDokterController.js"></script>
+
+</body>
+</html>

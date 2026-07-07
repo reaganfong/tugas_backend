@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Lihat & Edit Data</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Notifikasi di atas */
+        .notif-section {
+            margin-bottom: 24px;
+        }
+        
+        /* Grid ringkasan 3 kolom */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            padding: 20px 24px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-hover-shadow);
+        }
+        
+        .summary-card .icon {
+            font-size: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .summary-card .icon.blue { background: #dbeafe; color: #1e40af; }
+        .summary-card .icon.green { background: #dcfce7; color: #15803d; }
+        .summary-card .icon.purple { background: #ede9fe; color: #6d28d9; }
+        .summary-card .icon.orange { background: #fef3c7; color: #92400e; }
+        .summary-card .icon.red { background: #fee2e2; color: #b91c1c; }
+        .summary-card .icon.pink { background: #fce7f3; color: #be185d; }
+        
+        .summary-card .info h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin: 0 0 2px 0;
+        }
+        
+        .summary-card .info .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+        
+        .summary-card .info .sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Shift dalam 1 card dengan 2 kolom */
+        .shift-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .shift-grid .shift-col h3 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+        
+        /* Data count style */
+        .data-count {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #6c8eae;
+            margin-left: 8px;
+        }
+        
+        .data-count span {
+            font-weight: 600;
+            color: #1e4a6e;
+        }
+        
+        /* Tombol Hapus */
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-left: 4px;
+        }
+        
+        .btn-delete:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+        
+        .btn-delete i {
+            margin-right: 3px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .shift-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-grid.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 768px) {
+            .summary-grid.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .summary-grid.two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn-edit {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+
+        .action-buttons .btn-delete {
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .search-input-wrapper input {
+            width: 100%;
+            padding: 8px 14px 8px 40px;
+            border: 1px solid #cbdde6;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .search-input-wrapper input:focus {
+            outline: none;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .pagination-btn {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            align-items: center;
+        }
+
+        .filter-bar select {
+            padding: 8px 14px;
+            border: 1px solid #cbdde6;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background: white;
+            min-width: 140px;
+        }
+
+        @media (max-width: 600px) {
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-bar .search-input-wrapper {
+                min-width: unset;
+            }
+            .filter-bar select {
+                width: 100%;
+            }
+            .filter-bar button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .pagination-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #e9f0f3;
+        }
+
+        .pagination-info {
+            font-size: 0.85rem;
+            color: #6c8eae;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .pagination-controls select {
+            padding: 4px 8px;
+            border: 1px solid #cbdde6;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            background: white;
+        }
+
+        @media (max-width: 480px) {
+            .pagination-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .pagination-controls {
+                justify-content: center;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+    </style>
+    <script>
+        // Cegah flash of wrong theme – langsung set data-theme sebelum render
+        (function() {
+            const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <h1><i class="fas fa-user-cog"></i> Admin - Lihat & Edit Data</h1>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="themeToggle" class="btn-theme" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem;">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+            <button class="btn-back" onclick="location.href='/admin'">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button id="logoutBtn" class="btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== WELCOME ===== -->
+    <div class="welcome-text">
+        <i class="fas fa-user-circle"></i> Selamat datang, <b id="namaUser"><%= username %></b>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 1. NOTIFIKASI (DI ATAS)                                        -->
+    <!-- ============================================================ -->
+    <section class="notif-section card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h2 style="font-size:1rem;margin:0;">
+                <i class="fas fa-bell" style="color:#dc2626;"></i> Notifikasi
+                <span id="notifCount" class="badge badge-danger" style="font-size:0.7rem;margin-left:8px;">0</span>
+            </h2>
+            <button onclick="markAllNotifikasiRead()" class="btn-secondary" style="padding:4px 16px;font-size:0.75rem;">
+                <i class="fas fa-check-double"></i> Tandai Semua
+            </button>
+        </div>
+        <div id="notifikasi-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 2. RINGKASAN STATISTIK                                        -->
+    <!-- ============================================================ -->
+    <section class="summary-grid">
+        <div class="summary-card" onclick="scrollToSection('pasien-container')">
+            <div class="icon blue"><i class="fas fa-users"></i></div>
+            <div class="info">
+                <h3>Total Pasien</h3>
+                <div class="number" id="summaryPasien">0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+        
+        <div class="summary-card" onclick="scrollToSection('ruangan-container')">
+            <div class="icon green"><i class="fas fa-building"></i></div>
+            <div class="info">
+                <h3>Ruangan</h3>
+                <div class="number" id="summaryRuangan">0 / 0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+        
+        <div class="summary-card" onclick="scrollToSection('checkup-container')">
+            <div class="icon purple"><i class="fas fa-stethoscope"></i></div>
+            <div class="info">
+                <h3>Checkup</h3>
+                <div class="number" id="summaryCheckup">0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="summary-grid two-col" id="summaryRow2">
+        <div class="summary-card" onclick="scrollToSection('dokter-container')">
+            <div class="icon orange"><i class="fas fa-user-md"></i></div>
+            <div class="info">
+                <h3>Total Dokter</h3>
+                <div class="number" id="summaryDokter">0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+        
+        <div class="summary-card" onclick="scrollToSection('staff-container')">
+            <div class="icon red"><i class="fas fa-id-badge"></i></div>
+            <div class="info">
+                <h3>Total Staff</h3>
+                <div class="number" id="summaryStaff">0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+        
+        <div class="summary-card" onclick="scrollToSection('bayi-container')">
+            <div class="icon pink"><i class="fas fa-baby"></i></div>
+            <div class="info">
+                <h3>Total Bayi</h3>
+                <div class="number" id="summaryBayi">0</div>
+                <div class="sub"><i class="fas fa-chevron-right"></i> Lihat semua</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. TABEL DATA                                                  -->
+    <!-- ============================================================ -->
+    
+    <!-- PASIEN -->
+    <section class="card" id="section-pasien">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-users"></i> Data Pasien
+                <span class="data-count">Data: <span id="pasienCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchPasienInput" placeholder="Cari nama atau wali...">
+            </div>
+            <select id="filterStatusPasien">
+                <option value="">Semua Status</option>
+                <option value="dirawat">Dirawat</option>
+                <option value="pulang">Pulang</option>
+                <option value="baru">Baru</option>
+            </select>
+            <button id="btnSearchPasien" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetPasien" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="pasien-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationPasien">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="paginationFrom">0</span>-<span id="paginationTo">0</span> dari <span id="paginationTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="prevPageBtn" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="pageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="nextPageBtn" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="limitSelect">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAYI -->
+    <section class="card" id="section-bayi">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-baby"></i> Data Bayi
+                <span class="data-count">Data: <span id="bayiCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchBayiInput" placeholder="Cari nama bayi atau ibu...">
+            </div>
+            <button id="btnSearchBayi" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetBayi" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="bayi-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationBayi">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="bayiPaginationFrom">0</span>-<span id="bayiPaginationTo">0</span> dari <span id="bayiPaginationTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="bayiPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="bayiPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="bayiNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="bayiLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- JADWAL CHECKUP -->
+    <section class="card" id="section-jadwal-checkup">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-calendar-plus" style="color:#f59e0b;"></i> Jadwal Checkup
+                <span class="data-count">Data: <span id="jadwalCheckupCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchJadwalInput" placeholder="Cari nama pasien atau dokter...">
+            </div>
+            <button id="btnSearchJadwal" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetJadwal" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="jadwal-checkup-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationJadwal">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="jadwalFrom">0</span>-<span id="jadwalTo">0</span> dari <span id="jadwalTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="jadwalPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="jadwalPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="jadwalNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="jadwalLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUDAH CHECKOUT -->
+    <section class="card" id="section-sudah-checkout">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-check-double" style="color:#10b981;"></i> Sudah Checkout
+                <span class="data-count">Data: <span id="sudahCheckoutCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchCheckoutInput" placeholder="Cari nama pasien atau dokter...">
+            </div>
+            <select id="filterStatusCheckout">
+                <option value="">Semua Status</option>
+                <option value="selesai">Selesai</option>
+                <option value="batal">Batal</option>
+            </select>
+            <button id="btnSearchCheckout" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetCheckout" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="sudah-checkout-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationCheckout">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="checkoutFrom">0</span>-<span id="checkoutTo">0</span> dari <span id="checkoutTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="checkoutPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="checkoutPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="checkoutNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="checkoutLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOKTER -->
+    <section class="card" id="section-dokter">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-user-md"></i> Data Dokter
+                <span class="data-count">Data: <span id="dokterCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchDokterInput" placeholder="Cari nama atau spesialisasi...">
+            </div>
+            <button id="btnSearchDokter" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetDokter" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="dokter-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationDokter">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="dokterPaginationFrom">0</span>-<span id="dokterPaginationTo">0</span> dari <span id="dokterPaginationTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="dokterPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="dokterPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="dokterNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="dokterLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- RUANGAN -->
+    <section class="card" id="section-ruangan">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-building"></i> Data Ruangan
+                <span class="data-count">Data: <span id="ruanganCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchRuanganInput" placeholder="Cari ruangan atau pasien...">
+            </div>
+            <select id="filterStatusRuangan">
+                <option value="">Semua Status</option>
+                <option value="kosong">Kosong</option>
+                <option value="terisi">Terisi</option>
+            </select>
+            <button id="btnSearchRuangan" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetRuangan" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="ruangan-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationRuangan">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="ruanganPaginationFrom">0</span>-<span id="ruanganPaginationTo">0</span> dari <span id="ruanganPaginationTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="ruanganPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="ruanganPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="ruanganNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="ruanganLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- STAFF -->
+    <section class="card" id="section-staff">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            <h2 style="font-size:1.1rem;margin:0;">
+                <i class="fas fa-id-badge"></i> Data Staff
+                <span class="data-count">Data: <span id="staffCount">0</span></span>
+            </h2>
+        </div>
+        
+        <div class="filter-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchStaffInput" placeholder="Cari nama atau jabatan...">
+            </div>
+            <button id="btnSearchStaff" class="btn-primary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-search"></i> Cari
+            </button>
+            <button id="btnResetStaff" class="btn-secondary" style="padding:8px 20px;border-radius:8px;">
+                <i class="fas fa-undo"></i> Reset
+            </button>
+        </div>
+        
+        <div id="staff-container">
+            <i class="fas fa-spinner fa-spin"></i> Memuat...
+        </div>
+        
+        <div class="pagination-wrapper" id="paginationStaff">
+            <div class="pagination-info">
+                <i class="fas fa-database"></i> Menampilkan <span id="staffPaginationFrom">0</span>-<span id="staffPaginationTo">0</span> dari <span id="staffPaginationTotal">0</span> data
+            </div>
+            <div class="pagination-controls">
+                <button id="staffPrevPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                <span id="staffPageInfo" style="font-size:0.85rem;font-weight:600;padding:0 12px;">Halaman 1</span>
+                <button id="staffNextPage" class="btn-secondary pagination-btn" style="padding:6px 14px;border-radius:8px;font-size:0.8rem;">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+                <select id="staffLimit">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHIFT -->
+    <section class="card" id="section-shift">
+        <h2 style="font-size:1.1rem;margin-bottom:16px;">
+            <i class="fas fa-calendar-alt"></i> Jadwal Shift
+        </h2>
+        
+        <div class="shift-grid">
+            <div class="shift-col">
+                <h3><i class="fas fa-user-tie"></i> Shift Staff</h3>
+                <div id="shift-staff-container">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat...
+                </div>
+            </div>
+            
+            <div class="shift-col">
+                <h3><i class="fas fa-users"></i> Shift Users</h3>
+                <div id="shift-users-container">
+                    <i class="fas fa-spinner fa-spin"></i> Memuat...
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/controllers/dashboardAdminController.js"></script>
+
+<script>
+    // ===== SCROLL KE SECTION =====
+    function scrollToSection(id) {
+        const el = document.getElementById('section-' + id.replace('-container', ''));
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // ===== MARK ALL NOTIFICATIONS =====
+    async function markAllNotifikasiRead() {
+        try {
+            const notifs = await apiService.getNotifikasiDarurat();
+            for (const n of notifs) {
+                await apiService.markNotifikasiRead(n.id_notif);
+            }
+            showToast('Semua notifikasi ditandai sudah dibaca!', 'success');
+            loadNotifikasi();
+        } catch (err) {
+            showToast('Error: ' + err.message, 'error');
+        }
+    }
+
+    // ===== AUTH CHECK =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const jabatan = localStorage.getItem('jabatan');
+        const username = localStorage.getItem('username');
+        
+        if (!jabatan || !username || jabatan !== 'admin') {
+            window.location.href = '/';
+            return;
+        }
+        
+        document.getElementById('namaUser').innerText = username;
+        
+        document.getElementById('logoutBtn').onclick = function() {
+            localStorage.clear();
+            window.location.href = '/';
+        };
+    });
+</script>
+
+<!-- ==================== DARK MODE TOGGLE ==================== -->
+<script>
+    (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        function setTheme(isDark) {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? '1' : '0');
+            if (icon && text) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                text.textContent = isDark ? 'Light' : 'Dark';
+            }
+        }
+
+        // Inisialisasi dari localStorage (sinkron dengan flash script)
+        const saved = localStorage.getItem('darkMode') === '1';
+        setTheme(saved);
+
+        btn.addEventListener('click', function() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Rumah Sehat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e6f0fa, #f4f9fc);
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        .login-container { max-width: 440px; width: 100%; }
+        .login-card {
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 40px 32px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+            border: 1px solid #e9f0f3;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-wrap { position: absolute; top: 16px; right: 16px; z-index: 10; }
+        .btn-theme {
+            background: #fff;
+            color: #1e4a6e;
+            border: 1px solid #cbdde6;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .btn-theme:hover { background: #f0f4f7; border-color: #2c7da0; }
+        .logo { text-align: center; margin: 10px 0 28px; }
+        .logo .icon-hospital { font-size: 48px; color: #2c7da0; display: block; margin-bottom: 8px; }
+        .logo h1 {
+            font-size: 1.8rem; font-weight: 700;
+            background: linear-gradient(135deg, #0b3b5f, #1e6f5c);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            margin-bottom: 8px;
+        }
+        .logo p { color: #5e7e9e; font-size: 0.85rem; }
+        .form-group-login { margin-bottom: 20px; }
+        .form-group-login label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.85rem; color: #1e4a6e; }
+        .form-group-login label i { margin-right: 8px; color: #2c7da0; width: 18px; }
+        .form-group-login input, .form-group-login select {
+            width: 100%; padding: 12px 16px; border: 1px solid #cbdde6;
+            border-radius: 16px; font-size: 0.9rem; background: #fff;
+            color: #0f172a; font-family: 'Inter', sans-serif;
+        }
+        .btn-login {
+            width: 100%; padding: 14px; background: #2c7da0; color: white;
+            border: none; border-radius: 40px; font-weight: 600; font-size: 1rem;
+            cursor: pointer; transition: 0.2s; margin-top: 12px; font-family: 'Inter', sans-serif;
+        }
+        .btn-login:hover { background: #1f5e7a; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(44,125,160,0.3); }
+        #error { min-height: 40px; margin-top: 12px; }
+        .register-link { text-align: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid #e9f0f3; }
+        .register-link a { color: #2c7da0; text-decoration: none; font-weight: 500; }
+        .register-link a:hover { color: #1f5e7a; text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <div class="theme-toggle-wrap">
+            <button id="themeToggle" class="btn-theme">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+        </div>
+        <div class="logo">
+            <span class="icon-hospital"><i class="fas fa-hospital"></i></span>
+            <h1>Rumah Sehat</h1>
+            <p><i class="fas fa-info-circle" style="color:#2c7da0;margin-right:6px;"></i>Sistem Informasi Rumah Sakit</p>
+        </div>
+        <form id="loginForm">
+            <div class="form-group-login">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Masukkan username" autocomplete="off" required>
+            </div>
+            <div class="form-group-login">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" placeholder="Masukkan password" required>
+            </div>
+            <div class="form-group-login">
+                <label><i class="fas fa-briefcase"></i> Jabatan</label>
+                <select id="jabatan">
+                    <option value="admin">Admin</option>
+                    <option value="akuntan">Akuntan</option>
+                    <option value="apoteker">Apoteker</option>
+                    <option value="dokter">Dokter</option>
+                    <option value="pasien">Pasien</option>
+                </select>
+            </div>
+            <button type="button" class="btn-login" id="loginButton">
+                <i class="fas fa-sign-in-alt"></i> Masuk ke Dashboard
+            </button>
+        </form>
+        <div id="error"></div>
+        <div class="register-link">
+            <a href="/register"><i class="fas fa-user-plus"></i> Belum punya akun? Daftar di sini</a>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('span');
+
+    // Fungsi untuk mengubah semua style terkait tema
+    function applyDarkMode(isDark) {
+        // Body
+        document.body.style.background = isDark ? 
+            'linear-gradient(145deg, #0f172a, #1a2332)' : 
+            'linear-gradient(145deg, #e6f0fa, #f4f9fc)';
+        document.body.style.color = isDark ? '#e2e8f0' : '#0f172a';
+
+        // Card
+        const card = document.querySelector('.login-card');
+        if (card) {
+            card.style.background = isDark ? '#1e293b' : '#ffffff';
+            card.style.borderColor = isDark ? '#334155' : '#e9f0f3';
+        }
+
+        // Input & Select
+        document.querySelectorAll('.form-group-login input, .form-group-login select').forEach(el => {
+            el.style.background = isDark ? '#2d3748' : '#ffffff';
+            el.style.color = isDark ? '#e2e8f0' : '#0f172a';
+            el.style.borderColor = isDark ? '#475569' : '#cbdde6';
+        });
+
+        // Label
+        document.querySelectorAll('.form-group-login label').forEach(el => {
+            el.style.color = isDark ? '#94a3b8' : '#1e4a6e';
+        });
+
+        // Tombol login
+        const loginBtn = document.querySelector('.btn-login');
+        if (loginBtn) {
+            loginBtn.style.background = isDark ? '#3b82f6' : '#2c7da0';
+        }
+
+        // Tombol theme
+        btn.style.background = isDark ? '#2d3748' : '#ffffff';
+        btn.style.color = isDark ? '#e2e8f0' : '#1e4a6e';
+        btn.style.borderColor = isDark ? '#475569' : '#cbdde6';
+
+        // Link register
+        const regLink = document.querySelector('.register-link a');
+        if (regLink) {
+            regLink.style.color = isDark ? '#60a5fa' : '#2c7da0';
+        }
+
+        // Border register
+        const regDiv = document.querySelector('.register-link');
+        if (regDiv) {
+            regDiv.style.borderTopColor = isDark ? '#334155' : '#e9f0f3';
+        }
+
+        // Ikon & teks tombol
+        if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        if (text) text.textContent = isDark ? 'Light' : 'Dark';
+
+        // Simpan preferensi
+        localStorage.setItem('darkMode', isDark ? '1' : '0');
+    }
+
+    // Inisialisasi dari localStorage
+    const saved = localStorage.getItem('darkMode') === '1';
+    applyDarkMode(saved);
+
+    // Toggle saat klik
+    btn.onclick = function() {
+        const isDark = btn.textContent.trim() === 'Light'; // setelah diubah, teks jadi 'Light' jika dark mode aktif
+        applyDarkMode(!isDark);
+    };
+})();
+</script>
+
+<script src="/models/apiService.js"></script>
+<script src="/controllers/loginController.js"></script>
+</body>
+</html>

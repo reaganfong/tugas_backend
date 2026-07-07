@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cari Data Pasien - Rumah Sehat</title>
+    
+    <!-- Cegah flash of wrong theme -->
+    <script>
+        (function() {
+            const saved = localStorage.getItem('rumahsehat_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        /* Override dan tambahan spesifik halaman ini */
+        .search-form { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 20px; }
+        .form-group { flex: 1; min-width: 200px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--text-secondary); }
+        .form-group input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-input); color: var(--text-primary); }
+        .form-group input:focus { outline: none; border-color: var(--btn-primary); box-shadow: 0 0 0 3px rgba(44,125,160,0.1); }
+        
+        .btn-primary { background: var(--btn-primary); color: white; padding: 10px 24px; border: none; border-radius: 40px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-primary:hover { background: var(--btn-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(44,125,160,0.3); }
+        .btn-primary i { margin-right: 6px; }
+        
+        .profil-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+        .profil-grid div { padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .profil-grid strong { color: var(--text-secondary); }
+        
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
+        .status-lunas { background: var(--badge-success-bg); color: var(--badge-success-text); }
+        .status-belum { background: var(--badge-danger-bg); color: var(--badge-danger-text); }
+        
+        .loading-spinner { text-align: center; padding: 40px; color: var(--btn-primary); }
+        .loading-spinner i { font-size: 2rem; }
+        
+        .not-found, .error-message { text-align: center; padding: 20px; background: var(--badge-danger-bg); color: var(--badge-danger-text); border-radius: 12px; }
+        
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .data-table th { background: var(--bg-table-header); padding: 12px; text-align: left; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color); }
+        .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        .data-table tr:hover td { background: var(--bg-hover); }
+        
+        .card { background: var(--bg-card); border-radius: 24px; padding: 20px; margin-bottom: 24px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
+        .card h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--border-color); color: var(--text-secondary); }
+        .card h2 i { margin-right: 8px; color: var(--btn-primary); }
+        
+        .header { background: var(--bg-header); border-radius: 28px; padding: 20px 28px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 14px var(--shadow-color); border: 1px solid var(--border-light); flex-wrap: wrap; gap: 15px; }
+        .header h1 { font-size: 1.6rem; font-weight: 700; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -0.3px; }
+        .header h1 i { margin-right: 10px; color: var(--btn-primary); }
+        
+        .btn-danger { background: var(--btn-danger); color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.95rem; }
+        .btn-danger:hover { background: var(--btn-danger-hover); transform: translateY(-1px); box-shadow: 0 6px 12px rgba(220,38,38,0.2); }
+        .btn-danger i { margin-right: 6px; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        
+        #searchError { color: #b91c1c; margin-top: 10px; padding: 8px 12px; background: #fee2e2; border-radius: 8px; }
+        
+        .badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .badge-info { background: var(--badge-info-bg); color: var(--badge-info-text); }
+        .badge-success { background: var(--badge-success-bg); color: var(--badge-success-text); }
+        .badge-danger { background: var(--badge-danger-bg); color: var(--badge-danger-text); }
+        .badge-secondary { background: var(--badge-secondary-bg); color: var(--badge-secondary-text); }
+        
+        .or-divider { display: flex; align-items: center; gap: 16px; margin: 20px 0; color: var(--text-muted); font-size: 0.85rem; }
+        .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+        
+        /* Tombol tema */
+        .btn-theme {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        .btn-theme:hover {
+            background: var(--bg-hover);
+            border-color: var(--btn-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+        .btn-theme i { font-size: 1rem; }
+        
+        /* Dropdown dan input styling konsisten */
+        select, input[type="number"], input[type="text"] {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .header { flex-direction: column; text-align: center; }
+            .header h1 { font-size: 1.3rem; }
+            .search-form { flex-direction: column; }
+            .search-form .form-group { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-search"></i> Cari Data Pasien</h1>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="themeToggle" class="btn-theme">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+            <button id="logoutBtn" class="btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2><i class="fas fa-search"></i> Pencarian Pasien</h2>
+        
+        <!-- Dropdown pilih pasien -->
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: 600; margin-bottom: 8px; display: block; color: var(--text-secondary);"><i class="fas fa-list"></i> Pilih Pasien</label>
+            <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                <select id="pasienDropdown" style="flex: 1; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 16px; font-size: 0.9rem; background: var(--bg-input); color: var(--text-primary);">
+                    <option value="">-- Pilih Pasien --</option>
+                </select>
+                <select id="statusFilter" style="padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 16px; background: var(--bg-input); color: var(--text-primary); font-size: 0.9rem;">
+                    <option value="semua">Semua Status</option>
+                    <option value="baru">Baru</option>
+                    <option value="dirawat">Dirawat</option>
+                    <option value="pulang">Pulang</option>
+                </select>
+            </div>
+            <small id="loadingIndicator" style="color: var(--text-muted); display: none;"><i class="fas fa-spinner fa-spin"></i> Memuat daftar pasien...</small>
+        </div>
+
+        <div class="or-divider">atau cari manual</div>
+
+        <form id="searchForm" class="search-form">
+            <div class="form-group">
+                <label><i class="fas fa-hashtag"></i> ID Pasien</label>
+                <input type="number" id="searchId" placeholder="Contoh: 1" min="1">
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nama Pasien</label>
+                <input type="text" id="searchNama" placeholder="Contoh: Andi">
+            </div>
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-search"></i> Cari
+            </button>
+        </form>
+        <div id="searchError"></div>
+    </div>
+
+    <div id="resultContainer">
+        <div class="card" style="text-align: center; color: var(--text-muted);">
+            <i class="fas fa-info-circle" style="font-size: 2rem; display: block; margin-bottom: 12px;"></i>
+            Silakan masukkan ID atau Nama pasien untuk memulai pencarian.
+        </div>
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/controllers/dashboardPasienController.js"></script>
+
+<script>
+    // ==================== DARK MODE ====================
+    (function() {
+        const html = document.documentElement;
+        const toggleBtn = document.getElementById('themeToggle');
+        const icon = toggleBtn?.querySelector('i');
+        const text = toggleBtn?.querySelector('span');
+
+        function setTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('rumahsehat_theme', theme);
+            if (icon && text) {
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                    text.textContent = 'Light';
+                } else {
+                    icon.className = 'fas fa-moon';
+                    text.textContent = 'Dark';
+                }
+            }
+        }
+
+        // Terapkan tema tersimpan
+        const saved = localStorage.getItem('rumahsehat_theme') || 'light';
+        setTheme(saved);
+
+        // Toggle
+        toggleBtn?.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    })();
+
+    // ==================== DROPDOWN PASIEN ====================
+    var allPasienList = [];
+    var pasienDropdown = document.getElementById('pasienDropdown');
+    var statusFilter = document.getElementById('statusFilter');
+    var loadingIndicator = document.getElementById('loadingIndicator');
+
+    async function loadPasienList() {
+        try {
+            loadingIndicator.style.display = 'block';
+            pasienDropdown.disabled = true;
+            
+            var data = await apiService.getPasien();
+            allPasienList = data || [];
+            
+            renderDropdownOptions(statusFilter.value);
+            
+        } catch (err) {
+            console.error('Gagal memuat daftar pasien:', err);
+            showToast('Gagal memuat daftar pasien', 'error');
+        } finally {
+            loadingIndicator.style.display = 'none';
+            pasienDropdown.disabled = false;
+        }
+    }
+
+    function renderDropdownOptions(status) {
+        pasienDropdown.innerHTML = '<option value="">-- Pilih Pasien --</option>';
+        
+        var filtered = allPasienList;
+        if (status !== 'semua') {
+            filtered = allPasienList.filter(function(p) {
+                return p.msh_dirawat === status;
+            });
+        }
+        
+        if (filtered.length === 0) {
+            pasienDropdown.innerHTML += '<option value="" disabled>Tidak ada pasien dengan status ini</option>';
+            return;
+        }
+        
+        filtered.forEach(function(p) {
+            var statusText = '';
+            if (p.msh_dirawat === 'baru') statusText = 'Baru';
+            else if (p.msh_dirawat === 'dirawat') statusText = 'Dirawat';
+            else statusText = 'Pulang';
+            
+            var option = document.createElement('option');
+            option.value = p.id_pasien;
+            option.textContent = p.nama + ' (ID: ' + p.id_pasien + ') - ' + statusText;
+            pasienDropdown.appendChild(option);
+        });
+    }
+
+    // ==================== EVENT HANDLERS ====================
+    pasienDropdown.addEventListener('change', function() {
+        var selectedId = this.value;
+        if (selectedId) {
+            var selectedPasien = allPasienList.find(function(p) { return p.id_pasien == selectedId; });
+            if (selectedPasien) {
+                document.getElementById('searchId').value = selectedId;
+                document.getElementById('searchNama').value = selectedPasien.nama;
+                if (typeof searchPasien === 'function') {
+                    searchPasien();
+                }
+            }
+        } else {
+            document.getElementById('searchId').value = '';
+            document.getElementById('searchNama').value = '';
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="card" style="text-align: center; color: var(--text-muted);">
+                    <i class="fas fa-info-circle" style="font-size: 2rem; display: block; margin-bottom: 12px;"></i>
+                    Silakan masukkan ID atau Nama pasien untuk memulai pencarian.
+                </div>
+            `;
+        }
+    });
+
+    statusFilter.addEventListener('change', function() {
+        renderDropdownOptions(this.value);
+        pasienDropdown.value = '';
+    });
+
+    // ==================== LOAD SAAT HALAMAN SIAP ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        var jabatan = localStorage.getItem('jabatan');
+        var username = localStorage.getItem('username');
+        
+        if (!jabatan || !username || jabatan !== 'pasien') {
+            window.location.href = '/login';
+            return;
+        }
+        
+        document.getElementById('logoutBtn').onclick = function() {
+            localStorage.clear();
+            window.location.href = '/login';
+        };
+        
+        loadPasienList();
+    });
+</script>
+</body>
+</html>

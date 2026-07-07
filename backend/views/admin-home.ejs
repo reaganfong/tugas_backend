@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        .welcome-text {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e9f0f3;
+            font-size: 1rem;
+            color: #1e4a6e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .welcome-text b {
+            color: #0b3b5f;
+        }
+        .welcome-text i {
+            margin-right: 8px;
+            color: #2c7da0;
+        }
+
+        .btn-back {
+            background: #e2edf2;
+            color: #1e4a6e;
+            border: 2px solid #cbdde6;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .btn-back:hover {
+            background: #cbdde6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .btn-back i {
+            margin-right: 6px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid #e9f0f3;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 30px -12px rgba(0, 0, 0, 0.12);
+            border-color: #2c7da0;
+        }
+
+        .menu-card .icon {
+            font-size: 3rem;
+            color: #2c7da0;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .menu-card .icon i {
+            background: #f1f9fe;
+            padding: 20px;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .menu-card:hover .icon i {
+            background: #2c7da0;
+            color: white;
+        }
+
+        .menu-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e4a6e;
+            margin-bottom: 8px;
+        }
+
+        .menu-card p {
+            font-size: 0.85rem;
+            color: #6c8eae;
+            margin-bottom: 16px;
+        }
+
+        .menu-card .btn-menu {
+            background: #2c7da0;
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .menu-card .btn-menu:hover {
+            background: #1f5e7a;
+            transform: scale(1.03);
+        }
+
+        .menu-card .btn-menu i {
+            margin-right: 6px;
+        }
+
+        .btn-logout {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+        }
+
+        .btn-logout:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(220,38,38,0.2);
+        }
+
+        .btn-logout i {
+            margin-right: 6px;
+        }
+    </style>
+    <script>
+        // Cegah flash of wrong theme – langsung set data-theme sebelum render
+        (function() {
+            const saved = localStorage.getItem('darkMode') === '1' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', saved);
+        })();
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-hospital-user"></i> Dashboard Admin</h1>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button id="themeToggle" class="btn-theme" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 40px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 0.85rem;">
+                <i class="fas fa-moon"></i> <span>Dark</span>
+            </button>
+            <button id="logoutBtn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="welcome-text">
+        <i class="fas fa-user-circle"></i> Selamat datang, <b id="namaUser"><%= username %></b>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="menu-card" onclick="location.href='/admin/view'">
+            <span class="icon"><i class="fas fa-eye"></i></span>
+            <h3><i class="fas fa-edit" style="font-size:0.9rem;color:#2c7da0;"></i> Lihat & Edit Data</h3>
+            <p>Kelola pasien, dokter, staff, ruangan, shift, dan notifikasi</p>
+            <button class="btn-menu"><i class="fas fa-arrow-right"></i> Buka</button>
+        </div>
+
+        <div class="menu-card" onclick="location.href='/admin/add'">
+            <span class="icon"><i class="fas fa-plus-circle"></i></span>
+            <h3><i class="fas fa-plus" style="font-size:0.9rem;color:#2c7da0;"></i> Tambah Data</h3>
+            <p>Tambah pasien baru, bayi, staff, checkup, dan shift</p>
+            <button class="btn-menu"><i class="fas fa-arrow-right"></i> Buka</button>
+        </div>
+    </div>
+</div>
+
+<script src="/models/apiService.js"></script>
+<script src="/js/utils.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var jabatan = localStorage.getItem('jabatan');
+        var username = localStorage.getItem('username');
+        
+        console.log('[DASHBOARD ADMIN] Check auth:', { jabatan: jabatan, username: username });
+        
+        if (!jabatan || !username) {
+            console.log('[DASHBOARD ADMIN] No auth, redirecting to login');
+            window.location.href = '/login';
+            return;
+        }
+        
+        var expectedRole = 'admin';
+        if (jabatan !== expectedRole) {
+            console.log('[DASHBOARD ADMIN] Wrong role:', jabatan);
+            window.location.href = '/login';
+            return;
+        }
+        
+        var namaUser = document.getElementById('namaUser');
+        if (namaUser) {
+            namaUser.innerText = username;
+        }
+        
+        var logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.onclick = function() {
+                localStorage.clear();
+                window.location.href = '/login';
+            };
+        }
+    });
+</script>
+
+<!-- ==================== DARK MODE TOGGLE ==================== -->
+<script>
+    (function() {
+        const html = document.documentElement;
+        const btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        const icon = btn.querySelector('i');
+        const text = btn.querySelector('span');
+
+        function setTheme(isDark) {
+            html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('darkMode', isDark ? '1' : '0');
+            if (icon && text) {
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                text.textContent = isDark ? 'Light' : 'Dark';
+            }
+        }
+
+        // Inisialisasi dari localStorage (sinkron dengan flash script)
+        const saved = localStorage.getItem('darkMode') === '1';
+        setTheme(saved);
+
+        btn.addEventListener('click', function() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(!isDark);
+        });
+    })();
+</script>
+
+</body>
+</html>
