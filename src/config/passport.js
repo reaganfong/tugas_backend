@@ -29,6 +29,7 @@ passport.use(
         username: user.username,
         jabatan: user.jabatan,
         nama: payload.nama,
+        profileId: payload.profileId || null,
       });
     } catch (error) {
       return done(error, false);

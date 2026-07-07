@@ -4,17 +4,15 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/passport');
 
 // Helper: generate JWT token
-function generateToken(user, nama) {
-  return jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-      jabatan: user.jabatan,
-      nama: nama,
-    },
-    JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+function generateToken(user, nama, profileId = null) {
+  const payload = {
+    id: user.id,
+    username: user.username,
+    jabatan: user.jabatan,
+    nama: nama,
+  };
+  if (profileId) payload.profileId = profileId;
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
 }
 
 // ==================== REGISTER ====================
@@ -149,13 +147,15 @@ exports.login = async (req, res) => {
 
     let nama = username;
 
-    // Ambil nama dari tabel yang sesuai
+    // Ambil nama & profileId dari tabel yang sesuai
+    let profileId = null;
     if (jabatan === 'dokter') {
       const dokter = await prisma.dokter.findUnique({
         where: { userId: user.id },
       });
       if (dokter) {
         nama = dokter.nama_dokter;
+        profileId = dokter.id;
       }
     }
 
@@ -169,7 +169,7 @@ exports.login = async (req, res) => {
     }
 
     // Generate JWT
-    const token = generateToken(user, nama);
+    const token = generateToken(user, nama, profileId);
     console.log('[LOGIN] JWT generated for:', user.username);
 
     // Set httpOnly cookie (untuk page loads)
@@ -234,6 +234,7 @@ exports.getMe = async (req, res) => {
       username: user.username,
       jabatan: user.jabatan,
       nama: user.nama,
+      profileId: user.profileId || null,
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

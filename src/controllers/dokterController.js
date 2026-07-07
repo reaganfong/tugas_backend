@@ -2,7 +2,7 @@ const prisma = require('../config/prisma');
 
 // ==================== DASHBOARD DOKTER ====================
 const getDashboardDokter = async (req, res) => {
-    const dokterId = req.session.user?.id;
+    const dokterId = req.user?.profileId;
     try {
         const totalPasien = await prisma.checkUp.count({
             where: { id_dokter: dokterId }
@@ -24,7 +24,7 @@ const getDashboardDokter = async (req, res) => {
 
 // ==================== GET JADWAL SAYA ====================
 const getJadwalSaya = async (req, res) => {
-    const dokterId = req.session.user?.id;
+    const dokterId = req.user?.profileId;
     try {
         const rows = await prisma.checkUp.findMany({
             where: { id_dokter: dokterId },
@@ -75,7 +75,7 @@ const updateDeskripsiPasien = async (req, res) => {
 const updateCheckupStatus = async (req, res) => {
     const { id } = req.params;
     const { diagnosis, rekomendasi_obat } = req.body;
-    const dokterId = req.session.user?.id;
+    const dokterId = req.user?.profileId;
     try {
         const check = await prisma.checkUp.findFirst({
             where: {
@@ -121,7 +121,7 @@ const updateCheckupStatus = async (req, res) => {
 
 // ==================== GET PASIEN SAYA ====================
 const getPasienSaya = async (req, res) => {
-    const dokterId = req.session.user?.id;
+    const dokterId = req.user?.profileId;
     const search = req.query.search || '';
     try {
         const rows = await prisma.checkUp.findMany({
@@ -232,12 +232,6 @@ const dischargePasien = async (req, res) => {
             // UPDATE semua riwayat_obat yang BELUM punya id_tagihan
             const obatResult = await tx.riwayatObat.updateMany({
                 where: { id_pasien: id, id_tagihan: null },
-                data: { id_tagihan: idTagihan }
-            });
-
-            // UPDATE ruangan yang BELUM punya id_tagihan
-            await tx.ruangan.updateMany({
-                where: { ditempati: id, id_tagihan: null, status: 'kosong' },
                 data: { id_tagihan: idTagihan }
             });
 
