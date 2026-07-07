@@ -1,5 +1,6 @@
 const prisma = require('../config/prisma');
 const { toInt, toFloat } = require('../utils/sanitize');
+const { handleError } = require('../utils/handleError');
 
 // ==================== GET PASIEN CHECK IN OUT ====================
 const getPasienCheckInOut = async (req, res) => {
@@ -28,7 +29,7 @@ const getPasienCheckInOut = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -39,7 +40,7 @@ const getPasien = async (req, res) => {
         const result = rows.map(p => ({ id_pasien: p.id, ...p }));
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -103,7 +104,7 @@ const getPasienWithFilter = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] getPasienWithFilter:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -114,7 +115,7 @@ const getBayi = async (req, res) => {
         const result = rows.map(b => ({ id_bayi: b.id, ...b }));
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -153,7 +154,7 @@ const getBayiWithFilter = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -174,7 +175,7 @@ const getDokter = async (req, res) => {
         }));
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -218,7 +219,7 @@ const getDokterWithFilter = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -229,7 +230,7 @@ const getStaff = async (req, res) => {
         const result = rows.map(s => ({ id_staff: s.id, ...s }));
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -270,7 +271,7 @@ const getStaffWithFilter = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -282,7 +283,7 @@ const getUsers = async (req, res) => {
         });
         res.json(rows);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -326,7 +327,7 @@ const addStaff = async (req, res) => {
 
         res.json({ message: 'Staff berhasil ditambahkan', id: staffId });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -374,7 +375,7 @@ const getRuanganStatus = async (req, res) => {
         res.json(formatted);
     } catch (err) {
         console.error('[ERROR] getRuanganStatus:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -453,7 +454,7 @@ const getRuanganWithFilter = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] getRuanganWithFilter:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -467,7 +468,7 @@ const getNotifikasiDarurat = async (req, res) => {
         const result = rows.map(n => ({ id_notif: n.id, ...n }));
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -483,7 +484,7 @@ const markNotifikasiDibaca = async (req, res) => {
         if (err.code === 'P2025') {
             return res.status(404).json({ message: 'Notifikasi tidak ditemukan' });
         }
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -517,7 +518,7 @@ const getCheckup = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -599,7 +600,7 @@ const getCheckupWithFilter = async (req, res) => {
             }
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -633,7 +634,7 @@ const getJadwalCheckup = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -670,7 +671,7 @@ const getSudahCheckout = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -720,7 +721,7 @@ const addCheckup = async (req, res) => {
         res.json({ message: 'Checkup berhasil ditambahkan' });
     } catch (err) {
         console.error('[BACKEND] Error addCheckup:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -791,7 +792,7 @@ const updateDokter = async (req, res) => {
 
         res.json({ message: 'Data dokter berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -835,7 +836,7 @@ const updateStaff = async (req, res) => {
 
         res.json({ message: 'Data staff berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -886,7 +887,7 @@ const updatePasien = async (req, res) => {
 
         res.json({ message: 'Data pasien berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -925,7 +926,7 @@ const updateCheckup = async (req, res) => {
 
         res.json({ message: 'Data checkup berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -978,7 +979,7 @@ const addPasien = async (req, res) => {
         res.json({ message: 'Pasien berhasil ditambahkan', id: result.id });
     } catch (err) {
         console.error('[ERROR] addPasien:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1023,7 +1024,7 @@ const addBayi = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] addBayi:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1050,7 +1051,7 @@ const updateBayi = async (req, res) => {
         if (err.code === 'P2025') {
             return res.status(404).json({ message: 'Bayi tidak ditemukan' });
         }
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1099,7 +1100,7 @@ const addShift = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] addShift:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1146,7 +1147,7 @@ const getShiftJadwal = async (req, res) => {
         res.json({ staff: staffMapped, users: userMapped });
     } catch (err) {
         console.error('[ERROR] getShiftJadwal:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1284,7 +1285,7 @@ const updateRuanganStatus = async (req, res) => {
         res.json({ message: 'Status ruangan berhasil diubah dan tagihan otomatis diupdate' });
     } catch (err) {
         console.error('[BACKEND] Error updateRuanganStatus:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1304,7 +1305,7 @@ const updateShiftStaff = async (req, res) => {
         }
         res.json({ message: 'Shift staff berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1324,7 +1325,7 @@ const updateShiftUser = async (req, res) => {
         }
         res.json({ message: 'Shift user berhasil diubah' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1368,7 +1369,7 @@ const updateRuangan = async (req, res) => {
         res.json({ message: 'Ruangan berhasil diupdate' });
     } catch (err) {
         console.error('[BACKEND] Error updateRuangan:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1408,7 +1409,7 @@ const deletePasien = async (req, res) => {
         });
     } catch (err) {
         console.error('[DELETE PASIEN] Error:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1423,7 +1424,7 @@ const deleteBayi = async (req, res) => {
         await prisma.bayi.delete({ where: { id } });
         res.json({ message: 'Bayi berhasil dihapus' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1456,7 +1457,7 @@ const deleteDokter = async (req, res) => {
 
         res.json({ message: 'Dokter dan akun login berhasil dihapus' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1471,7 +1472,7 @@ const deleteRuangan = async (req, res) => {
         await prisma.ruangan.delete({ where: { id } });
         res.json({ message: 'Ruangan berhasil dihapus' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1486,7 +1487,7 @@ const deleteStaff = async (req, res) => {
         await prisma.staff.delete({ where: { id } });
         res.json({ message: 'Staff berhasil dihapus' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -1514,7 +1515,7 @@ const batalCheckup = async (req, res) => {
         res.json({ message: 'Checkup berhasil dibatalkan' });
     } catch (err) {
         console.error('[ERROR] batalCheckup:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 

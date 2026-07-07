@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const { handleError } = require('../utils/handleError');
 
 // ==================== TAGIHAN ====================
 const getTagihan = async (req, res) => {
@@ -77,7 +78,7 @@ const getTagihan = async (req, res) => {
         res.json(result);
     } catch (err) {
         console.error('[ERROR] getTagihan:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -133,7 +134,7 @@ const updateTagihanStatus = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] updateTagihanStatus:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -154,7 +155,7 @@ const batalkanLunas = async (req, res) => {
 
         res.json({ message: 'Status tagihan dikembalikan ke belum lunas' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -183,7 +184,7 @@ const addTagihan = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] addTagihan:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -202,7 +203,7 @@ const getFasilitas = async (req, res) => {
             notifikasi_rusak: rusak
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -233,7 +234,7 @@ const toggleFasilitasStatus = async (req, res) => {
 
         res.json({ message: 'Status fasilitas berhasil diubah', status: newStatus });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -266,7 +267,7 @@ const getPasienCheckInOut = async (req, res) => {
 
         res.json(formatted);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -413,7 +414,7 @@ const getDetailTagihan = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] getDetailTagihan:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 

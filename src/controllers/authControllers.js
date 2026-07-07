@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { toInt } = require('../utils/sanitize');
 const { JWT_SECRET } = require('../config/passport');
+const { handleError } = require('../utils/handleError');
 
 // Helper: generate JWT token
 function generateToken(user, nama, profileId = null) {
@@ -111,10 +112,7 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error('[REGISTER] Error:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message,
-    });
+    handleError(res, error);
   }
 };
 
@@ -201,10 +199,7 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     console.error('[LOGIN] Error:', error);
-    res.status(500).json({
-      message: 'Server error',
-      error: error.message,
-    });
+    handleError(res, error);
   }
 };
 
@@ -248,6 +243,6 @@ exports.getMe = async (req, res) => {
       profileId: user.profileId || null,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    handleError(res, error);
   }
 };

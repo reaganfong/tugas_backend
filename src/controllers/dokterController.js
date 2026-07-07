@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const { handleError } = require('../utils/handleError');
 
 // ==================== DASHBOARD DOKTER ====================
 const getDashboardDokter = async (req, res) => {
@@ -18,7 +19,7 @@ const getDashboardDokter = async (req, res) => {
 
         res.json({ totalPasien, pasienHariIni });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -52,7 +53,7 @@ const getJadwalSaya = async (req, res) => {
         res.json(result);
     } catch (err) {
         console.error('[BACKEND] Error getJadwalSaya:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -67,7 +68,7 @@ const updateDeskripsiPasien = async (req, res) => {
         });
         res.json({ message: "OK" });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -115,7 +116,7 @@ const updateCheckupStatus = async (req, res) => {
 
         res.json({ message: 'Status checkup diubah menjadi selesai' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -174,7 +175,7 @@ const getPasienSaya = async (req, res) => {
 
         res.json(Array.from(pasienMap.values()));
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -269,7 +270,7 @@ const dischargePasien = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] dischargePasien:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -283,7 +284,7 @@ const batalkanPulangPasien = async (req, res) => {
         });
         res.json({ message: 'Status pasien dikembalikan ke dirawat' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -350,7 +351,7 @@ const assignRawatInap = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] assignRawatInap:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -479,7 +480,7 @@ const pulangkanDariRuangan = async (req, res) => {
         });
     } catch (err) {
         console.error('[ERROR] pulangkanDariRuangan:', err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 

@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const { handleError } = require('../utils/handleError');
 
 // ==================== GET OBAT ====================
 const getObat = async (req, res) => {
@@ -26,7 +27,7 @@ const getObat = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -53,7 +54,7 @@ const tambahStokObat = async (req, res) => {
 
         res.json({ message: 'Stok ditambah', newQty });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -146,7 +147,7 @@ const kurangiStokObat = async (req, res) => {
 
         res.json({ message: 'Stok dikurangi dan tagihan otomatis diupdate', newQty, total_harga: totalHargaObat });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -179,7 +180,7 @@ const buangObat = async (req, res) => {
 
         res.json({ message: 'Obat berhasil dibuang', newQty });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -204,7 +205,7 @@ const tambahObatBaru = async (req, res) => {
 
         res.json({ message: 'Obat berhasil ditambahkan', id: result.id });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -251,7 +252,7 @@ const getCheckupForApoteker = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -289,7 +290,7 @@ const getCheckupRekomendasi = async (req, res) => {
 
         res.json(result);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 

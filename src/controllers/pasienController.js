@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma');
+const { handleError } = require('../utils/handleError');
 
 // Get profil pasien dari ID
 const getProfilById = async (req, res) => {
@@ -132,7 +133,7 @@ const getProfilById = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
@@ -276,7 +277,7 @@ const searchPasien = async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message });
+        handleError(res, err);
     }
 };
 
