@@ -261,7 +261,7 @@ const getCheckupRekomendasi = async (req, res) => {
         const rows = await prisma.checkUp.findMany({
             where: {
                 status: 'selesai',
-                rekomendasi_obat: { not: null, not: '' }
+                rekomendasi_obat: { not: null, notIn: [''] }
             },
             include: {
                 pasien: { select: { id: true, nama: true } },

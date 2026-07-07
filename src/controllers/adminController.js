@@ -1401,8 +1401,21 @@ const deleteDokter = async (req, res) => {
         if (!existing) {
             return res.status(404).json({ message: 'Dokter tidak ditemukan' });
         }
-        await prisma.dokter.delete({ where: { id } });
-        res.json({ message: 'Dokter berhasil dihapus' });
+
+        const userId = existing.userId;
+
+        await prisma.$transaction(async (tx) => {
+            // Hapus shift user terkait
+            await tx.shiftUser.deleteMany({
+                where: { id_users: userId }
+            });
+            // Hapus profile dokter
+            await tx.dokter.delete({ where: { id } });
+            // Hapus akun login
+            await tx.user.delete({ where: { id: userId } });
+        });
+
+        res.json({ message: 'Dokter dan akun login berhasil dihapus' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
